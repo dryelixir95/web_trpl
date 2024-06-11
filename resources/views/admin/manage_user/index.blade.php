@@ -49,7 +49,7 @@
                         // Tambahkan data kolom
                         row.append('<td>' + user.name + '</td>');
                         row.append('<td>' + user.email + '</td>');
-                        row.append('<td><a href="'+ '/admin/user/edit/' + user.id + '" class="pd-1 btn btn-primary">Edit</a><button data-id="' + user.id + '" class="pd-2 btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td><a href="'+ '/admin/user/edit/' + user.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + user.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
