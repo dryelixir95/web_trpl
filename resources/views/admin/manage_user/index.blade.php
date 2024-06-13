@@ -66,8 +66,8 @@
         });
 
         function deleteUser(userId) {
-        if (confirm('Are you sure you want to delete this user?')) {
-            $.ajax({
+            if (confirm('Apa Anda yakin ingin menghapus User ini?')) {
+                $.ajax({
                 url: '/api/admin/user/' + userId,
                 method: 'DELETE',
                 headers: {

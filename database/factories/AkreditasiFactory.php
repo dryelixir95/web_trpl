@@ -15,7 +15,7 @@ class AkreditasiFactory extends Factory
         return [
             'judul' => $this->faker->sentence,
             'tgl_akreditasi' => $this->faker->date,
-            'gambar_akreditasi' => $this->faker->image('public/images/akreditasi', 640, 480, null, false), // generates a placeholder image
+            'file_akreditasi' => $this->faker->image('public/file/akreditasi', 640, 480, null, false), // generates a placeholder image
         ];
     }
 }

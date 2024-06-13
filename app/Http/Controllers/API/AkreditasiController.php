@@ -41,15 +41,15 @@ class AkreditasiController extends Controller
             $validatedData = $request->validate([
                 'judul' => 'required|string|max:255',
                 'tgl_akreditasi' => 'required|date',
-                'gambar_akreditasi' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'file_akreditasi' => 'nullable|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048'
             ]);
 
-            if ($request->hasFile('gambar_akreditasi')) {
-                $file = $request->file('gambar_akreditasi');
+            if ($request->hasFile('file_akreditasi')) {
+                $file = $request->file('file_akreditasi');
                 if ($file->isValid()) {
                     $fileName = uniqid('akreditasi_') . '.' . $file->getClientOriginalExtension();
-                    $file->move(public_path('images/akreditasi'), $fileName);
-                    $validatedData['gambar_akreditasi'] = $fileName;
+                    $file->move(public_path('file/akreditasi'), $fileName);
+                    $validatedData['file_akreditasi'] = $fileName;
                 }
             }
 
@@ -89,34 +89,33 @@ class AkreditasiController extends Controller
             $validatedData = $request->validate([
                 'judul' => 'required|string|max:255',
                 'tgl_akreditasi' => 'required|date',
-                'gambar_akreditasi' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'file_akreditasi' => 'nullable|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048'
             ]);
 
-            if ($request->hasFile('gambar_akreditasi')) {
-                if ($akreditasi->gambar_akreditasi) {
-                    File::delete(public_path('images/akreditasi/' . $akreditasi->gambar_akreditasi));
+
+            if ($request->hasFile('file_akreditasi')) {
+                if ($akreditasi->file_akreditasi) {
+                    File::delete(public_path('file/akreditasi/' . $akreditasi->file_akreditasi));
                 }
 
-                $file = $request->file('gambar_akreditasi');
+                $file = $request->file('file_akreditasi');
                 $fileName = uniqid('akreditasi_') . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('images/akreditasi'), $fileName);
-                $validatedData['gambar_akreditasi'] = $fileName;
+                $file->move(public_path('file/akreditasi'), $fileName);
+                $validatedData['file_akreditasi'] = $fileName;
             }
 
             $akreditasi->update($validatedData);
-            $url = '/admin/akreditasi';
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Update akreditasi successful',
                 'akreditasi' => $akreditasi,
-                'url' => $url,
             ]);
         } catch (ValidationException $e) {
             Log::error('Failed to add akreditasi: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error', 
-                'message' => 'Failed to add akreditasi', 
+                'message' => 'Failed to update akreditasi', 
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
@@ -135,8 +134,8 @@ class AkreditasiController extends Controller
 
     //         $akreditasi = $Allakreditasi[0];
 
-    //         if ($akreditasi->gambar_akreditasi) {
-    //             File::delete(public_path('images/akreditasi/' . $akreditasi->gambar_akreditasi));
+    //         if ($akreditasi->file_akreditasi) {
+    //             File::delete(public_path('file/akreditasi/' . $akreditasi->file_akreditasi));
     //         }
 
     //         $akreditasi->delete();

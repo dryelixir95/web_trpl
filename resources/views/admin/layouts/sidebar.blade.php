@@ -17,40 +17,39 @@
                 <span class="menu-title">User</span>
             </a>
         </li>
-
         <li class="nav-item mt-4" style="background-color: #FFC100; border-radius: 10px;">
             <div class="row p-2 ml-2">
                 <span class="menu-title">Menu</span>
             </div>
         </li>
         @if(Auth::user()->role == 'Admin')
-        <li class="nav-item dropdown" id="beranda">
-            <a class="nav-link" href="#">
+        <li class="nav-item dropdown">
+            <a class="nav-link" href="#" data-toggle="dropdown">
                 <i class="fa-solid fa-cube menu-icon"></i>
                 <span class="menu-title">Beranda</span>
             </a>
-            <div class="submenu">
+            <div class="submenu d-none">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('berita.index') }}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Berita Terbaru</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('fasilitas.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Fasilitas</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('akreditasi.index') }}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Akreditasi</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('kerjasama_mitra.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Kerjasama Mitra</span>
                         </a>
@@ -58,12 +57,12 @@
                 </ul>
             </div>
         </li>
-        <li class="nav-item dropdown" id="profilProdi">
-            <a class="nav-link" href="#">
-                <i class="fa-solid fa-warehouse menu-icon"></i>
+        <li class="nav-item dropdown">
+            <a class="nav-link" href="#" data-toggle="dropdown">
+                <i class="fa-solid fa-cube menu-icon"></i>
                 <span class="menu-title">Profil Prodi</span>
             </a>
-            <div class="submenu">
+            <div class="submenu d-none">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="#">
@@ -84,7 +83,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('akreditasi.index') }}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Akreditasi</span>
                         </a>
@@ -110,12 +109,12 @@
                 </ul>
             </div>
         </li>
-        <li class="nav-item dropdown" id="kemahasiswaan">
-            <a class="nav-link" href="#">
-                <i class="fa-solid fa-users menu-icon"></i>
+        <li class="nav-item dropdown">
+            <a class="nav-link" href="#" data-toggle="dropdown">
+                <i class="fa-solid fa-cube menu-icon"></i>
                 <span class="menu-title">Kemahasiswaan</span>
             </a>
-            <div class="submenu">
+            <div class="submenu d-none">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="#">
@@ -158,12 +157,12 @@
         </li>
         @endif
         @if(Auth::user()->role == 'Kaprodi')
-        <li class="nav-item dropdown" id="beranda">
-            <a class="nav-link" href="#">
+        <li class="nav-item dropdown">
+            <a class="nav-link" href="#" data-toggle="dropdown">
                 <i class="fa-solid fa-cube menu-icon"></i>
                 <span class="menu-title">Beranda</span>
             </a>
-            <div class="submenu">
+            <div class="submenu d-none">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="#">
@@ -178,7 +177,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('akreditasi.index') }}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Akreditasi</span>
                         </a>
@@ -195,33 +194,13 @@
         @endif
     </ul>
 </nav>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-$(document).ready(function(){
-    // Sembunyikan submenu saat halaman dimuat
-    $(".submenu").hide();
-
-    // Tambahkan event click pada menu "Beranda"
-    $("#beranda").click(function(e) {
-        e.preventDefault();
-        // Toggle tampilan submenu
-        $("#beranda .submenu").slideToggle();
+    $(document).ready(function() {
+        $('[data-toggle="dropdown"]').on('click', function(event) {
+            event.preventDefault();
+            var submenu = $(this).next('.submenu');
+            submenu.toggleClass('d-none');
+        });
     });
-
-    // Tambahkan event click pada menu "ProfilProdi"
-    $("#profilProdi").click(function(e) {
-        e.preventDefault();
-        // Toggle tampilan submenu
-        $("#profilProdi .submenu").slideToggle();
-    });
-
-    // Tambahkan event click pada menu "kemahasiswaan"
-    $("#kemahasiswaan").click(function(e) {
-        e.preventDefault();
-        // Toggle tampilan submenu
-        $("#kemahasiswaan .submenu").slideToggle();
-    });
-});
-
 </script>

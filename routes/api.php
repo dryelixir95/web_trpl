@@ -52,7 +52,7 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])
     // Route::get('berita/{id}', [BeritaController::class, 'show']);
     Route::get('berita/edit/{id}', [BeritaController::class, 'edit']);
     Route::put('berita/{id}', [BeritaController::class, 'update']);
-    Route::delete('berita/single/{id}', [BeritaController::class, 'destroy_gambar']);
+    // Route::delete('berita/single/{id}', [BeritaController::class, 'destroy_gambar']);
     Route::delete('berita/{id}', [BeritaController::class, 'destroy']);
 });
 

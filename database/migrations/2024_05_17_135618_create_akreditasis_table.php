@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('akreditasis', function (Blueprint $table) {
             $table->id('akreditasi_id');
             $table->string('judul');
-            $table->string('gambar_akreditasi')->nullable();
+            $table->string('file_akreditasi')->nullable();
             $table->date('tgl_akreditasi');
             $table->timestamps();
         });

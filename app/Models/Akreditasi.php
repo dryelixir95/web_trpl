@@ -13,7 +13,7 @@ class Akreditasi extends Model
 
     protected $fillable = [
         'judul',
-        'gambar_akreditasi',
+        'file_akreditasi',
         'tgl_akreditasi',
     ];
 }

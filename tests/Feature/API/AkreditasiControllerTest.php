@@ -62,7 +62,7 @@ class AkreditasiControllerTest extends TestCase
         $response = $this->postJson('/api/admin/akreditasi', [
             'judul' => 'Akreditasi Test',
             'tgl_akreditasi' => '2024-01-01',
-            'gambar_akreditasi' => null,
+            'file_akreditasi' => null,
         ]);
 
         Log::info($response->getContent());
@@ -82,7 +82,7 @@ class AkreditasiControllerTest extends TestCase
         $response = $this->postJson('/api/admin/akreditasi', [
             'judul' => '', // Judul tidak boleh kosong
             'tgl_akreditasi' => 'invalid-date', // Tanggal tidak valid
-            'gambar_akreditasi' => null,
+            'file_akreditasi' => null,
         ]);
 
         Log::info($response->getContent());
@@ -101,7 +101,7 @@ class AkreditasiControllerTest extends TestCase
         $data = [
             'judul' => 'Updated Akreditasi',
             'tgl_akreditasi' => '2023-06-02',
-            'gambar_akreditasi' => UploadedFile::fake()->image('new_akreditasi.jpg'),
+            'file_akreditasi' => UploadedFile::fake()->image('new_akreditasi.jpg'),
         ];
 
         $response = $this->putJson('/api/admin/akreditasi', $data);
@@ -125,7 +125,7 @@ class AkreditasiControllerTest extends TestCase
         $data = [
             'judul' => '', // Judul tidak boleh kosong
             'tgl_akreditasi' => 'invalid-date', // Tanggal tidak valid
-            'gambar_akreditasi' => UploadedFile::fake()->image('new_akreditasi.jpg'),
+            'file_akreditasi' => UploadedFile::fake()->image('new_akreditasi.jpg'),
         ];
 
         $response = $this->putJson('/api/admin/akreditasi', $data);

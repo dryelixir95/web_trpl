@@ -46,7 +46,6 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
         var timeout;
@@ -67,32 +66,25 @@
             timeout = setTimeout(checkPassword, 2000);
         });
 
-        var host = "http://127.0.0.1:8000/api";
-
         $('#StoreForm').submit(function(event) {
             event.preventDefault(); 
 
-            var name = $('#name').val();
-            var email = $('#email').val();
-            var password = $('#password').val();
-            var password_confirmation = $('#password_confirmation').val();
-            var role =$('#role').val();
+            var formData = new FormData();
+            formData.append('name', $('#name').val());
+            formData.append('email', $('#email').val());
+            formData.append('password', $('#password').val());
+            formData.append('password_confirmation', $('#password_confirmation').val());
+            formData.append('role', $('#role').val());
 
-            var requestData = {
-                name : name,
-                email: email,
-                password: password,
-                password_confirmation : password_confirmation,
-                role : role,
-            };
-
-            console.log(requestData);
+            console.log(formData);
 
             $.ajax({
-                url: host + '/admin/user',
+                url: '/api/admin/user',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(requestData),
+                data: formData,
+                processData: false,
+                contentType: false, 
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
