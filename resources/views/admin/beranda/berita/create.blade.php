@@ -81,8 +81,6 @@
                 formData.append('gambar', $('#gambar')[0].files[0]);
             }
 
-            console.log(formData);
-
             $.ajax({
                 url: '/api/admin/berita',
                 method: 'POST',

@@ -76,8 +76,6 @@
                 formData.append('logo_mitra', $('#logo_mitra')[0].files[0]);
             }
 
-            console.log(formData);
-
             $.ajax({
                 url: '/api/admin/kerjasama-mitra',
                 method: 'POST',

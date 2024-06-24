@@ -38,14 +38,14 @@ class StrukturOrganisasiController extends Controller
         try {
             $validatedData = $request->validate([
                 'judul' => 'required|string|max:255',
-                'file_struktur' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'file_struktur' => 'nullable|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048'
             ]);
 
             if ($request->hasFile('file_struktur')) {
                 $file = $request->file('file_struktur');
                 if ($file->isValid()) {
                     $fileName = uniqid('struktur_') . '.' . $file->getClientOriginalExtension();
-                    $file->move(public_path('images/strukturOrganisasi'), $fileName);
+                    $file->move(public_path('files/strukturOrganisasi'), $fileName);
                     $validatedData['file_struktur'] = $fileName;
                 }
             }
@@ -101,17 +101,17 @@ class StrukturOrganisasiController extends Controller
             
             $validatedData = $request->validate([
                 'judul' => 'required|string|max:255',
-                'file_struktur' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'file_struktur' => 'nullable|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048'
             ]);
 
             if ($request->hasFile('file_struktur')) {
                 if ($strukturOrganisasi->file_struktur) {
-                    File::delete(public_path('images/strukturOrganisasi/' . $strukturOrganisasi->file_struktur));
+                    File::delete(public_path('files/strukturOrganisasi/' . $strukturOrganisasi->file_struktur));
                 }
 
                 $file = $request->file('file_struktur');
                 $fileName = uniqid('strukturOrganisasi_') . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('images/strukturOrganisasi'), $fileName);
+                $file->move(public_path('files/strukturOrganisasi'), $fileName);
                 $validatedData['file_struktur'] = $fileName;
             }
 
@@ -141,7 +141,7 @@ class StrukturOrganisasiController extends Controller
     //         $strukturOrganisasi = $AllStrukturOrganisasi[0];
 
     //         if ($strukturOrganisasi->file_struktur) {
-    //             File::delete(public_path('images/strukturOrganisasi/' . $strukturOrganisasi->file_struktur));
+    //             File::delete(public_path('files/strukturOrganisasi/' . $strukturOrganisasi->file_struktur));
     //         }
 
     //         $strukturOrganisasi->delete();

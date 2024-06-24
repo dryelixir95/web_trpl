@@ -48,7 +48,7 @@ class AkreditasiController extends Controller
                 $file = $request->file('file_akreditasi');
                 if ($file->isValid()) {
                     $fileName = uniqid('akreditasi_') . '.' . $file->getClientOriginalExtension();
-                    $file->move(public_path('file/akreditasi'), $fileName);
+                    $file->move(public_path('files/akreditasi'), $fileName);
                     $validatedData['file_akreditasi'] = $fileName;
                 }
             }
@@ -95,12 +95,12 @@ class AkreditasiController extends Controller
 
             if ($request->hasFile('file_akreditasi')) {
                 if ($akreditasi->file_akreditasi) {
-                    File::delete(public_path('file/akreditasi/' . $akreditasi->file_akreditasi));
+                    File::delete(public_path('files/akreditasi/' . $akreditasi->file_akreditasi));
                 }
 
                 $file = $request->file('file_akreditasi');
                 $fileName = uniqid('akreditasi_') . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('file/akreditasi'), $fileName);
+                $file->move(public_path('files/akreditasi'), $fileName);
                 $validatedData['file_akreditasi'] = $fileName;
             }
 
@@ -135,7 +135,7 @@ class AkreditasiController extends Controller
     //         $akreditasi = $Allakreditasi[0];
 
     //         if ($akreditasi->file_akreditasi) {
-    //             File::delete(public_path('file/akreditasi/' . $akreditasi->file_akreditasi));
+    //             File::delete(public_path('files/akreditasi/' . $akreditasi->file_akreditasi));
     //         }
 
     //         $akreditasi->delete();

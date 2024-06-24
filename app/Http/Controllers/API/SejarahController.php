@@ -112,7 +112,7 @@ class SejarahController extends Controller
                 $file = $request->file('gambar');
                 $fileName = uniqid('sejarah_') . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('images/sejarah'), $fileName);
-                $validatedData['sejarah'] = $fileName;
+                $validatedData['gambar'] = $fileName;
             }
 
             $sejarah->update($validatedData);
@@ -133,32 +133,32 @@ class SejarahController extends Controller
         }
     }
 
-    // public function destroy()
-    // {
-    //     try {
-    //         $AllSejarah = Sejarah::all();
+    public function destroy_gambar()
+    {
+        try {
+            $AllSejarah = Sejarah::all();
 
-    //         $sejarah = $AllSejarah[0];
+            $sejarah = $AllSejarah[0];
 
 
-    //         if ($sejarah->gambar) {
-    //             File::delete(public_path('images/sejarah/' . $sejarah->gambar));
-    //         }
+            if ($sejarah->gambar) {
+                File::delete(public_path('images/sejarah/' . $sejarah->gambar));
+            }
 
-    //         $sejarah->delete();
-    //         $url = '/admin/sejarah';
+            $sejarah->update([
+                'gambar' => null,
+            ]);
 
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'message' => 'sejarah has been removed',
-    //             'url' => $url,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Failed to remove sejarah',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'sejarah has been removed',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to remove sejarah',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

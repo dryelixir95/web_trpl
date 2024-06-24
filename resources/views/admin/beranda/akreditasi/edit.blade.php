@@ -65,13 +65,13 @@ $(document).ready(function() {
 
                 if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
                     // Jika file gambar, buat elemen img
-                    previewContent = '<img src="' + '/file/akreditasi/' + fileUrl + '" alt="Preview" class="img-fluid">';
+                    previewContent = '<img src="' + '/files/akreditasi/' + fileUrl + '" alt="Preview" class="img-fluid">';
                 } else if (fileExtension === 'pdf') {
                     // Jika file PDF, buat elemen embed
-                    previewContent = '<embed src="' + '/file/akreditasi/' + fileUrl + '" type="application/pdf" width="100%" height="400px">';
+                    previewContent = '<embed src="' + '/files/akreditasi/' + fileUrl + '" type="application/pdf" width="100%" height="400px">';
                 } else {
                     // Jika file tipe lain, buat link untuk mengunduh
-                    previewContent = '<a href="' + '/file/akreditasi/' + fileUrl + '" target="_blank">Lihat File</a>';
+                    previewContent = '<a href="' + '/files/akreditasi/' + fileUrl + '" target="_blank">Lihat File</a>';
                 }
 
                 // Tambahkan konten preview ke container
@@ -129,13 +129,9 @@ $(document).ready(function() {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     'X-HTTP-Method-Override': 'PUT'
                 },
-            success: function(response) {
-                if(response.status === "success") {
-                    alert('akreditasi updated successfully');
-                    window.location.href = '/admin/akreditasi';
-                } else {
-                    alert('Failed to update akreditasi');
-                }
+            success: function(data) {
+                console.log(data);
+                window.location.href = data.url; // Redirect ke halaman setelah berhasil disimpan
             },
             error: function(xhr, status, error) {
                 console.error('There has been a problem with your AJAX operation:', error);

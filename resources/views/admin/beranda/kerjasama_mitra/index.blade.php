@@ -57,7 +57,7 @@
                         row.append('<td><img src="' + imagePath + '" alt="' + mitra.gambar + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
                         row.append('<td>' + mitra.alamat_mitra + '</td>');
 
-                        row.append('<td><a href="'+ '/admin/kerjasama-mitra/edit/' + mitra.mitra_id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + mitra.mitra_id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td><a href="#" class="mr-1 btn btn-primary">Edit</a><button data-id="' + mitra.mitra_id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
 

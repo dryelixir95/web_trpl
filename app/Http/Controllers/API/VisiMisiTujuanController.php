@@ -20,7 +20,7 @@ class VisiMisiTujuanController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Get data visi misi tujuan successful',
-                'akreditasis' => $vmt,
+                'vmt' => $vmt,
                 'url' => $url,
             ]);
         }catch (\Exception $e) {

@@ -65,19 +65,19 @@
             <div class="submenu d-none">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('sejarah.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Sejarah TRPL</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('visi_misi_tujuan.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Visi, Misi, Tujuan TRPL</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('kurikulum.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Kurikulum</span>
                         </a>
@@ -89,19 +89,19 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('fasilitas.index') }}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Fasilitas</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('dosen-staff.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Dosen dan Staff</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('struktur-organisasi.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Struktur Organisasi</span>
                         </a>

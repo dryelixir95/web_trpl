@@ -67,21 +67,21 @@
         $('#StoreForm').submit(function(event) {
             event.preventDefault(); 
 
-            var judul = $('#judul').val();
-            var tanggal = $('#tanggal').val();
-            var file_akreditasi = $('#file_akreditasi')[0].files[0];
-
-            var requestData = {
-                judul : judul,
-                tgl_akreditasi: tanggal,
-                file_akreditasi: file_akreditasi,
-            };
+            var formData = new FormData();
+            formData.append('judul', $('#judul').val());
+            formData.append('tgl_akreditasi', $('#tanggal').val());
+            
+            if ($('#file_akreditasi')[0].files[0]) {
+                formData.append('file_akreditasi', $('#file_akreditasi')[0].files[0]);
+            }
 
             $.ajax({
                 url: '/api/admin/akreditasi',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(requestData),
+                data: formData,
+                processData: false,
+                contentType: false,
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },

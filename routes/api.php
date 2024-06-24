@@ -92,7 +92,8 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
     Route::post('sejarah', [SejarahController::class, 'store']);
     Route::get('sejarah/edit', [SejarahController::class, 'edit']);
     Route::put('sejarah', [SejarahController::class, 'update']);
-    
+    Route::delete('sejarah-gambar', [SejarahController::class, 'destroy_gambar']);
+
     // route delete memang dihapus
     // Route::delete('sejarah', [SejarahController::class, 'destroy']);
 });
