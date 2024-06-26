@@ -117,13 +117,13 @@
             <div class="submenu d-none">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('kegiatan.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Kegiatan</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('prestasi.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Prestasi</span>
                         </a>

@@ -161,3 +161,29 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
         return view('admin.profil_prodi.struktur_organisasi.edit');
     })->name('struktur-organisasi.edit');
 });
+
+// Kemahasiswaan menu
+// KegiatanController
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('kegiatan', function(){
+        return view('admin.kemahasiswaan.kegiatan.index');
+    })->name('kegiatan.index');
+    Route::get('kegiatan/add', function(){
+        return view('admin.kemahasiswaan.kegiatan.create');
+    })->name('kegiatan.create');
+    Route::get('kegiatan/edit/{id}', function(){
+        return view('admin.kemahasiswaan.kegiatan.edit');
+    })->name('kegiatan.edit');
+});
+
+// PrestasiController
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('prestasi', function(){
+        return view('admin.kemahasiswaan.prestasi.index');
+    })->name('prestasi.index');
+    Route::get('prestasi/add', function(){
+        return view('admin.kemahasiswaan.prestasi.create');
+    })->name('prestasi.create');
+    Route::get('prestasi/edit/{id}', function(){
+        return view('admin.kemahasiswaan.prestasi.edit');
+    })->name('prestasi.edit');});
