@@ -160,12 +160,12 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
 });
 
 // Dokumen Menu
-// DMutuController gaduk iki sek an
+// DMutuController
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
     Route::get('dokumen-mutu', [DMutuController::class, 'index']);
     Route::post('dokumen-mutu', [DMutuController::class, 'store']);
-    Route::get('dokumen-mutu/{id}/download', [DMutuController::class, 'download']);
-    Route::get('dokumen-mutu/{id}/view', [DMutuController::class, 'view']);
+    // Route::get('dokumen-mutu/{id}/download', [DMutuController::class, 'download']);
+    // Route::get('dokumen-mutu/{id}/view', [DMutuController::class, 'view']);
     Route::delete('dokumen-mutu/{id}', [DMutuController::class, 'destroy']);
 });
 

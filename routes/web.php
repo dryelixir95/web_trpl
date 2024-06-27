@@ -186,4 +186,45 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
     })->name('prestasi.create');
     Route::get('prestasi/edit/{id}', function(){
         return view('admin.kemahasiswaan.prestasi.edit');
-    })->name('prestasi.edit');});
+    })->name('prestasi.edit');
+});
+
+// DMutuController
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('dokumen-mutu', function(){
+        return view('admin.dokumen_mutu.index');
+    })->name('dokumen-mutu.index');
+    Route::get('dokumen-mutu/add', function(){
+        return view('admin.dokumen_mutu.create');
+    })->name('dokumen-mutu.create');
+});
+
+// MKIController
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('magang-kerja-industri', function(){
+        return view('admin.dokumen_mki.index');
+    })->name('magang-kerja-industri.index');
+    Route::get('magang-kerja-industri/add', function(){
+        return view('admin.dokumen_mki.create');
+    })->name('magang-kerja-industri.create');
+});
+
+// TAController
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('tugas-akhir', function(){
+        return view('admin.dokumen_ta.index');
+    })->name('tugas-akhir.index');
+    Route::get('tugas-akhir/add', function(){
+        return view('admin.dokumen_ta.create');
+    })->name('tugas-akhir.create');
+});
+
+// SEdarMahasiswaController
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('surat-edar', function(){
+        return view('admin.surat_edar.index');
+    })->name('surat-edar.index');
+    Route::get('surat-edar/add', function(){
+        return view('admin.surat_edar.create');
+    })->name('surat-edar.create');
+});

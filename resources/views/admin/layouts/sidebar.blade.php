@@ -132,25 +132,25 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('dokumen-mutu.index')}}">
                 <i class="icon-folder menu-icon"></i>
                 <span class="menu-title">Dokumen Mutu</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('magang-kerja-industri.index')}}">
                 <i class="icon-folder menu-icon"></i>
                 <span class="menu-title">Dokumen MKI</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('tugas-akhir.index')}}">
                 <i class="icon-folder menu-icon"></i>
                 <span class="menu-title">Dokumen TA</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('surat-edar.index')}}">
                 <i class="icon-folder menu-icon"></i>
                 <span class="menu-title">Surat Edar Mahasiswa</span>
             </a>

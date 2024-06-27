@@ -6,20 +6,26 @@
         <div class="col-md-12 grid-margin transparent">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tambah Kurikulum Baru</h4>
+                    <h4 class="card-title">Tambah Dokumen Mutu Baru</h4>
                         <form id="StoreForm" enctype="multipart/form-data" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col mb-3">
-                                <label for="semester" class="form-label">Nama Kurikulum</label>
-                                <input type="text" class="form-control" id="semester" name="semester" required>
+                                <label for="nama_Dmutu" class="form-label">Nama Dokumen Mutu</label>
+                                <input type="text" class="form-control" id="nama_Dmutu" name="nama_Dmutu" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col mb-3">
-                                <label for="file_kurikulum" class="form-label">Unggah PDF</label>
-                                <input type="file" class="form-control-file" id="file_kurikulum" name="file_kurikulum" accept=".pdf" required>
-                                <small id="fileHelp" class="form-text text-muted">File harus berupa PDF.</small>
+                                <label for="keterangan" class="form-label">Keterangan</label>
+                                <textarea class="form-control" id="keterangan" name="keterangan" rows="10" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="file_Dmutu" class="form-label">Unggah file PDF/XLS</label>
+                                <input type="file" class="form-control-file" id="file_Dmutu" name="file_Dmutu" accept=".xls,.xlsx,.pdf" required>
+                                <small id="fileHelp" class="form-text text-muted">File harus berupa PDF/XLS.</small>
                             </div>
                         </div>
                         <div class="row">
@@ -54,7 +60,7 @@
             reader.readAsDataURL(file);
         }
 
-        $('#file_kurikulum').change(function() {
+        $('#file_Dmutu').change(function() {
             var file = this.files[0];
             previewFile(file); // Panggil fungsi previewFile saat file dipilih
         });
@@ -63,16 +69,17 @@
             event.preventDefault(); 
 
             var formData = new FormData();
-            formData.append('semester', $('#semester').val());
+            formData.append('nama_Dmutu', $('#nama_Dmutu').val());
+            formData.append('keterangan', $('#keterangan').val());
             
-            if ($('#file_kurikulum')[0].files[0]) {
-                formData.append('file_kurikulum', $('#file_kurikulum')[0].files[0]);
+            if ($('#file_Dmutu')[0].files[0]) {
+                formData.append('file_Dmutu', $('#file_Dmutu')[0].files[0]);
             }
 
             console.log(formData);
 
             $.ajax({
-                url: '/api/admin/kurikulum',
+                url: '/api/admin/dokumen-mutu',
                 method: 'POST',
                 contentType: 'application/json',
                 data: formData,
