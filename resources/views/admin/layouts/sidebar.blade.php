@@ -165,13 +165,13 @@
             <div class="submenu d-none">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('berita.index') }}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Berita Terbaru</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('fasilitas.index') }}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Fasilitas</span>
                         </a>
@@ -183,7 +183,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('kerjasama_mitra.index')}}">
                             <i class="fa-solid fa-bars menu-icon"></i>
                             <span class="menu-title">Kerjasama Mitra</span>
                         </a>
