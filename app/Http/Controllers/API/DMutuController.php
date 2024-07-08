@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DMutu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\ValidationException;
 
 class DMutuController extends Controller
 {
@@ -57,6 +58,12 @@ class DMutuController extends Controller
                 'dokumenMutu' => $dokumenMutu,
                 'url' => $url,
             ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'Failed to add dokumen mutu', 
+                'errors' => $e->errors(),
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\ValidationException;
 
 class BeritaController extends Controller
 {
@@ -55,7 +56,13 @@ class BeritaController extends Controller
                 'berita' => $berita,
                 'url' => $url
             ]);
-        } catch (\Exception $e) {
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'Failed to add akreditasi', 
+                'errors' => $e->errors(),
+            ], 422);
+        }catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to add berita',
@@ -136,6 +143,12 @@ class BeritaController extends Controller
                 'berita' => $berita,
                 'url' => $url
             ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'Failed to add akreditasi', 
+                'errors' => $e->errors(),
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
