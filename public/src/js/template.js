@@ -6,10 +6,11 @@
 
     function addActiveClass(element) {
       var current = window.location.pathname;  // Dapatkan path lengkap dari URL
+      var currentPath = current.split('/').slice(0, 4).join('/');  // Ambil hingga /admin/menu/beranda
       var elementPath = new URL(element.attr('href'), window.location.origin).pathname;  // Dapatkan path dari href elemen
 
       // Jika path elemen sesuai dengan path saat ini
-      if (elementPath === current) {
+      if (elementPath === currentPath) {
        // Hanya tambahkan kelas active jika elemen tidak memiliki class dropdown
         if (!element.closest('.nav-item').hasClass('dropdown')) {
           element.closest('.nav-item').addClass('active');
@@ -19,10 +20,12 @@
       }
     }
 
-    // Iterasi melalui setiap elemen a dalam sidebar dan terapkan addActiveClass
-    $('.nav li a', sidebar).each(function() {
-      var $this = $(this);
-      addActiveClass($this);
+    // Panggil fungsi untuk elemen yang dimuat melalui AJAX
+    $(document).ajaxComplete(function() {
+      $('.nav li a', sidebar).each(function() {
+        var $this = $(this);
+        addActiveClass($this);
+      });
     });
 
     // Close other submenu in sidebar on opening any

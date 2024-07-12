@@ -7,10 +7,10 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar user</h4>
+                            <h4 class="card-title">Daftar Menu</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('user.create')}}"class="btn btn-primary">Tambah User</a>
+                            <a href="{{ route('menu.create')}}"class="btn btn-primary">Tambah Menu</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -18,12 +18,11 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Email</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-user">
-                                <!-- data user -->
+                            <tbody id="table-menu">
+                                <!-- data menu -->
                             </tbody>
                         </table>
                     </div>
@@ -33,31 +32,31 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/api/admin/user',
+            url: '/api/admin/menu',
             method: 'GET',
             success: function(data) {
-                if (Array.isArray(data.users)) {
-                    var tableBody = $('#table-user');
+                if (Array.isArray(data.menu)) {
+                    var tableBody = $('#table-menu');
 
                     // Iterasi setiap user dalam data
-                    data.users.forEach(function(user) {
+                    data.menu.forEach(function(menu) {
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        row.append('<td>' + user.name + '</td>');
-                        row.append('<td>' + user.email + '</td>');
-                        row.append('<td><a href="'+ '/admin/user/edit/' + user.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + user.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td>' + menu.nama_menu + '</td>');
+                        row.append('<td><a href="'+ '/admin/menu/edit/' + menu.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + menu.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
 
                     $('.delete-button').on('click', function() {
-                    var userId = $(this).data('id');
-                    deleteUser(userId);
+                    var menuId = $(this).data('id');
+                    deleteMenu(menuId);
                 });
                 }
             },
@@ -66,21 +65,22 @@
             }
         });
 
-        function deleteUser(userId) {
-            if (confirm('Apa Anda yakin ingin menghapus User ini?')) {
+        function deleteMenu(menuId) {
+            if (confirm('Apa Anda yakin ingin menghapus Menu ini?')) {
                 $.ajax({
-                url: '/api/admin/user/' + userId,
+                url: '/api/admin/menu/' + menuId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('User deleted successfully');
-                        // Remove the user row from the table
-                        $('button[data-id="' + userId + '"]').closest('tr').remove();
+                        alert('Menu deleted successfully');
+                        // Remove the Menu row from the table
+                        $('button[data-id="' + menuId + '"]').closest('tr').remove();
+                        $('li[data-id="' + menuId + '"]').remove();
                     } else {
-                        alert('Failed to delete user');
+                        alert('Failed to delete menu');
                     }
                 },
                 error: function(xhr, status, error) {

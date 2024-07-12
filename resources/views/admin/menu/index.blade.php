@@ -7,10 +7,10 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar user</h4>
+                            <h4 class="card-title" id="card-title"></h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('user.create')}}"class="btn btn-primary">Tambah User</a>
+                            <a href=""class="btn btn-primary" id="tambah-submenu">Tambah Sub-Menu</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -18,12 +18,12 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Email</th>
+                                    <th>Child Menu</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-user">
-                                <!-- data user -->
+                            <tbody id="table-submenu">
+                                <!-- data menu -->
                             </tbody>
                         </table>
                     </div>
@@ -33,31 +33,44 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
 <script>
     $(document).ready(function () {
+        var slug = window.location.pathname.split('/').pop();
+
+        var formattedTitle = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+        $('.card-title').text(formattedTitle);
+
+        $('#tambah-submenu').click(function(event) {
+            event.preventDefault();
+            var url = '/admin/menu/' + slug + '/add';
+            // Mengarahkan pengguna ke URL yang sesuai
+            window.location.href = url;
+        });
         $.ajax({
-            url: '/api/admin/user',
+            url: '/api/admin/menu/'+ slug,
             method: 'GET',
             success: function(data) {
-                if (Array.isArray(data.users)) {
-                    var tableBody = $('#table-user');
+                if (Array.isArray(data.subMenu)) {
+                    var tableBody = $('#table-submenu');
 
                     // Iterasi setiap user dalam data
-                    data.users.forEach(function(user) {
+                    data.subMenu.forEach(function(submenu) {
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        row.append('<td>' + user.name + '</td>');
-                        row.append('<td>' + user.email + '</td>');
-                        row.append('<td><a href="'+ '/admin/user/edit/' + user.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + user.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td>' + submenu.nama_menu + '</td>');
+                        row.append('<td>' + submenu.slug + '</td>');
+                        row.append('<td><a href="'+ '/admin/menu/edit/' + submenu.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + submenu.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
 
                     $('.delete-button').on('click', function() {
-                    var userId = $(this).data('id');
-                    deleteUser(userId);
+                    var submenuId = $(this).data('id');
+                    deleteMenu(submenuId);
                 });
                 }
             },
@@ -66,21 +79,21 @@
             }
         });
 
-        function deleteUser(userId) {
-            if (confirm('Apa Anda yakin ingin menghapus User ini?')) {
+        function deleteMenu(submenuId) {
+            if (confirm('Apa Anda yakin ingin menghapus SubMenu ini?')) {
                 $.ajax({
-                url: '/api/admin/user/' + userId,
+                url: '/api/admin/menu/' + slug +'/'+ submenuId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('User deleted successfully');
-                        // Remove the user row from the table
-                        $('button[data-id="' + userId + '"]').closest('tr').remove();
+                        alert('SubMenu deleted successfully');
+                        // Remove the Menu row from the table
+                        $('button[data-id="' + submenuId + '"]').closest('tr').remove();
                     } else {
-                        alert('Failed to delete user');
+                        alert('Failed to delete SubMenu');
                     }
                 },
                 error: function(xhr, status, error) {

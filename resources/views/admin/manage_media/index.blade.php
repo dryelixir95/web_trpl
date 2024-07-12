@@ -7,10 +7,10 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar user</h4>
+                            <h4 class="card-title">Daftar Media</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('user.create')}}"class="btn btn-primary">Tambah User</a>
+                            <a href="{{ route('media.create')}}"class="btn btn-primary">Tambah Media</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -18,12 +18,13 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Action</th>
+                                    <th>Media</th>
+                                    <th>Keterangan</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-user">
-                                <!-- data user -->
+                            <tbody id="table-media">
+                                <!-- data media -->
                             </tbody>
                         </table>
                     </div>
@@ -33,31 +34,46 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/api/admin/user',
+            url: '/api/admin/media',
             method: 'GET',
             success: function(data) {
-                if (Array.isArray(data.users)) {
-                    var tableBody = $('#table-user');
+                if (Array.isArray(data.media)) {
+                    var tableBody = $('#table-media');
 
                     // Iterasi setiap user dalam data
-                    data.users.forEach(function(user) {
+                    data.media.forEach(function(media) {
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        row.append('<td>' + user.name + '</td>');
-                        row.append('<td>' + user.email + '</td>');
-                        row.append('<td><a href="'+ '/admin/user/edit/' + user.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + user.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td>' + media.nama + '</td>');
+
+                        var fileUrl = media.media;
+                        var fileExtension = fileUrl.split('.').pop().toLowerCase();
+
+                        if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+                            // Jika file gambar, buat elemen img
+                            row.append('<td><img src="' + '/media/' + fileUrl + '" alt="' + media.nama + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
+                        } else if (fileExtension === 'pdf') {
+                            // Jika file PDF, buat link untuk mengunduh
+                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        } else{
+                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        }
+
+                        row.append('<td>' + media.keterangan + '</td>');
+                        row.append('<td><button data-id="' + media.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
 
                     $('.delete-button').on('click', function() {
-                    var userId = $(this).data('id');
-                    deleteUser(userId);
+                    var mediaId = $(this).data('id');
+                    deleteMedia(mediaId);
                 });
                 }
             },
@@ -66,21 +82,21 @@
             }
         });
 
-        function deleteUser(userId) {
-            if (confirm('Apa Anda yakin ingin menghapus User ini?')) {
+        function deleteMedia(mediaId) {
+            if (confirm('Apa Anda yakin ingin menghapus media ini?')) {
                 $.ajax({
-                url: '/api/admin/user/' + userId,
+                url: '/api/admin/media/' + mediaId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('User deleted successfully');
-                        // Remove the user row from the table
-                        $('button[data-id="' + userId + '"]').closest('tr').remove();
+                        alert('Media deleted successfully');
+                        // Remove the media row from the table
+                        $('button[data-id="' + mediaId + '"]').closest('tr').remove();
                     } else {
-                        alert('Failed to delete user');
+                        alert('Failed to delete media');
                     }
                 },
                 error: function(xhr, status, error) {
