@@ -10,7 +10,7 @@
                             <h4 class="card-title" id="card-title"></h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href=""class="btn btn-primary" id="tambah-submenu">Tambah Sub-Menu</a>
+                            <a href=""class="btn btn-primary" id="tambah-submenu">Add Sub-Menu</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -19,6 +19,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Child Menu</th>
+                                    <th>Data Sub-Menu</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -36,20 +37,20 @@
 
 <script>
     $(document).ready(function () {
-        var slug = window.location.pathname.split('/').pop();
+        var kategori = window.location.pathname.split('/').pop();
 
-        var formattedTitle = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        var formattedTitle = kategori.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-        $('.card-title').text(formattedTitle);
+        $('.card-title').text('Sub-Menu '+formattedTitle);
 
         $('#tambah-submenu').click(function(event) {
             event.preventDefault();
-            var url = '/admin/menu/' + slug + '/add';
+            var url = '/admin/' + kategori + '/add';
             // Mengarahkan pengguna ke URL yang sesuai
             window.location.href = url;
         });
         $.ajax({
-            url: '/api/admin/menu/'+ slug,
+            url: '/api/admin/'+ kategori,
             method: 'GET',
             success: function(data) {
                 if (Array.isArray(data.subMenu)) {
@@ -57,21 +58,24 @@
 
                     // Iterasi setiap user dalam data
                     data.subMenu.forEach(function(submenu) {
+
+                        var nama_subMenu = submenu.nama_menu.toLowerCase().replace(/\s+/g, '-');
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
                         row.append('<td>' + submenu.nama_menu + '</td>');
-                        row.append('<td>' + submenu.slug + '</td>');
-                        row.append('<td><a href="'+ '/admin/menu/edit/' + submenu.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + submenu.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td>' + submenu.kategori + '</td>');
+                        row.append('<td><a href="/admin/' + kategori + '/' + nama_subMenu + '" class="btn btn-primary">Detail</a></td>');
+                        row.append('<td><a href="#" class="mr-1 btn btn-primary">Edit</a><button data-id="' + submenu.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
 
                     $('.delete-button').on('click', function() {
-                    var submenuId = $(this).data('id');
-                    deleteMenu(submenuId);
-                });
+                        var submenuId = $(this).data('id');
+                        deleteMenu(submenuId);
+                    });
                 }
             },
             error: function(xhr, status, error) {
@@ -82,7 +86,7 @@
         function deleteMenu(submenuId) {
             if (confirm('Apa Anda yakin ingin menghapus SubMenu ini?')) {
                 $.ajax({
-                url: '/api/admin/menu/' + slug +'/'+ submenuId,
+                url: '/api/admin/' + kategori +'/'+ submenuId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'

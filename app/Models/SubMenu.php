@@ -11,6 +11,17 @@ class SubMenu extends Model
 
     protected $fillable = [
         'nama_menu',
-        'slug',
+        'kategori',
+        'menu_id', 
     ];
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
+
+    public function fieldSubMenu()
+    {
+        return $this->hasMany(SubMenuField::class);
+    }
 }

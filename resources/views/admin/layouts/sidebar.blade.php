@@ -34,6 +34,12 @@
                 <span class="menu-title">Menu</span>
             </div>
         </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa-solid fa-cube menu-icon"></i>
+                <span class="menu-title">Beranda/Home</span>
+            </a>
+        </li> -->
         <!-- menu -->
     </ul>
 </nav>
@@ -51,9 +57,11 @@
                     data.menu.forEach(function(menu) {
                         // Buat baris tabel baru
                         var li = $('<li class="nav-item" data-id="' + menu.id + '"></li>');
+                        var nama_menu = menu.nama_menu;
+                        var formattedUrl = nama_menu.split(' ').map(word => word.charAt(0).toLowerCase() + word.slice(1)).join('-');
 
                         // Tambahkan data kolom
-                        li.append('<a class="nav-link" href="' + '/admin/menu/'+ menu.slug + '"><i class="fa-solid fa-cube menu-icon"></i><span class="menu-title">'+ menu.nama_menu +'</span></a>');
+                        li.append('<a class="nav-link" href="' + '/admin/'+ formattedUrl + '"><i class="fa-solid fa-cube menu-icon"></i><span class="menu-title">'+ menu.nama_menu +'</span></a>');
                         // Tambahkan baris ke dalam tabel
                         sidebar.append(li);
                     });

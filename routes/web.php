@@ -69,11 +69,22 @@ Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
     })->name('menu.edit');
 
 
-// sub
-    Route::get('menu/{slug}', function(){
+// sub-menu
+    Route::get('/{formattedUrl}', function(){
         return view('admin.menu.index');
     });
-    Route::get('menu/{slug}/add', function(){
+    Route::get('/{formattedUrl}/add', function(){
         return view('admin.menu.create');
-    })->name('submenu.create');
+    });
+
+// data pada sub-menu
+    Route::get('/{formattedUrl}/{subMenu}', function(){
+        return view('admin.data_subMenu.index');
+    });
+    Route::get('/{formattedUrl}/{subMenu}/add', function(){
+        return view('admin.data_subMenu.create');
+    });
+    Route::get('/{formattedUrl}/{subMenu}/field', function(){
+        return view('admin.data_subMenu.field');
+    });
 });

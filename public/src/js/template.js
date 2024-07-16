@@ -6,7 +6,7 @@
 
     function addActiveClass(element) {
       var current = window.location.pathname;  // Dapatkan path lengkap dari URL
-      var currentPath = current.split('/').slice(0, 4).join('/');  // Ambil hingga /admin/menu/beranda
+      var currentPath = current.split('/').slice(0, 3).join('/');  // Ambil hingga /admin/menu/beranda
       var elementPath = new URL(element.attr('href'), window.location.origin).pathname;  // Dapatkan path dari href elemen
 
       // Jika path elemen sesuai dengan path saat ini

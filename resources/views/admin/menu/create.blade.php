@@ -31,9 +31,9 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        var slug = window.location.pathname.split('/')[3];
+        var kategori = window.location.pathname.split('/')[2];
 
-        var formattedTitle = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        var formattedTitle = kategori.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
         $('.card-title').text(formattedTitle);
 
@@ -44,12 +44,11 @@
 
             var formData = new FormData();
             formData.append('nama_menu', $('#nama_menu').val());
-            formData.append('page', slug);
 
             console.log(formData);
 
             $.ajax({
-                url: '/api/admin/menu/' + slug,
+                url: '/api/admin/' + kategori,
                 method: 'POST',
                 contentType: 'application/json',
                 data: formData,

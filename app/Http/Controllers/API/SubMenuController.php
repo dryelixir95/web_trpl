@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\SubMenu;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Models\Menu;
+use App\Models\SubMenu;
 
 class SubMenuController extends Controller
 {
-    public function index($slug){
-
+    public function index($kategori){
         try {
-            $subMenu = SubMenu::where('slug', $slug)->get();
+            $subMenu = SubMenu::where('kategori', $kategori)->get();
         
             return response()->json([
                 'status' => 'success',
@@ -29,24 +28,31 @@ class SubMenuController extends Controller
         }
     }
 
-    public function store(Request $request, $slug){
+    public function store(Request $request, $kategori){
         try{
 
             $validatedData = $request->validate([
                 'nama_menu' => 'required|string|max:255',
-                'page' => 'required|string',
             ]);
 
-            $nama_menu = $validatedData['nama_menu'];
+            $kategoriMenu = str_replace('-', ' ', $kategori);
+
+            $menu = Menu::all();
+            $menu_id = '';
+
+            foreach ($menu as $menu){
+                if(strtolower($menu->nama_menu) == $kategoriMenu){
+                    $menu_id = $menu->id;
+                }
+            }
 
             $menu = SubMenu::create([
-                'nama_menu' => $nama_menu,
-                'slug' => $slug,
+                'nama_menu' => $validatedData['nama_menu'],
+                'kategori' => $kategori,
+                'menu_id' => $menu_id,
             ]);
-
-            $page = $validatedData['page'];
             
-            $url = '/admin/menu/'. $page;
+            $url = '/admin/'. $kategori;
 
             return response()->json([
                 'status' => 'success',
@@ -63,10 +69,10 @@ class SubMenuController extends Controller
         }
     }
 
-    public function destroy($slug, $id)
+    public function destroy($kategori, $id)
     {
         try {
-            $menu = SubMenu::where('slug', $slug)->where('id', $id)->first();
+            $menu = SubMenu::where('kategori', $kategori)->where('id', $id)->first();
             $menu->delete();
 
             return response()->json([

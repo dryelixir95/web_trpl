@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_menus', function (Blueprint $table) {
+        Schema::create('sub_menu_fields', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_menu');
-            $table->string('kategori');
-            $table->unsignedBigInteger('menu_id'); 
+            $table->string('nama_field');
+            $table->unsignedBigInteger('submenu_id'); 
             $table->timestamps();
             
-            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
+            $table->foreign('submenu_id')->references('id')->on('sub_menus')->onDelete('cascade');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sub_menus');
+        Schema::dropIfExists('sub_menu_fields');
     }
 };

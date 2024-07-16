@@ -10,7 +10,7 @@
                             <h4 class="card-title">Daftar Media</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('media.create')}}"class="btn btn-primary">Tambah Media</a>
+                            <a href="{{ route('media.create')}}"class="btn btn-primary">Add Media</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -19,8 +19,8 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Media</th>
-                                    <th>Keterangan</th>
-                                    <th>Aksi</th>
+                                    <th>Note</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="table-media">

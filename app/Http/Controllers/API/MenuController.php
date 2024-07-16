@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 class MenuController extends Controller
 {
     public function index(){
-
         try {
             $menu = Menu::all();
         
@@ -38,8 +37,6 @@ class MenuController extends Controller
 
             $nama_menu = $validatedData['nama_menu'];
 
-            $slug = strtolower(str_replace(' ', '-', $nama_menu));
-
             $hak = $validatedData['hak_akses'];
 
             // Inisialisasi hak_akses
@@ -54,7 +51,6 @@ class MenuController extends Controller
 
             $menu = Menu::create([
                 'nama_menu' => $nama_menu,
-                'slug' => $slug,
                 'hak_akses' => $hak_akses,
             ]);
             $url = '/admin/menu';
@@ -104,8 +100,6 @@ class MenuController extends Controller
 
             $nama_menu = $validatedData['nama_menu'];
 
-            $slug = strtolower(str_replace(' ', '-', $nama_menu));
-
             $hak = $validatedData['hak_akses'];
 
             // Inisialisasi hak_akses
@@ -120,7 +114,6 @@ class MenuController extends Controller
 
             $menu->update([
                 'nama_menu' => $nama_menu,
-                'slug' => $slug,
                 'hak_akses' => $hak_akses,
             ]);
             $url = '/admin/menu';

@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Menu extends Model
+class SubMenuField extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nama_menu',
-        'hak_akses',
+        'nama_field',
+        'submenu_id',
     ];
 
     public function subMenu()
     {
-        return $this->hasMany(SubMenu::class);
+        return $this->belongsTo(SubMenu::class);
     }
 }

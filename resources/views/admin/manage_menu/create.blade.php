@@ -5,7 +5,7 @@
         <div class="col-md-12 grid-margin transparent">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tambah User Baru</h4>
+                    <h4 class="card-title">Tambah Menu Baru</h4>
                     <form id="StoreForm" enctype="multipart/form-data" method="POST">
                         @csrf
                         <div class="row">

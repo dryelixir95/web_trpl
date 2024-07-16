@@ -48,9 +48,9 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
 });
 
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
-    Route::get('menu/{slug}', [SubMenuController::class, 'index']);
-    Route::post('menu/{slug}', [SubMenuController::class, 'store']);
-    // Route::get('menu/{slug}/edit/{id}', [SubMenuController::class, 'edit']);
-    // Route::put('menu/{slug}/{id}', [SubMenuController::class, 'update']);
-    Route::delete('menu/{slug}/{id}', [SubMenuController::class, 'destroy']);
+    Route::get('{kategori}', [SubMenuController::class, 'index']);
+    Route::post('{kategori}', [SubMenuController::class, 'store']);
+    // Route::get('{kategori}/edit/{id}', [SubMenuController::class, 'edit']);
+    // Route::put('{kategori}/{id}', [SubMenuController::class, 'update']);
+    Route::delete('{kategori}/{id}', [SubMenuController::class, 'destroy']);
 });
