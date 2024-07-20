@@ -6,6 +6,8 @@ use App\Http\Controllers\API\MediaController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\MenuController;
 use App\Http\Controllers\API\SubMenuController;
+use App\Http\Controllers\API\SubMenuFieldController;
+use App\Http\Controllers\API\DataSubMenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +52,18 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
     Route::get('{kategori}', [SubMenuController::class, 'index']);
     Route::post('{kategori}', [SubMenuController::class, 'store']);
-    // Route::get('{kategori}/edit/{id}', [SubMenuController::class, 'edit']);
-    // Route::put('{kategori}/{id}', [SubMenuController::class, 'update']);
     Route::delete('{kategori}/{id}', [SubMenuController::class, 'destroy']);
+});
+
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('{kategori}/{submenu}', [SubMenuFieldController::class, 'index']);
+    Route::post('{kategori}/{submenu}', [SubMenuFieldController::class, 'store']);
+});
+
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('{kategori}/{submenu}/data', [DataSubMenuController::class, 'index']);
+    Route::post('{kategori}/{submenu}/data', [DataSubMenuController::class, 'store']);
+    Route::get('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'edit']);
+    Route::put('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'update']);
+    Route::delete('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'destroy']);
 });

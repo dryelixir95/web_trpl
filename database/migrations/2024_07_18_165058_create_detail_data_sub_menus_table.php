@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_menu_fields', function (Blueprint $table) {
+        Schema::create('detail_data_sub_menus', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_field');
             $table->string('tag');
-            $table->string('type_field');
-            $table->string('null');
-            $table->unsignedBigInteger('submenu_id'); 
+            $table->text('value');
+            $table->unsignedBigInteger('dataSubmenu_id'); 
             $table->timestamps();
-            
-            $table->foreign('submenu_id')->references('id')->on('sub_menus')->onDelete('cascade');
+
+            $table->foreign('dataSubmenu_id')->references('id')->on('data_sub_menus')->onDelete('cascade');
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sub_menu_fields');
+        Schema::dropIfExists('detail_data_sub_menus');
     }
 };

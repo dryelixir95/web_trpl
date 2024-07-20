@@ -35,13 +35,11 @@ class SubMenuController extends Controller
                 'nama_menu' => 'required|string|max:255',
             ]);
 
-            $kategoriMenu = str_replace('-', ' ', $kategori);
-
             $menu = Menu::all();
             $menu_id = '';
 
             foreach ($menu as $menu){
-                if(strtolower($menu->nama_menu) == $kategoriMenu){
+                if(strtolower(str_replace(' ', '-', $menu->nama_menu)) == $kategori){
                     $menu_id = $menu->id;
                 }
             }
