@@ -67,6 +67,51 @@ class SubMenuController extends Controller
         }
     }
 
+    public function edit($kategori, $id){
+        try {
+            $subMenu = SubMenu::where('kategori', $kategori)->where('id', $id)->first();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'get sub-menu successfull',
+                'submenu' => $subMenu,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to get sub-menu',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function update(Request $request, $kategori, $id){
+        try {
+            $validatedData = $request->validate([
+                'nama_menu' => 'required|string|max:255',
+            ]);
+
+            $subMenu = SubMenu::where('kategori', $kategori)->where('id', $id)->first();
+            $subMenu->update([
+                'nama_menu' => $validatedData['nama_menu'],
+            ]);
+
+            $url = '/admin/'. $kategori;
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'get sub-menu successfull',
+                'submenu' => $subMenu,
+                'url' => $url,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to get sub-menu',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function destroy($kategori, $id)
     {
         try {

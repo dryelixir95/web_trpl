@@ -72,7 +72,6 @@
             previewFile(file); // Panggil fungsi previewFile saat file dipilih
         });
 
-
         $('#StoreForm').submit(function(event) {
             event.preventDefault(); 
 

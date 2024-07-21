@@ -7,6 +7,7 @@ use App\Models\DetailDataSubMenu;
 use App\Models\SubMenu;
 use App\Models\SubMenuField;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class DataSubMenuController extends Controller
 {
@@ -129,15 +130,142 @@ class DataSubMenuController extends Controller
     }
 
     public function edit($kategori, $submenu, $id){
+        try{
+            $allsubMenu = SubMenu::all();
+            $subMenu_id = '';
 
+            foreach ($allsubMenu as $subMenu){
+                if(strtolower(str_replace(' ', '-', $subMenu->nama_menu))  == $submenu){
+                    $subMenu_id = $subMenu->id;
+                }
+            }
+
+            $fields = SubMenuField::where('submenu_id', $subMenu_id)->get();
+
+            $dataDetailSubMenu = DetailDataSubMenu::where('dataSubmenu_id', $id)->get();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Get data data-sub-menu-id successful',
+                'dataDetailSubMenu' => $dataDetailSubMenu,
+                'fields' => $fields,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to get data data-sub-menu-id',
+                'error' => $e->getMessage()
+            ], 500);
+        } 
     }
 
     public function update(Request $request, $kategori, $submenu, $id){
-        
+        try {
+            $input = $request->except('_token');
+
+            $detailData = DetailDataSubMenu::where('dataSubmenu_id', $id)->get();
+
+            foreach ($input as $key => $value) {
+                if (str_ends_with($key, '-type')) {
+                    continue;
+                }
+    
+                $typeKey = '';
+                foreach ($input as $k => $v) {
+                    if (str_ends_with($k, '-type')) {
+                        if ($k == $key . '-type') {
+                            $typeKey = $v;
+                            break;
+                        }
+                    }
+                }
+    
+                $detail = $detailData->firstWhere('tag', $key);
+
+                if ($typeKey == 'text' || $typeKey == 'textarea' || $typeKey == 'date') {
+                    if ($detail) {
+                        $detail->value = $value;
+                        $detail->save();
+                    } else if (!empty($value)) {
+                        DetailDataSubMenu::create([
+                            'tag' => $key,
+                            'value' => $value,
+                            'dataSubmenu_id' => $id,
+                        ]);
+                    }
+                } else {
+                    if ($request->hasFile($key)) {
+                        $file = $request->file($key);
+                        $fileName = time() . '_' . $file->getClientOriginalName();
+                        $file->move(public_path('files'), $fileName);
+
+                        $oldFile = public_path('files/' . $value);
+
+                        if (File::exists($oldFile)) {
+                            File::delete($oldFile);
+                        }  
+    
+                        if ($detail) {
+                            $detail->value = $fileName;
+                            $detail->save();
+                        } else {
+                            DetailDataSubMenu::create([
+                                'tag' => $key,
+                                'value' => $fileName,
+                                'dataSubmenu_id' => $id,
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            $url = '/admin/'. $kategori.'/'.$submenu;
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data saved successfully',
+                'data' => $input,
+                'url' => $url,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to save data',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy($kategori, $submenu, $id){
-        
+        try{
+            $dataSubMenu = DataSubMenu::findOrFail($id);
+            $dataDetailSubMenu = DetailDataSubMenu::where('dataSubmenu_id', $dataSubMenu->id)->get();
+
+            foreach($dataDetailSubMenu as $detail){
+                $oldFile = public_path('files/' . $detail->value);
+
+                if (File::exists($oldFile)) {
+                    File::delete($oldFile);
+                }  
+
+            }
+
+            $dataSubMenu->delete();
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'data-sub-menu-id has been removed',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to remove data-sub-menu-id',
+                'error' => $e->getMessage()
+            ], 500);
+        } 
     }
 
 }

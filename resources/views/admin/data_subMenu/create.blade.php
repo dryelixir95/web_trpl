@@ -22,7 +22,7 @@
         var subMenu = window.location.pathname.split('/')[3];
         var formattedTitle = subMenu.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-        $('.card-title').text('Setting ' + formattedTitle);
+        $('.card-title').text('Tambah Data ' + formattedTitle);
         $.ajax({
             url: '/api/admin/' + kategori + '/' + subMenu,
             method: 'GET',
@@ -32,7 +32,6 @@
 
                     // Iterasi setiap field dalam data
                     data.fields.forEach(function(field) {
-                        // Buat baris tabel baru
                         var row = $('<div class="row"></div>');
                         var div = $('<div class="col-12 mb-3"></div>')
                         var inputElement;
@@ -63,6 +62,32 @@
             },
             error: function(xhr, status, error) {
                 console.error('There has been a problem with your AJAX operation:', error);
+            }
+        });
+
+        // Function to handle file input changes
+        $(document).on('change', 'input[type="file"]', function() {
+            var fileInput = $(this);
+            var file = fileInput[0].files[0];
+            var reader = new FileReader();
+            var fileType = file.type;
+
+            reader.onload = function(e) {
+                var result = e.target.result;
+                var filePreview = '';
+
+                if (fileType.startsWith('image/')) {
+                    filePreview = '<img src="' + result + '" alt="Image Preview" style="width: 500px; height: auto; margin-top: 10px;">';
+                } else if (fileType === 'application/pdf') {
+                    filePreview = '<embed src="' + result + '" type="application/pdf" style="width: 500px; height: 750px; margin-top: 10px;">';
+                }
+
+                fileInput.siblings('.file-preview').remove(); // Remove previous previews
+                fileInput.after('<div class="file-preview text-center">' + filePreview + '</div>');
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
             }
         });
 

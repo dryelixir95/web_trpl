@@ -55,7 +55,7 @@
         });
 
         $.ajax({
-            url: '/api/admin/' + kategori + '/' + subMenu +'/data',
+            url: '/api/admin/' + kategori + '/' + subMenu + '/data',
             method: 'GET',
             success: function(data) {
                 if (Array.isArray(data.fields)) {
@@ -65,7 +65,7 @@
                     // Iterasi setiap field dalam data
                     data.fields.forEach(function (field) {
                         // Tambahkan data kolom
-                        row.append('<th id="'+field.tag+'">' + field.nama_field + '</th>');
+                        row.append('<th id="' + field.tag + '">' + field.nama_field + '</th>');
                         // Tambahkan baris ke dalam tabel
                     });
                     row.append('<th>Action</th>');
@@ -78,15 +78,29 @@
                     // Iterate through data to create table rows
                     data.dataDetailSubMenu.forEach(function(detail) {
                         var row = $('<tr></tr>');
-
                         var detailDataId = detail[0].dataSubmenu_id;
+
                         // Add data columns
                         data.fields.forEach(function(field) {
                             var value = detail.find(d => d.tag === field.tag)?.value || 'null';
+                            var fileExtensions = ['jpeg', 'jpg', 'png', 'gif', 'svg', 'pdf', 'doc', 'docx', 'xls', 'xlsx'];
+                            var isFile = fileExtensions.some(ext => value.endsWith('.' + ext));
+
+                            if (isFile) {
+                                value = '<a href="/files/' + value + '" target="_blank">View File</a>';
+                            } else {
+                                if (value.length > 70) {
+                                    var shortenedValue = value.substring(0, 70) + '...';
+                                    value = '<pre style="white-space: pre-wrap; background:000; font-family: sans-serif; line-height: 1.5;">' + shortenedValue + ' <a href="#" class="show-more" data-full-text="' + value + '">Selengkapnya</a></pre>';
+                                } else {
+                                    value = '<pre style="white-space: pre-wrap; background:000; font-family: sans-serif; line-height: 1.5;">' + value + '</pre>';
+                                }
+                            }
+
                             row.append('<td>' + value + '</td>');
                         });
 
-                        row.append('<td><a href="/admin/'+ kategori + '/' + subMenu +'/data/'+detailDataId+'" class="mr-1 btn btn-primary edit-button">Edit</a><button data-id="' + detailDataId + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td><a href="/admin/' + kategori + '/' + subMenu + '/data/edit/' + detailDataId + '" class="mr-1 btn btn-primary edit-button">Edit</a><button data-id="' + detailDataId + '" class="btn btn-danger delete-button">Delete</button></td>');
                         tableBody.append(row);
                     });
 
@@ -95,6 +109,13 @@
                         var dataId = $(this).data('id');
                         deleteData(dataId);
                     });
+
+                    // Add show more event listener
+                    $(document).on('click', '.show-more', function(event) {
+                        event.preventDefault();
+                        var fullText = $(this).data('full-text');
+                        $(this).parent().text(fullText);
+                    });
                 }
             },
             error: function(xhr, status, error) {
@@ -102,10 +123,11 @@
             }
         });
 
+
         function deleteData(dataId) {
             if (confirm('Apa Anda yakin ingin menghapus Data ini?')) {
                 $.ajax({
-                    url: '/api/admin/' + kategori + '/' + subMenu +'/data' + dataId,
+                    url: '/api/admin/' + kategori + '/' + subMenu +'/data/' + dataId,
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'

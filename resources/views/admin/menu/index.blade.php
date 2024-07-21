@@ -67,7 +67,7 @@
                         row.append('<td>' + submenu.nama_menu + '</td>');
                         row.append('<td>' + submenu.kategori + '</td>');
                         row.append('<td><a href="/admin/' + kategori + '/' + nama_subMenu + '" class="btn btn-primary">Detail</a></td>');
-                        row.append('<td><a href="#" class="mr-1 btn btn-primary">Edit</a><button data-id="' + submenu.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td><a href="/admin/'+ kategori +'/edit/'+submenu.id+'" class="mr-1 btn btn-primary">Edit</a><button data-id="' + submenu.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });

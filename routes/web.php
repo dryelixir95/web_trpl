@@ -76,6 +76,9 @@ Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
     Route::get('/{formattedUrl}/add', function(){
         return view('admin.menu.create');
     });
+    Route::get('/{formattedUrl}/edit/{id}', function(){
+        return view('admin.menu.edit');
+    });
 
 // data pada sub-menu
     Route::get('/{formattedUrl}/{subMenu}', function(){
@@ -86,5 +89,8 @@ Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
     });
     Route::get('/{formattedUrl}/{subMenu}/field', function(){
         return view('admin.data_subMenu.field');
+    });
+    Route::get('/{formatedUrl}/{submenu}/data/edit/{dataId}', function(){
+        return view('admin.data_subMenu.edit');
     });
 });
