@@ -34,12 +34,12 @@
                 <span class="menu-title">Menu</span>
             </div>
         </li>
-        <!-- <li class="nav-item">
-            <a class="nav-link" href="#">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('beranda.index')}}">
                 <i class="fa-solid fa-cube menu-icon"></i>
-                <span class="menu-title">Beranda/Home</span>
+                <span class="menu-title">Beranda</span>
             </a>
-        </li> -->
+        </li>
         <!-- menu -->
     </ul>
 </nav>

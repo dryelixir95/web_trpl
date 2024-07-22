@@ -68,6 +68,14 @@ Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
         return view('admin.manage_menu.edit');
     })->name('menu.edit');
 
+    // beranda
+    Route::get('beranda', function(){
+        return view('admin.beranda.index');
+    })->name('beranda.index');
+    Route::get('beranda/add', function(){
+        return view('admin.beranda.create');
+    })->name('beranda.create');
+
 
 // sub-menu
     Route::get('/{formattedUrl}', function(){

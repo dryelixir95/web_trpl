@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_menu');
             $table->string('kategori');
+            $table->boolean('beranda')->default(0);
             $table->unsignedBigInteger('menu_id'); 
             $table->timestamps();
             

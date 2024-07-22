@@ -121,14 +121,6 @@ class DataSubMenuController extends Controller
         }
     }
 
-    public function show($kategori, $submenu, $id){
-        
-    }
-
-    public function download($kategori, $submenu, $id){
-        
-    }
-
     public function edit($kategori, $submenu, $id){
         try{
             $allsubMenu = SubMenu::all();

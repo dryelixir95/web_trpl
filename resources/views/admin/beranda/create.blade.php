@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title" id="card-title"></h4>
-                    <form id="updateForm" enctype="multipart/form-data" method="POST">
+                    <form id="StoreForm" enctype="multipart/form-data" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-6 col-sm-12 mb-3">
@@ -32,26 +32,12 @@
 <script>
     $(document).ready(function () {
         var kategori = window.location.pathname.split('/')[2];
-        var subMenuId = window.location.pathname.split('/').pop();
 
         var formattedTitle = kategori.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-        $('.card-title').text('Edit ' +formattedTitle);
+        $('.card-title').text(formattedTitle);
 
-        $.ajax({
-            url: '/api/admin/' + kategori +'/edit/'+ subMenuId,
-            method: 'GET',
-            success: function(data) {
-                if(data.status === "success") {
-                    $('#nama_menu').val(data.submenu.nama_menu);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('There has been a problem with your AJAX operation:', error);
-            }
-        });
-
-        $('#updateForm').submit(function(event) {
+        $('#StoreForm').submit(function(event) {
             event.preventDefault(); 
 
             // $('#submitButton').prop('disabled', true);
@@ -62,15 +48,14 @@
             console.log(formData);
 
             $.ajax({
-                url: '/api/admin/' + kategori +'/edit/'+ subMenuId,
+                url: '/api/admin/' + kategori,
                 method: 'POST',
                 contentType: 'application/json',
                 data: formData,
                 processData: false,
                 contentType: false, 
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'X-HTTP-Method-Override': 'PUT',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(data) {
                     console.log(data);

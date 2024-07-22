@@ -54,6 +54,11 @@ class DatabaseSeeder extends Seeder
             'menu_id' => '1',
         ]);
         SubMenu::create([
+            'nama_menu' => 'Berita',
+            'kategori' => 'profil-prodi',
+            'menu_id' => '1',
+        ]);
+        SubMenu::create([
             'nama_menu' => 'Kurikulum',
             'kategori' => 'profil-prodi',
             'menu_id' => '1',

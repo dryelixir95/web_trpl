@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\BerandaController;
 use App\Http\Controllers\API\MediaController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\MenuController;
@@ -49,11 +50,19 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
     Route::delete('menu/{id}', [MenuController::class, 'destroy']);
 });
 
+// BerandaController 
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+    Route::get('beranda', [BerandaController::class, 'index']);
+    Route::post('beranda', [BerandaController::class, 'store']);
+    Route::put('beranda', [BerandaController::class, 'update']);
+    Route::delete('beranda/{id}', [BerandaController::class, 'destroy']);
+});
+
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
     Route::get('{kategori}', [SubMenuController::class, 'index']);
     Route::post('{kategori}', [SubMenuController::class, 'store']);
-    Route::get('{kategori}/{id}', [SubMenuController::class, 'edit']);
-    Route::put('{kategori}/{id}', [SubMenuController::class, 'update']);
+    Route::get('{kategori}/edit/{id}', [SubMenuController::class, 'edit']);
+    Route::put('{kategori}/edit/{id}', [SubMenuController::class, 'update']);
     Route::delete('{kategori}/{id}', [SubMenuController::class, 'destroy']);
 });
 
@@ -65,8 +74,6 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
     Route::get('{kategori}/{submenu}/data', [DataSubMenuController::class, 'index']);
     Route::post('{kategori}/{submenu}/data', [DataSubMenuController::class, 'store']);
-    // Route::get('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'show']);
-    // Route::get('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'download']);
     Route::get('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'edit']);
     Route::put('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'update']);
     Route::delete('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'destroy']);

@@ -12,6 +12,7 @@ class SubMenu extends Model
     protected $fillable = [
         'nama_menu',
         'kategori',
+        'beranda',
         'menu_id', 
     ];
 
