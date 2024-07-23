@@ -67,7 +67,9 @@ Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
     Route::get('menu/edit/{id}', function(){
         return view('admin.manage_menu.edit');
     })->name('menu.edit');
+});
 
+Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
     // beranda
     Route::get('beranda', function(){
         return view('admin.beranda.index');

@@ -81,7 +81,8 @@
         @include('admin.layouts.sidebar')
         <!-- partial -->
         <div class="main-panel">
-          @yield('content')
+            <!-- @include('admin.layouts.modal') -->
+            @yield('content')
             <footer class="footer">
                 <div class="d-sm-flex justify-content">
                     <span class="text-muted">© Created by <a href="https://trpl.poliwangi.ac.id/">TRPL Poliwangi</a></span>

@@ -17,7 +17,7 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="keterangan" class="form-label">keterangan Media/File</label>
-                                <small class="form-text text-muted">bisa tidak di isi</small>
+                                <small class="form-text" style="color: red;">bisa tidak di isi</small>
                                 <textarea class="form-control" id="keterangan" name="keterangan" rows="10"></textarea>
                             </div>
                         </div>
@@ -25,7 +25,7 @@
                             <div class="col mb-3">
                                 <label for="media" class="form-label">Unggah Media/File</label>
                                 <input type="file" class="form-control-file" id="media" name="media" accept=".jpeg,.png,.jpg,.gif,.svg,.pdf,.doc,.docx,.xls,.xlsx" required>
-                                <small id="fileHelp" class="form-text text-muted">File bisa berupa IMG/DOC/PDF/XLS.</small>
+                                <small id="fileHelp" class="form-text" style="color: red;">File bisa berupa IMG/DOC/PDF/XLS.</small>
                             </div>
                         </div>
                         <div class="row">

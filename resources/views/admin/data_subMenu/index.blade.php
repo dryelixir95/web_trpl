@@ -11,7 +11,7 @@
                         </div>
                         <div class="col-6 text-end">
                             <a href="#" id="setting-field-submenu" class="btn btn-success">Setting Field Data</a>
-                            <a href="#" id="tambah-data-submenu" class="btn btn-primary">Add Data</a>
+                            <a href="#" id="tambah-data-submenu" class="btn btn-primary" hidden>Add Data</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -66,6 +66,7 @@
                     data.fields.forEach(function (field) {
                         // Tambahkan data kolom
                         row.append('<th id="' + field.tag + '">' + field.nama_field + '</th>');
+                        $('#tambah-data-submenu').removeAttr('hidden');
                         // Tambahkan baris ke dalam tabel
                     });
                     row.append('<th>Action</th>');

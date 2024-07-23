@@ -9,9 +9,11 @@
                         <div class="col-6">
                             <h4 class="card-title" id="card-title"></h4>
                         </div>
+                        @if(Auth::user()->role == 'Admin')
                         <div class="col-6 text-end">
                             <a href=""class="btn btn-primary" id="tambah-submenu">Add Sub-Menu</a>
                         </div>
+                        @endif
                     </div>
                     <div class="table-responsive">
                         <table class="table">

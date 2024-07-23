@@ -5,12 +5,20 @@ namespace App\Http\Controllers\API;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class MenuController extends Controller
 {
     public function index(){
         try {
-            $menu = Menu::all();
+            $hak = Auth::user()->role;
+
+            if($hak == 'Admin'){
+                $menu = Menu::all();
+
+            } else{
+                $menu = Menu::where('hak_akses', 2)->get();
+            }
         
             return response()->json([
                 'status' => 'success',

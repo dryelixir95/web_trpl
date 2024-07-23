@@ -11,24 +11,29 @@
                 <span class="menu-title">Master</span>
             </div>
         </li>
+        @if(Auth::user()->role == 'Admin')
         <li class="nav-item">
             <a class="nav-link" href="{{route ('user.index')}}">
                 <i class="fa-solid fa-user menu-icon"></i>
                 <span class="menu-title">User</span>
             </a>
         </li>
-        <li class="nav-item">
+        @endif
+        <!-- <li class="nav-item">
             <a class="nav-link" href="{{ route('media.index')}}">
                 <i class="fa-solid fa-folder menu-icon"></i>
                 <span class="menu-title">Media</span>
             </a>
-        </li>
+        </li> -->
+        @if(Auth::user()->role == 'Admin')
         <li class="nav-item">
             <a class="nav-link" href="{{route ('menu.index')}}">
                 <i class="fa-solid fa-cube menu-icon"></i>
                 <span class="menu-title">Master Menu</span>
             </a>
         </li>
+        @endif
+
         <li class="nav-item mt-4" style="background-color: #FFC100; border-radius: 10px;">
             <div class="row p-2 ml-2">
                 <span class="menu-title">Menu</span>

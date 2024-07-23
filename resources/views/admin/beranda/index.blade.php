@@ -9,10 +9,12 @@
                         <div class="col-6">
                             <h4 id="card-title" class="card-title">Beranda</h4>
                         </div>
+                        @if(Auth::user()->role == 'Admin')
                         <div class="col-6 text-end">
                             <a href="#" id="setting-data-beranda" class="btn btn-success">Setting Data</a>
                             <a href="{{ route('beranda.create')}}" id="add-data-beranda" class="btn btn-primary">Add Data</a>
                         </div>
+                        @endif
                     </div>
                     <div class="table-responsive">
                         <table class="table">

@@ -35,14 +35,14 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
 });
 
 // MediaController 
-Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('media', [MediaController::class, 'index']);
     Route::post('media', [MediaController::class, 'store']);
     Route::delete('media/{id}', [MediaController::class, 'destroy']);
 });
 
 // MenuController 
-Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('menu', [MenuController::class, 'index']);
     Route::post('menu', [MenuController::class, 'store']);
     Route::get('menu/{id}', [MenuController::class, 'edit']);
@@ -51,14 +51,14 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
 });
 
 // BerandaController 
-Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('beranda', [BerandaController::class, 'index']);
     Route::post('beranda', [BerandaController::class, 'store']);
     Route::put('beranda', [BerandaController::class, 'update']);
     Route::delete('beranda/{id}', [BerandaController::class, 'destroy']);
 });
 
-Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('{kategori}', [SubMenuController::class, 'index']);
     Route::post('{kategori}', [SubMenuController::class, 'store']);
     Route::get('{kategori}/edit/{id}', [SubMenuController::class, 'edit']);
@@ -66,12 +66,12 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
     Route::delete('{kategori}/{id}', [SubMenuController::class, 'destroy']);
 });
 
-Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('{kategori}/{submenu}', [SubMenuFieldController::class, 'index']);
     Route::post('{kategori}/{submenu}', [SubMenuFieldController::class, 'store']);
 });
 
-Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(function () {
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('{kategori}/{submenu}/data', [DataSubMenuController::class, 'index']);
     Route::post('{kategori}/{submenu}/data', [DataSubMenuController::class, 'store']);
     Route::get('{kategori}/{submenu}/data/{id}', [DataSubMenuController::class, 'edit']);
