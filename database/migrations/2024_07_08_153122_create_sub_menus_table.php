@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama_menu');
             $table->string('kategori');
             $table->boolean('beranda')->default(0);
-            $table->unsignedBigInteger('menu_id'); 
+            $table->unsignedBigInteger('menu_id')->nullable(); 
             $table->timestamps();
             
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');

@@ -10,7 +10,7 @@ use App\Models\User;
 
 class AuthControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
 
     /** @test */
     public function user_can_login_with_valid_credentials()

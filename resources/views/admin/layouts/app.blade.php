@@ -81,7 +81,7 @@
         @include('admin.layouts.sidebar')
         <!-- partial -->
         <div class="main-panel">
-            <!-- @include('admin.layouts.modal') -->
+            <!--  include('admin.layouts.modal') -->
             @yield('content')
             <footer class="footer">
                 <div class="d-sm-flex justify-content">

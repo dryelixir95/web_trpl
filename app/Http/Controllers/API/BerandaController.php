@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\SubMenu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class BerandaController extends Controller
 {
@@ -50,7 +52,14 @@ class BerandaController extends Controller
                 'menu' => $menu,
                 'url' => $url,
             ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e){
+            Log::error('Store method failed: '.$e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to add sub-menu',
@@ -81,6 +90,12 @@ class BerandaController extends Controller
                 'url' => $url,
             ]);
 
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
