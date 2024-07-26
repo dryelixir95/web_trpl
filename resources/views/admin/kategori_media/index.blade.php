@@ -7,23 +7,21 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar Media</h4>
+                            <h4 class="card-title">Daftar Kategori Media</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('media.create')}}"class="btn btn-primary">Add Media</a>
+                            <a href="{{ route('kategori-media.create')}}"class="btn btn-primary">Tambah Kategori</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Media</th>
                                     <th>Kategori</th>
-                                    <th>Deskripsi</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-media">
+                            <tbody id="table-kategori-media">
                                 <!-- data media -->
                             </tbody>
                         </table>
@@ -38,34 +36,19 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/api/admin/media',
+            url: '/api/admin/kategori-media',
             method: 'GET',
             success: function(data) {
-                if (Array.isArray(data.media)) {
-                    var tableBody = $('#table-media');
+                if (Array.isArray(data.kategori)) {
+                    var tableBody = $('#table-kategori-media');
 
                     // Iterasi setiap user dalam data
-                    data.media.forEach(function(media) {
+                    data.kategori.forEach(function(media) {
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        
-                        var fileUrl = media.media;
-                        var fileExtension = fileUrl.split('.').pop().toLowerCase();
-                        
-                        if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
-                            // Jika file gambar, buat elemen img
-                            row.append('<td><img src="' + '/media/' + fileUrl + '" alt="' + media.nama + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
-                        } else if (fileExtension === 'pdf') {
-                            // Jika file PDF, buat link untuk mengunduh
-                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
-                        } else{
-                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
-                        }
-                        row.append('<td>' + media.kategori + '</td>');
-
-                        row.append('<td>' + media.keterangan + '</td>');
+                        row.append('<td>' + media.nama + '</td>');
                         row.append('<td><button data-id="' + media.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
@@ -83,9 +66,9 @@
         });
 
         function deleteMedia(mediaId) {
-            if (confirm('Apa Anda yakin ingin menghapus media ini?')) {
+            if (confirm('Apa Anda yakin ingin menghapus kategori media ini?')) {
                 $.ajax({
-                url: '/api/admin/media/' + mediaId,
+                url: '/api/admin/kategori-media/' + mediaId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'

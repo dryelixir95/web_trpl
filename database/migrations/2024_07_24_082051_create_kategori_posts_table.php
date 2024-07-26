@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
+        Schema::create('kategori_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('media');
-            $table->string('kategori');
-            $table->string('keterangan')->nullable();
+            $table->string('nama');
+            $table->string('slug');
+            $table->unsignedBigInteger('index_menu');
+            $table->string('deskripsi')->nullable();
             $table->timestamps();
+
+            $table->foreign('index_menu')->references('id')->on('menus')->onDelete('cascade');
         });
     }
 
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('kategori_posts');
     }
 };

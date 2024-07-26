@@ -44,7 +44,41 @@ Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
     })->name('user.edit');
 });
 
-// userControllter
+Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
+    Route::get('post/', function(){
+        return view('admin.manage_post.index');
+    })->name('post.index');
+    Route::get('post/add', function(){
+        return view('admin.manage_post.create');
+    })->name('post.create');
+    Route::get('post/edit/{id}', function(){
+        return view('admin.manage_post.edit');
+    })->name('post.edit');
+});
+Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
+    Route::get('kategori-post/', function(){
+        return view('admin.kategori_post.index');
+    })->name('kategori-post.index');
+    Route::get('kategori-post/add', function(){
+        return view('admin.kategori_post.create');
+    })->name('kategori-post.create');
+    Route::get('kategori-post/edit/{id}', function(){
+        return view('admin.kategori_post.edit');
+    })->name('kategori-post.edit');
+});
+Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
+    Route::get('tag/', function(){
+        return view('admin.manage_tag.index');
+    })->name('tag.index');
+    Route::get('tag/add', function(){
+        return view('admin.manage_tag.create');
+    })->name('tag.create');
+    Route::get('tag/edit/{id}', function(){
+        return view('admin.manage_tag.edit');
+    })->name('tag.edit');
+});
+
+// mediaControllter
 Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('media/', function(){
         return view('admin.manage_media.index');
@@ -55,6 +89,18 @@ Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function
     Route::get('media/edit/{id}', function(){
         return view('admin.manage_media.edit');
     })->name('media.edit');
+});
+
+Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
+    Route::get('kategori-media/', function(){
+        return view('admin.kategori_media.index');
+    })->name('kategori-media.index');
+    Route::get('kategori-media/add', function(){
+        return view('admin.kategori_media.create');
+    })->name('kategori-media.create');
+    Route::get('kategori-media/edit/{id}', function(){
+        return view('admin.kategori_media.edit');
+    })->name('kategori-media.edit');
 });
 
 Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {

@@ -14,7 +14,12 @@
        // Hanya tambahkan kelas active jika elemen tidak memiliki class dropdown
         if (!element.closest('.nav-item').hasClass('dropdown')) {
           element.closest('.nav-item').addClass('active');
+        } else{
+          // Tambahkan kelas active pada elemen dropdown dan item anaknya
+          element.closest('.dropdown').addClass('active');
+          element.closest('.dropdown').find('.dropdown-toggle').addClass('active');
         }
+        
         // Hapus kelas d-none dari submenu yang terkait
         element.closest('.dropdown').find('.submenu').removeClass('d-none');
       }
@@ -48,15 +53,15 @@
       $(".horizontal-menu .bottom-navbar").toggleClass("header-toggled");
     });
 
-    var navItemClicked = $('.horizontal-menu .page-navigation >.nav-item');
-    navItemClicked.on("click", function(event) {
-      if(window.matchMedia('(max-width: 991px)').matches) {
-        if(!($(this).hasClass('show-submenu'))) {
-          navItemClicked.removeClass('show-submenu');
-        }
-        $(this).toggleClass('show-submenu');
-      }        
-    });
+    // var navItemClicked = $('.horizontal-menu .page-navigation >.nav-item');
+    // navItemClicked.on("click", function(event) {
+    //   if(window.matchMedia('(max-width: 991px)').matches) {
+    //     if(!($(this).hasClass('show-submenu'))) {
+    //       navItemClicked.removeClass('show-submenu');
+    //     }
+    //     $(this).toggleClass('show-submenu');
+    //   }        
+    // });
 
     $(window).scroll(function() {
       if(window.matchMedia('(min-width: 992px)').matches) {

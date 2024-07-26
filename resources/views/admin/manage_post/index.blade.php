@@ -7,19 +7,21 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar Media</h4>
+                            <h4 class="card-title">Daftar Post</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('media.create')}}"class="btn btn-primary">Add Media</a>
+                            <a href="{{ route('post.create')}}"class="btn btn-primary">Add Post</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Media</th>
+                                    <th>Judul</th>
                                     <th>Kategori</th>
-                                    <th>Deskripsi</th>
+                                    <th>Deskripsi/Isi</th>
+                                    <th>Tag</th>
+                                    <th>Tanggal</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -38,7 +40,7 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/api/admin/media',
+            // url: '/api/admin/media',
             method: 'GET',
             success: function(data) {
                 if (Array.isArray(data.media)) {
@@ -50,10 +52,11 @@
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        
+                        row.append('<td>' + media.nama + '</td>');
+
                         var fileUrl = media.media;
                         var fileExtension = fileUrl.split('.').pop().toLowerCase();
-                        
+
                         if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
                             // Jika file gambar, buat elemen img
                             row.append('<td><img src="' + '/media/' + fileUrl + '" alt="' + media.nama + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
@@ -63,7 +66,6 @@
                         } else{
                             row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
                         }
-                        row.append('<td>' + media.kategori + '</td>');
 
                         row.append('<td>' + media.keterangan + '</td>');
                         row.append('<td><button data-id="' + media.id + '" class="btn btn-danger delete-button">Delete</button></td>');

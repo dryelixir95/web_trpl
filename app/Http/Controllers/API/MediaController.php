@@ -31,8 +31,8 @@ class MediaController extends Controller
         try{
 
             $validatedData = $request->validate([
-                'nama' => 'required|string|max:255',
                 'media' => 'required|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx,xls,xlsx|max:2048',
+                'kategori' => 'required|string|max:255',
                 'keterangan' => 'nullable|string'
             ]);
 

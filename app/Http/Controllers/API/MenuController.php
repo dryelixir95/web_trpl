@@ -43,7 +43,7 @@ class MenuController extends Controller
                 'hak_akses' => 'required|array'
             ]);
 
-            $nama_menu = ucwords($validatedData['nama_menu']);
+            $nama_menu = ucwords(strtolower($validatedData['nama_menu']));
 
             $hak = $validatedData['hak_akses'];
 

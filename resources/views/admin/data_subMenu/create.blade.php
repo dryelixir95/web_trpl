@@ -43,16 +43,17 @@
                         } else if(field.type_field == 'date'){
                             inputElement = '<input type="date" class="form-control" id="'+field.tag+'" name="'+field.tag+'" data-type-field="date">';
                         } else{
-                            inputElement = '<input type="file" class="form-control-file" id="'+field.tag+'" name="'+field.tag+'" data-type-field="file" accept=".jpeg,.png,.jpg,.gif,.svg,.pdf,.doc,.docx,.xls,.xlsx">';
+                            // inputElement = '<input type="file" class="form-control-file" id="'+field.tag+'" name="'+field.tag+'" data-type-field="file" accept=".jpeg,.png,.jpg,.gif,.svg,.pdf,.doc,.docx,.xls,.xlsx">';
+                        // }
+                        inputElement = `
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="${field.tag}" name="${field.tag}" data-type-field="file" accept=".jpeg,.png,.jpg,.gif,.svg,.pdf,.doc,.docx,.xls,.xlsx">
+                                    <button type="button" id="openMediaLibrary" class="btn btn-secondary">Select from Media Library</button>
+                                    <input type="hidden" id="selectedMediaFile" name="selected_media_file">
+                                    <div class="file-preview"></div>
+                                </div>
+                            `;
                         }
-                        // inputElement = `
-                        //         <div class="input-group">
-                        //             <input type="file" class="form-control" id="${field.tag}" name="${field.tag}" data-type-field="file" accept=".jpeg,.png,.jpg,.gif,.svg,.pdf,.doc,.docx,.xls,.xlsx">
-                        //             <button type="button" id="openMediaLibrary" class="btn btn-secondary">Select from Media Library</button>
-                        //             <input type="hidden" id="selectedMediaFile" name="selected_media_file">
-                        //             <div class="file-preview"></div>
-                        //         </div>
-                        //     `;
                         
                         // Tambahkan atribut 'required' jika field tidak boleh null
                         if (field.null == 'not') {

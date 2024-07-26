@@ -7,23 +7,24 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar Media</h4>
+                            <h4 class="card-title">Daftar Kategori Post</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('media.create')}}"class="btn btn-primary">Add Media</a>
+                            <a href="{{ route('kategori-post.create')}}"class="btn btn-primary">Add Kategori</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Media</th>
-                                    <th>Kategori</th>
+                                    <th>Nama</th>
+                                    <th>Slug</th>
+                                    <th>Index Menu</th>
                                     <th>Deskripsi</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-media">
+                            <tbody id="table-kategori-post">
                                 <!-- data media -->
                             </tbody>
                         </table>
@@ -38,42 +39,34 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/api/admin/media',
+            url: '/api/admin/kategori-post',
             method: 'GET',
             success: function(data) {
-                if (Array.isArray(data.media)) {
-                    var tableBody = $('#table-media');
+                if (Array.isArray(data.kategori)) {
+                    var tableBody = $('#table-kategori-post');
 
                     // Iterasi setiap user dalam data
-                    data.media.forEach(function(media) {
+                    data.kategori.forEach(function(kategori) {
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        
-                        var fileUrl = media.media;
-                        var fileExtension = fileUrl.split('.').pop().toLowerCase();
-                        
-                        if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
-                            // Jika file gambar, buat elemen img
-                            row.append('<td><img src="' + '/media/' + fileUrl + '" alt="' + media.nama + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
-                        } else if (fileExtension === 'pdf') {
-                            // Jika file PDF, buat link untuk mengunduh
-                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
-                        } else{
-                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
-                        }
-                        row.append('<td>' + media.kategori + '</td>');
-
-                        row.append('<td>' + media.keterangan + '</td>');
-                        row.append('<td><button data-id="' + media.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td>' + kategori.nama + '</td>');
+                        row.append('<td>' + kategori.slug + '</td>');
+                        data.menu.forEach(function(menu) {
+                            if(menu.id == kategori.id){
+                                row.append('<td id="'+kategori.index_menu+'">' +menu.nama_menu + '</td>');
+                            }
+                        });
+                        row.append('<td>' + kategori.deskripsi + '</td>');
+                        row.append('<td><button data-id="' + kategori.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
 
                     $('.delete-button').on('click', function() {
-                    var mediaId = $(this).data('id');
-                    deleteMedia(mediaId);
+                    var kategoriId = $(this).data('id');
+                    deleteMedia(kategoriId);
                 });
                 }
             },
@@ -82,10 +75,10 @@
             }
         });
 
-        function deleteMedia(mediaId) {
-            if (confirm('Apa Anda yakin ingin menghapus media ini?')) {
+        function deleteMedia(kategoriId) {
+            if (confirm('Apa Anda yakin ingin menghapus kategori media ini?')) {
                 $.ajax({
-                url: '/api/admin/media/' + mediaId,
+                url: '/api/admin/kategori-media/' + mediaId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'

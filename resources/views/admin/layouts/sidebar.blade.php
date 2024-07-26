@@ -1,3 +1,12 @@
+<style>
+    .dropdown-toggle::after {
+        margin-left: auto;
+        margin-right: 0;
+        right: 13px;
+        position: absolute;
+    }
+</style>
+
 <nav class="sidebar sidebar-offcanvas mt-3" id="sidebar">
     <ul class="nav" id="menu">
         <li class="nav-item">
@@ -19,12 +28,28 @@
             </a>
         </li>
         @endif
-        <!-- <li class="nav-item">
-            <a class="nav-link" href="{{ route('media.index')}}">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa-solid fa-folder menu-icon"></i>
+                <span class="menu-title">Post</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="postDropdown">
+                <a class="dropdown-item" href="{{ route('post.index') }}">List Post</a>
+                <a class="dropdown-item" href="{{ route('kategori-post.index') }}">Kategori</a>
+                <a class="dropdown-item" href="{{ route('tag.index') }}">Tag</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="mediaDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-folder menu-icon"></i>
                 <span class="menu-title">Media</span>
             </a>
-        </li> -->
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="mediaDropdown">
+                <a class="dropdown-item" href="{{ route('media.index') }}">Semua</a>
+                <a class="dropdown-item" href="{{ route('kategori-media.index') }}">Kategori</a>
+            </div>
+        </li>
+
         @if(Auth::user()->role == 'Admin')
         <li class="nav-item">
             <a class="nav-link" href="{{route ('menu.index')}}">
@@ -63,7 +88,7 @@
                         // Buat baris tabel baru
                         var li = $('<li class="nav-item" data-id="' + menu.id + '"></li>');
                         var nama_menu = menu.nama_menu;
-                        var formattedUrl = nama_menu.split(' ').map(word => word.charAt(0).toLowerCase() + word.slice(1)).join('-');
+                        var formattedUrl = nama_menu.toLowerCase().split(' ').join('-');
 
                         // Tambahkan data kolom
                         li.append('<a class="nav-link" href="' + '/admin/'+ formattedUrl + '"><i class="fa-solid fa-cube menu-icon"></i><span class="menu-title">'+ menu.nama_menu +'</span></a>');

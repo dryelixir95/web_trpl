@@ -21,6 +21,22 @@
   <link rel="stylesheet" href="{{asset('/src/css/vertical-layout-light/style.css')}}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{{asset('/src/images/favicon.png')}}">
+
+  <!-- ckeditor5 -->
+  <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.1/ckeditor5-premium-features.css" />
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
+                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/",
+                "ckeditor5-premium-features": "https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.1/ckeditor5-premium-features.js",
+                "ckeditor5-premium-features/": "https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.1/"
+            }
+        }
+    </script>
+    <script type="module" src="{{ URL::asset('assets/vendor/ckeditor5.js') }}"></script>
+
 </head>
 <style>
 .navbar-toggler:focus {
@@ -81,7 +97,9 @@
         @include('admin.layouts.sidebar')
         <!-- partial -->
         <div class="main-panel">
-            <!--  include('admin.layouts.modal') -->
+            @include('admin.layouts.modal')
+            <!-- <div id="editor"></div> -->
+
             @yield('content')
             <footer class="footer">
                 <div class="d-sm-flex justify-content">
