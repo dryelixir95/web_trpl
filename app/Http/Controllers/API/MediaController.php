@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
@@ -29,7 +30,6 @@ class MediaController extends Controller
 
     public function store(Request $request){
         try{
-
             $validatedData = $request->validate([
                 'media' => 'required|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx,xls,xlsx|max:2048',
                 'kategori' => 'required|string|max:255',
@@ -55,6 +55,33 @@ class MediaController extends Controller
                 'media' => $media,
                 'url' => $url,
             ]);
+        } catch (\Exception $e){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to add media',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function upload_ckeditor(Request $request){
+        try{
+            $validatedData = $request->validate([
+                'upload' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            if ($request->hasFile('upload')) {
+                $file = $request->file('upload');
+                if ($file->isValid()) {
+                    $FileName = uniqid('media_') . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('media/ckeditor'), $FileName);
+                    $validatedData['upload'] = $FileName;
+                }
+            }
+
+            $url = asset('media/ckeditor/' . $validatedData['upload']);
+
+            return response()->json(['url' => $url]);
+
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'error',

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <!-- Required meta tags -->
+   <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>TRPL Admin</title>
@@ -23,19 +25,10 @@
   <link rel="shortcut icon" href="{{asset('/src/images/favicon.png')}}">
 
   <!-- ckeditor5 -->
-  <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.1/ckeditor5-premium-features.css" />
-    <script type="importmap">
-        {
-            "imports": {
-                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
-                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/",
-                "ckeditor5-premium-features": "https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.1/ckeditor5-premium-features.js",
-                "ckeditor5-premium-features/": "https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.1/"
-            }
-        }
-    </script>
-    <script type="module" src="{{ URL::asset('assets/vendor/ckeditor5.js') }}"></script>
+  <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css" />
+  <link rel="stylesheet" href="{{ URL::asset('assets/vendor/main.css') }}" />
+  
+    
 
 </head>
 <style>
@@ -113,6 +106,17 @@
     @yield('content')
 @endif
 
+  <!-- ckeditor -->
+  <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.js",
+                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.2/"
+            }
+        }
+    </script>
+    <script type="module" src="{{ URL::asset('assets/vendor/ckeditor5.js') }}"></script>
+
   <!-- plugins:js -->
   <script src="{{asset('/src/vendors/js/vendor.bundle.base.js')}}"></script>
   <script src="{{asset('/src/vendors/chart.js/Chart.min.js')}}"></script>
@@ -139,12 +143,11 @@
   <!-- End custom js for this page-->
 
 <script>
-  var host = "http://127.0.0.1:8000/api";
 
   $('#logout').click(function() {
     // Membuat permintaan logout ke server
     $.ajax({
-        url: host + '/logout',
+        url: '/api/logout',
         method: 'POST', 
         contentType: 'application/json',
         headers: {

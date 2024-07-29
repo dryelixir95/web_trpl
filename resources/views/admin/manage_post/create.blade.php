@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 @section('content')
 <style>
-    .selected-categories-container, .selected-tags-container {
+    .selected-tags-container {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
@@ -10,7 +10,7 @@
         border-radius: 5px;
         padding: 5px;
     }
-    .selected-category-tag, .selected-tag-tag  {
+    .selected-tag-tag  {
         display: inline-block;
         background-color: #007bff;
         color: white;
@@ -21,7 +21,7 @@
         margin-top: -9px;
     }
 
-    .selected-category-tag .remove-tag, .selected-tag-tag .remove-tag {
+    .selected-tag-tag .remove-tag {
         margin-left: 10px;
         cursor: pointer;
         font-weight: bold;
@@ -42,30 +42,24 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 mb-4">
-                                <label for="kategori" class="form-label">Kategori</label>
-                                <div class="input-group">
-                                    <select class="custom-select" style="height: 46px;" id="kategori" name="kategori">
-                                        <option value="">Pilih Kategori</option>
-                                        <!-- option -->
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" id="tambah-kategori" type="button">Tambah</button>
-                                    </div>
-                                </div>
+                            <div class="col-12 mb-3">
+                                <label for="tanggal" class="form-label">Tanggal</label>
+                                <input type="date" class="form-control" id="tanggal" name="tanggal" required>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="selected-category" class="col-sm-2 col-form-label">Kategori yang dipilih:</label>
-                                <div class="col-sm-10">
-                                    <div id="selected-categories-container" class="form-control"></div>
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <label for="kategori" class="form-label">Kategori</label>
+                                <select class="custom-select" style="height: 46px;" id="kategori" name="kategori">
+                                    <option value="">Pilih Kategori</option>
+                                    <!-- option -->
+                                </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi/isi</label>
                                 <textarea class="form-control" id="editor" name="keterangan" rows="10"></textarea>
-                                <small class="form-text" style="color: red;">bisa tidak di isi</small>
                             </div>
                         </div>
                         <div class="row">
@@ -103,6 +97,9 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
+        const today = new Date().toISOString().split('T')[0];
+        $('#tanggal').val(today);
+
         $.ajax({
             url: '/api/admin/kategori-post',
             method: 'GET',
@@ -113,7 +110,7 @@
                     // Iterasi setiap user dalam data
                     data.kategori.forEach(function(kategori) {
                         // Buat baris tabel baru
-                        var option = $('<option></option>').val(kategori.id).text(kategori.slug);
+                        var option = $('<option></option>').val(kategori.nama).text(kategori.nama);
                         
                         // Tambahkan baris ke dalam tabel
                         selectMenu.append(option);
@@ -123,36 +120,6 @@
             error: function(xhr, status, error) {
                 console.error('There has been a problem with your AJAX operation:', error);
             }
-        });
-
-        $('#tambah-kategori').on('click', function(event) {
-            event.preventDefault(); // Mencegah tindakan default tombol
-
-            // Ambil nilai kategori yang dipilih
-            var selectedCategory = $('#kategori').val();
-            var selectedCategoryName = $('#kategori option:selected').text();
-
-            if (!selectedCategory) return; 
-
-            var categoryExists = false;
-            $('#selected-categories-container .selected-category-tag').each(function() {
-                if ($(this).data('category') == selectedCategory) {
-                    categoryExists = true;
-                    return false; // Break the loop
-                }
-            });
-
-            if (!categoryExists) {
-                // Tambahkan kategori yang dipilih sebagai tag
-                var categoryTag = $('<span class="selected-category-tag" data-category="' + selectedCategory + '">' + selectedCategoryName + '<span class="remove-tag">&times;</span></span>');
-                $('#selected-categories-container').append(categoryTag);
-
-                // Tambahkan event listener untuk menghapus tag
-                categoryTag.find('.remove-tag').on('click', function() {
-                    $(this).parent().remove();
-                });
-            }
-            $('#kategori').val('');
         });
 
         $.ajax({
@@ -165,7 +132,7 @@
                     // Iterasi setiap user dalam data
                     data.tag.forEach(function(tag) {
                         // Buat baris tabel baru
-                        var option = $('<option></option>').val(tag.id).text(tag.tag);
+                        var option = $('<option></option>').val(tag.tag).text(tag.tag);
                         
                         // Tambahkan baris ke dalam tabel
                         selectMenu.append(option);
@@ -209,19 +176,24 @@
         });
 
         $('#StoreForm').submit(function(event) {
-            event.preventDefault(); 
-
-            // $('#submitButton').prop('disabled', true);
+            event.preventDefault();
 
             var formData = new FormData();
-            formData.append('nama', $('#nama').val());
-            formData.append('keterangan', $('#keterangan').val());
-            if ($('#media')[0].files[0]) {
-                formData.append('media', $('#media')[0].files[0]);
-            }
+            formData.append('judul', $('#judul').val());
+            formData.append('tanggal', $('#tanggal').val());
+            formData.append('kategori', $('#kategori').val());
+
+            const editorData = window.editor.getData();
+            console.log(editorData);
+            formData.append('deskripsi', editorData); // Ambil data CKEditor
+
+            // Menyertakan tag yang dipilih
+            $('#selected-tags-container .selected-tag-tag').each(function() {
+                formData.append('tags[]', $(this).data('tag'));
+            });
 
             $.ajax({
-                url: '/api/admin/media',
+                url: '/api/admin/post',
                 method: 'POST',
                 contentType: 'application/json',
                 data: formData,

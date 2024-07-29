@@ -11,6 +11,7 @@ use App\Http\Controllers\API\SubMenuController;
 use App\Http\Controllers\API\SubMenuFieldController;
 use App\Http\Controllers\API\DataSubMenuController;
 use App\Http\Controllers\API\KategoriPostController;
+use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\TagController;
 
 /*
@@ -38,11 +39,11 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
 });
 
 // PostController 
-// Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
-//     Route::get('post', [PostController::class, 'index']);
-//     Route::post('post', [PostController::class, 'store']);
-//     Route::delete('post/{id}', [PostController::class, 'destroy']);
-// });
+Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
+    Route::get('post', [PostController::class, 'index']);
+    Route::post('post', [PostController::class, 'store']);
+    Route::delete('post/{id}', [PostController::class, 'destroy']);
+});
 
 // KategoriPostController 
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
@@ -62,6 +63,7 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('media', [MediaController::class, 'index']);
     Route::post('media', [MediaController::class, 'store']);
+    Route::post('media/ckeditor', [MediaController::class, 'upload_ckeditor']);
     Route::delete('media/{id}', [MediaController::class, 'destroy']);
 });
 // KategoriMediaController 

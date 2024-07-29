@@ -25,8 +25,8 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-media">
-                                <!-- data media -->
+                            <tbody id="table-post">
+                                <!-- data post -->
                             </tbody>
                         </table>
                     </div>
@@ -40,42 +40,48 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            // url: '/api/admin/media',
+            url: '/api/admin/post',
             method: 'GET',
             success: function(data) {
-                if (Array.isArray(data.media)) {
-                    var tableBody = $('#table-media');
+                if (Array.isArray(data.posts)) {
+                    var tableBody = $('#table-post');
 
                     // Iterasi setiap user dalam data
-                    data.media.forEach(function(media) {
+                    data.posts.forEach(function(post) {
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        row.append('<td>' + media.nama + '</td>');
+                        row.append('<td>' + post.judul + '</td>');
+                        row.append('<td>' + post.kategori + '</td>');
 
-                        var fileUrl = media.media;
-                        var fileExtension = fileUrl.split('.').pop().toLowerCase();
+                        var isiDeskripsi = post.deskripsi;
+                        var shortenedDeskripsi = isiDeskripsi;
+                        var showMore = '';
 
-                        if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
-                            // Jika file gambar, buat elemen img
-                            row.append('<td><img src="' + '/media/' + fileUrl + '" alt="' + media.nama + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
-                        } else if (fileExtension === 'pdf') {
-                            // Jika file PDF, buat link untuk mengunduh
-                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
-                        } else{
-                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        if (isiDeskripsi.length > 70) {
+                            shortenedDeskripsi = isiDeskripsi.substring(0, 70) + '...';
+                            showMore = '<a href="#" class="show-more">Selengkapnya</a>';
                         }
 
-                        row.append('<td>' + media.keterangan + '</td>');
-                        row.append('<td><button data-id="' + media.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td><pre style="white-space: pre-wrap; background:000; font-family: sans-serif; line-height: 1.5;">' + shortenedDeskripsi + ' ' + showMore + '</pre></td>');
+
+                        row.append('<td>' + post.tag + '</td>');
+                        row.append('<td>' + post.tanggal + '</td>');
+
+                        row.append('<td><button data-id="' + post.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
+
+                        $('.show-more').on('click', function(event) {
+                            event.preventDefault();
+                            $(this).parent().html(isiDeskripsi);
+                        });
                     });
 
                     $('.delete-button').on('click', function() {
-                    var mediaId = $(this).data('id');
-                    deleteMedia(mediaId);
+                    var postId = $(this).data('id');
+                    deletePost(postId);
                 });
                 }
             },
@@ -84,21 +90,20 @@
             }
         });
 
-        function deleteMedia(mediaId) {
-            if (confirm('Apa Anda yakin ingin menghapus media ini?')) {
+        function deletePost(postId) {
+            if (confirm('Apa Anda yakin ingin menghapus Postingan ini?')) {
                 $.ajax({
-                url: '/api/admin/media/' + mediaId,
+                url: '/api/admin/post/' + postId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('Media deleted successfully');
-                        // Remove the media row from the table
-                        $('button[data-id="' + mediaId + '"]').closest('tr').remove();
+                        alert('Postingan deleted successfully');
+                        $('button[data-id="' + postId + '"]').closest('tr').remove();
                     } else {
-                        alert('Failed to delete media');
+                        alert('Failed to delete Postingan');
                     }
                 },
                 error: function(xhr, status, error) {
