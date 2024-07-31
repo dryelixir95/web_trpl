@@ -83,8 +83,6 @@ $(document).ready(function() {
             role: $('#role').val()
         };
 
-        console.log(formData);
-
         $.ajax({
             url: '/api/admin/user/' + userId,
             method: 'PUT',
@@ -95,7 +93,7 @@ $(document).ready(function() {
             success: function(response) {
                 if(response.status === "success") {
                     alert('User updated successfully');
-                    window.location.href = '/admin/user'; // Redirect to the user list or another page
+                    window.location.href = data.url;
                 } else {
                     alert('Failed to update user');
                 }

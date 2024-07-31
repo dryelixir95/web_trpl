@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <!-- Required meta tags -->
+   <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>TRPL Admin</title>
@@ -21,6 +23,13 @@
   <link rel="stylesheet" href="{{asset('/src/css/vertical-layout-light/style.css')}}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{{asset('/src/images/favicon.png')}}">
+
+  <!-- ckeditor5 -->
+  <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css" />
+  <link rel="stylesheet" href="{{ URL::asset('assets/vendor/main.css') }}" />
+  
+    
+
 </head>
 <style>
 .navbar-toggler:focus {
@@ -46,9 +55,9 @@
       <!-- partial:partials/_navbar.html -->
       <nav class="navbar navbar-warning col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
           <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-              <a class="navbar-brand brand-logo mr-2" href="index.html"><img src="{{asset('/src/images/logo.svg')}}"
+              <a class="navbar-brand brand-logo mr-2" href="{{ route('dashboard')}}"><img src="{{asset('/src/images/logo.svg')}}"
                       class="mr-2" alt="logo" /></a>
-              <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{{asset('/src/images/logo-mini.svg')}}"
+              <a class="navbar-brand brand-logo-mini" href="{{ route('dashboard')}}"><img src="{{asset('/src/images/logo-mini.svg')}}"
                       alt="logo" /></a>
           </div>
           <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -81,7 +90,10 @@
         @include('admin.layouts.sidebar')
         <!-- partial -->
         <div class="main-panel">
-          @yield('content')
+            @include('admin.layouts.modal')
+            <!-- <div id="editor"></div> -->
+
+            @yield('content')
             <footer class="footer">
                 <div class="d-sm-flex justify-content">
                     <span class="text-muted">© Created by <a href="https://trpl.poliwangi.ac.id/">TRPL Poliwangi</a></span>
@@ -93,6 +105,17 @@
 @else
     @yield('content')
 @endif
+
+  <!-- ckeditor -->
+  <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.js",
+                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.2/"
+            }
+        }
+    </script>
+    <script type="module" src="{{ URL::asset('assets/vendor/ckeditor5.js') }}"></script>
 
   <!-- plugins:js -->
   <script src="{{asset('/src/vendors/js/vendor.bundle.base.js')}}"></script>
@@ -120,12 +143,11 @@
   <!-- End custom js for this page-->
 
 <script>
-  var host = "http://127.0.0.1:8000/api";
 
   $('#logout').click(function() {
     // Membuat permintaan logout ke server
     $.ajax({
-        url: host + '/logout',
+        url: '/api/logout',
         method: 'POST', 
         contentType: 'application/json',
         headers: {

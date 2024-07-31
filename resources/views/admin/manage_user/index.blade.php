@@ -10,7 +10,7 @@
                             <h4 class="card-title">Daftar user</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('user.create')}}"class="btn btn-primary">Tambah User</a>
+                            <a href="{{ route('user.create')}}"class="btn btn-primary">Add User</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -32,6 +32,7 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
         $.ajax({
@@ -49,7 +50,7 @@
                         // Tambahkan data kolom
                         row.append('<td>' + user.name + '</td>');
                         row.append('<td>' + user.email + '</td>');
-                        row.append('<td><a href="'+ '/admin/user/edit/' + user.id + '" class="pd-1 btn btn-primary">Edit</a><button data-id="' + user.id + '" class="pd-2 btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td><a href="'+ '/admin/user/edit/' + user.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + user.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
@@ -66,8 +67,8 @@
         });
 
         function deleteUser(userId) {
-        if (confirm('Are you sure you want to delete this user?')) {
-            $.ajax({
+            if (confirm('Apa Anda yakin ingin menghapus User ini?')) {
+                $.ajax({
                 url: '/api/admin/user/' + userId,
                 method: 'DELETE',
                 headers: {
