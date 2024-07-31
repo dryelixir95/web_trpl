@@ -103,6 +103,20 @@
             width: 24px;
             height: 24px;
         }
+        .card-body {
+            padding: 15px;
+        }
+        .card-title {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .card-text {
+            margin-bottom: 15px;
+        }
+        .hero-section h2, .hero-section .card-title, .hero-section .card-text {
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -113,32 +127,35 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="container">
-            <h2><u>Berita Terbaru</u></h2>
+            <h2 style="color: white;"><u>Berita Terbaru</u></h2>
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
-                        <img src="https://via.placeholder.com/300" style="width: 100%; height: 200px;" class="card-img-top" alt="Lab 1">
+                        <img src="https://via.placeholder.com/300" style="width: 100%; height: 200px;" class="card-img-top" alt="Berita 1">
                         <div class="card-body">
                             <h4 class="card-title">Berita 1</h4>
-                            <p>Keterangan berita 1</p>
+                            <p class="card-text">Keterangan berita 1 yang lebih panjang sehingga memberikan lebih banyak informasi tentang isi berita tersebut.</p>
+                            <a href="#" class="btn btn-primary">Selengkapnya</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <img src="https://via.placeholder.com/300" style="width: 100%; height: 200px;" class="card-img-top" alt="Lab 1">
+                        <img src="https://via.placeholder.com/300" style="width: 100%; height: 200px;" class="card-img-top" alt="Berita 2">
                         <div class="card-body">
-                            <h5 class="card-title">Berita 2</h5>
-                            <p>Keterangan berita 2</p>
+                            <h4 class="card-title">Berita 2</h4>
+                            <p class="card-text">Keterangan berita 2 yang lebih panjang sehingga memberikan lebih banyak informasi tentang isi berita tersebut.</p>
+                            <a href="#" class="btn btn-primary">Selengkapnya</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <img src="https://via.placeholder.com/300" style="width: 100%; height: 200px;" class="card-img-top" alt="Lab 1">
+                        <img src="https://via.placeholder.com/300" style="width: 100%; height: 200px;" class="card-img-top" alt="Berita 3">
                         <div class="card-body">
-                            <h5 class="card-title">Berita 3</h5>
-                            <p>Keterangan berita 3</p>
+                            <h4 class="card-title">Berita 3</h4>
+                            <p class="card-text">Keterangan berita 3 yang lebih panjang sehingga memberikan lebih banyak informasi tentang isi berita tersebut.</p>
+                            <a href="#" class="btn btn-primary">Selengkapnya</a>
                         </div>
                     </div>
                 </div>
@@ -180,24 +197,30 @@
         </div>
     </div>
     <!-- Akhir Learning Section -->
+
     <div class="learning-section">
         <div class="container">
-            <h2><u>Sejarah TRPL</u></h2>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+            <div class="row">
+                <div class="col-md-8">
+                    <h2><u>Visi TRPL</u></h2>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+                    
+                    <h2><u>Misi TRPL</u></h2>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Akreditasi">
+                        <div class="card-body">
+                            <h5 class="card-title">Akreditasi</h5>
+                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="learning-section">
-        <div class="container">
-            <h2><u>Visi TRPL</u></h2>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-        </div>
-    </div>
-    <div class="learning-section">
-        <div class="container">
-            <h2><u>Misi TRPL</u></h2>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-        </div>
-    </div>
+
     <!-- Footer -->
     @include('public.footer')
     <!-- Akhir Footer -->
