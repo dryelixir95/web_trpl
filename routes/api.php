@@ -101,3 +101,6 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])
     Route::put('beranda', [BerandaController::class, 'update']);
     Route::delete('beranda/{id}', [BerandaController::class, 'destroy']);
 });
+
+
+Route::get('public/menu', [KategoriPostController::class, 'index']);

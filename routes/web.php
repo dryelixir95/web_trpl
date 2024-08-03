@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('public.welcome');
+    return view('public.beranda');
 });
 
 Route::get('/login', function(){
@@ -166,4 +166,12 @@ Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function
     Route::get('/{formattedUrl}/edit/{id}', function(){
         return view('admin.menu.edit');
     });
+});
+
+// public
+Route::get('/{kategori}', function(){
+    return view('public.menu.index');
+});
+Route::get('/{kategori}/{slug}', function(){
+    return view('public.menu.detail');
 });
