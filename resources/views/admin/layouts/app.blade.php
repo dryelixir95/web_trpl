@@ -168,7 +168,7 @@
                 data.setting.forEach(function(setting) {
                     if (setting.name == 'dataLogoAdmin') {
                         logoAdmin.html(`<img src="/media/${setting.value}" class="mr-2" alt="${setting.name}" />`);
-                    } else if (setting.name === 'dataTittleWebAdmin') {
+                    } else if (setting.name == 'dataTittleWebAdmin') {
                         tittleWebAdmin.text(setting.value);
                     }
                 });

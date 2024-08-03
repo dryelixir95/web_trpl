@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="{{asset('src/images/LOGO_poliwangi.jpeg')}}" class="me-1" style="width: 50px; height: auto;" alt="Logo">
-            <span class="brand-text" style="margin-left: 12px;">Teknologi Rekayasa<br>Perangkat Lunak</span>
+        <a class="navbar-brand d-flex align-items-center" href="/" id="logoPublic">
+            <!-- <img src="{{asset('src/images/LOGO_poliwangi.jpeg')}}" class="me-1" style="width: 50px; height: auto;" alt="Logo">
+            <span class="brand-text" style="margin-left: 12px;">Teknologi Rekayasa<br>Perangkat Lunak</span> -->
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,7 +25,7 @@
                 if (Array.isArray(data.menu)) {
                     var navbar = $('#navbar');
                     var beranda = `<li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Beranda</a>
+                                <a class="nav-link active" aria-current="page" href="/">Beranda</a>
                             </li>`
                     navbar.append(beranda);
 
@@ -42,7 +42,6 @@
                         // Iterasi kategori untuk menambahkan item ke dropdown
                         data.kategori.forEach(function(kategori) {
                             if (kategori.index_menu == menu.id) {  // Misalkan `kategori.index_menu` adalah `menu.id`
-                                console.log('tes')
                                 dropdown += `
                                     <li><a class="dropdown-item" href="${kategori.slug}"><i class="fa-solid fa-bars menu-icon"></i> ${kategori.nama}</a></li>`;
                             }

@@ -104,3 +104,4 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])
 
 
 Route::get('public/menu', [KategoriPostController::class, 'index']);
+Route::get('setting', [SettingController::class, 'index']);
