@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Menu;
+use App\Models\SubMenu;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
@@ -22,6 +25,21 @@ class DatabaseSeeder extends Seeder
             'email' => 'kaprodi@gmail.com',
             'password' => '12345678',
             'role' => 'Kaprodi'
+        ]);
+
+        Menu::create([
+            'nama_menu' => 'Profil Prodi',
+            'hak_akses' => '1'
+        ]);
+
+        Menu::create([
+            'nama_menu' => 'Kemahasiswaan',
+            'hak_akses' => '1'
+        ]);
+
+        Menu::create([
+            'nama_menu' => 'Dokumen',
+            'hak_akses' => '1'
         ]);
     }
 }

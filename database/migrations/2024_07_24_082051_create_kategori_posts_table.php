@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('kategori_posts', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->string('slug');
+            $table->unsignedBigInteger('index_menu')->nullable();
+            $table->string('deskripsi')->nullable();
+            $table->boolean('beranda')->default(0);
+            $table->string('type_halaman');
+            $table->timestamps();
+
+            $table->foreign('index_menu')->references('id')->on('menus')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('kategori_posts');
+    }
+};

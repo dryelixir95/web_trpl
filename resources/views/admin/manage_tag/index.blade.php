@@ -7,23 +7,22 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar user</h4>
+                            <h4 class="card-title">Daftar Tag</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('user.create')}}"class="btn btn-primary">Add User</a>
+                            <a href="{{ route('tag.create')}}"class="btn btn-primary">Tambah Tag</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
+                                    <th>Tag</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-user">
-                                <!-- data user -->
+                            <tbody id="table-tag">
+                                <!-- data media -->
                             </tbody>
                         </table>
                     </div>
@@ -33,31 +32,31 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/api/admin/user',
+            url: '/api/admin/tag',
             method: 'GET',
             success: function(data) {
-                if (Array.isArray(data.users)) {
-                    var tableBody = $('#table-user');
+                if (Array.isArray(data.tag)) {
+                    var tableBody = $('#table-tag');
 
                     // Iterasi setiap user dalam data
-                    data.users.forEach(function(user) {
+                    data.tag.forEach(function(tag) {
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        row.append('<td>' + user.name + '</td>');
-                        row.append('<td>' + user.email + '</td>');
-                        row.append('<td><a href="'+ '/admin/user/edit/' + user.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + user.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td>' + tag.tag + '</td>');
+                        row.append('<td><button data-id="' + tag.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
 
                     $('.delete-button').on('click', function() {
-                    var userId = $(this).data('id');
-                    deleteUser(userId);
+                    var tagId = $(this).data('id');
+                    deleteMedia(tagId);
                 });
                 }
             },
@@ -66,21 +65,21 @@
             }
         });
 
-        function deleteUser(userId) {
-            if (confirm('Apa Anda yakin ingin menghapus User ini?')) {
+        function deleteMedia(tagId) {
+            if (confirm('Apa Anda yakin ingin menghapus kategori media ini?')) {
                 $.ajax({
-                url: '/api/admin/user/' + userId,
+                url: '/api/admin/tag/' + tagId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('User deleted successfully');
-                        // Remove the user row from the table
-                        $('button[data-id="' + userId + '"]').closest('tr').remove();
+                        alert('Tag deleted successfully');
+                        // Remove the Tag row from the table
+                        $('button[data-id="' + tagId + '"]').closest('tr').remove();
                     } else {
-                        alert('Failed to delete user');
+                        alert('Failed to delete Tag');
                     }
                 },
                 error: function(xhr, status, error) {
