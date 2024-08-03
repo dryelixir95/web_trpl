@@ -17,4 +17,9 @@ class Post extends Model
         'tag',
         'komen',
     ];
+
+    public function kategoriPost()
+    {
+        return $this->belongsTo(kategoriPost::class, 'kategori','id');
+    }
 }
