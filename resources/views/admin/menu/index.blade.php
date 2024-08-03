@@ -11,7 +11,7 @@
                         </div>
                         @if(Auth::user()->role == 'Admin')
                         <div class="col-6 text-end">
-                            <a href=""class="btn btn-primary" id="tambah-submenu">Add Sub-Menu</a>
+                            <a href=""class="btn btn-primary" id="tambah-submenu">Add Kategori</a>
                         </div>
                         @endif
                     </div>
@@ -21,11 +21,11 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Child Menu</th>
-                                    <th>Data Sub-Menu</th>
+                                    <th>Data Kategori</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-submenu">
+                            <tbody id="table-kategori">
                                 <!-- data menu -->
                             </tbody>
                         </table>
@@ -39,44 +39,57 @@
 
 <script>
     $(document).ready(function () {
-        var kategori = window.location.pathname.split('/').pop();
+        var kategoriMenu = window.location.pathname.split('/').pop();
 
-        var formattedTitle = kategori.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        var formattedTitle = kategoriMenu.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-        $('.card-title').text('Sub-Menu '+formattedTitle);
+        $('.card-title').text('kategori '+formattedTitle);
 
         $('#tambah-submenu').click(function(event) {
             event.preventDefault();
-            var url = '/admin/' + kategori + '/add';
+            var url = '/admin/' + kategoriMenu + '/add';
             // Mengarahkan pengguna ke URL yang sesuai
             window.location.href = url;
         });
+
         $.ajax({
-            url: '/api/admin/'+ kategori,
+            url: '/api/admin/kategori-post/data/'+ kategoriMenu,
             method: 'GET',
             success: function(data) {
-                if (Array.isArray(data.subMenu)) {
-                    var tableBody = $('#table-submenu');
+                if (Array.isArray(data.kategori)) {
+                    var tableBody = $('#table-kategori');
 
                     // Iterasi setiap user dalam data
-                    data.subMenu.forEach(function(submenu) {
+                    data.kategori.forEach(function(kategori) {
 
-                        var nama_subMenu = submenu.nama_menu.toLowerCase().replace(/\s+/g, '-');
+                        var nama_subMenu = kategori.nama.toLowerCase().replace(/\s+/g, '-');
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        row.append('<td>' + submenu.nama_menu + '</td>');
-                        row.append('<td>' + submenu.kategori + '</td>');
-                        row.append('<td><a href="/admin/' + kategori + '/' + nama_subMenu + '" class="btn btn-primary">Detail</a></td>');
-                        row.append('<td><a href="/admin/'+ kategori +'/edit/'+submenu.id+'" class="mr-1 btn btn-primary">Edit</a><button data-id="' + submenu.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td>' + kategori.nama + '</td>');
+                        data.menu.forEach(function(menu) {
+                            if(menu.id == kategori.index_menu){
+                                row.append('<td id="'+kategori.index_menu+'">' +menu.nama_menu + '</td>');
+                            }
+                        });
+                        var url;
+                        data.menu.forEach(function(menu) {
+                            if(kategori.type_halaman == 'multi-artikel'){
+                                url='/admin/post';
+                            } else{
+                                url='/admin/halaman';
+                            }
+                        });
+                        row.append('<td><a href=" '+url+'" class="btn btn-primary">Detail</a></td>');
+                        row.append('<td><a href="/admin/'+ kategoriMenu +'/edit/'+kategori.id+'" class="mr-1 btn btn-primary">Edit</a><button data-id="' + kategori.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
 
                     $('.delete-button').on('click', function() {
-                        var submenuId = $(this).data('id');
-                        deleteMenu(submenuId);
+                        var kategoriID = $(this).data('id');
+                        deleteMenu(kategoriID);
                     });
                 }
             },
@@ -85,21 +98,21 @@
             }
         });
 
-        function deleteMenu(submenuId) {
-            if (confirm('Apa Anda yakin ingin menghapus SubMenu ini?')) {
+        function deleteMenu(kategoriID) {
+            if (confirm('Apa Anda yakin ingin menghapus kategori ini?')) {
                 $.ajax({
-                url: '/api/admin/' + kategori +'/'+ submenuId,
+                url: '/api/admin/kategori-post/'+ kategoriID,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('SubMenu deleted successfully');
-                        // Remove the Menu row from the table
-                        $('button[data-id="' + submenuId + '"]').closest('tr').remove();
+                        alert('kategori deleted successfully');
+                        // Remove the kategori row from the table
+                        $('button[data-id="' + kategoriID + '"]').closest('tr').remove();
                     } else {
-                        alert('Failed to delete SubMenu');
+                        alert('Failed to delete kategori');
                     }
                 },
                 error: function(xhr, status, error) {

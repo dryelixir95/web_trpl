@@ -7,10 +7,10 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar Kategori Post</h4>
+                            <h4 class="card-title">Daftar Kategori Halaman</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('kategori-post.create')}}"class="btn btn-primary">Add Kategori</a>
+                            <a href="{{ route('kategori-halaman.create')}}"class="btn btn-primary">Add Kategori</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -47,7 +47,7 @@
 
                     // Iterasi setiap user dalam data
                     data.kategori.forEach(function(kategori) {
-                        if(kategori.type_halaman == 'multi-artikel'){
+                        if(kategori.type_halaman != 'multi-artikel'){
                             var row = $('<tr></tr>');
 
                             // Tambahkan data kolom
@@ -65,11 +65,10 @@
                             row.append(menukategori);
 
                             row.append('<td>' + kategori.deskripsi + '</td>');
-                            row.append('<td><a href="'+ '/admin/kategori-post/edit/' + kategori.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + kategori.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                            row.append('<td><a href="'+ '/admin/kategori-halaman/edit/' + kategori.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + kategori.id + '" class="btn btn-danger delete-button">Delete</button></td>');
                             // Tambahkan baris ke dalam tabel
                             tableBody.append(row);
                         }
-                        // Buat baris tabel baru
                     });
 
                     $('.delete-button').on('click', function() {
@@ -86,18 +85,18 @@
         function deleteMedia(kategoriId) {
             if (confirm('Apa Anda yakin ingin menghapus kategori media ini?')) {
                 $.ajax({
-                url: '/api/admin/kategori-post/' + kategoriId,
+                url: '/api/admin/kategori-media/' + mediaId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('Kategori deleted successfully');
-                        // Remove the kategori row from the table
-                        $('button[data-id="' + kategoriId + '"]').closest('tr').remove();
+                        alert('Media deleted successfully');
+                        // Remove the media row from the table
+                        $('button[data-id="' + mediaId + '"]').closest('tr').remove();
                     } else {
-                        alert('Failed to delete kategori');
+                        alert('Failed to delete media');
                     }
                 },
                 error: function(xhr, status, error) {

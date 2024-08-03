@@ -21,8 +21,14 @@
                                 <small class="form-text" style="color: red;">tidak boleh ada spasi</small>
                             </div>
                         </div>
-                        <input type="text" class="form-control" id="index-menu" name="index-menu" hidden>
-                        <input type="text" class="form-control" id="type-halaman" name="type-halaman" hidden>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="index-menu" class="form-label">Index Menu</label>
+                                <select class="form-control" id="index-menu" name="index-menu">
+                                    <option value="">Pilih Menu</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="deskripsi" class="form-label">deskripsi</label>
@@ -46,19 +52,49 @@
         var kategoriPostId = window.location.pathname.split('/').pop();
 
         $.ajax({
-            url: '/api/admin/kategori-post/edit/' + kategoriPostId,
+            url: '/api/admin/menu',
             method: 'GET',
             success: function(data) {
-                $('#nama').val(data.kategori.nama);
-                $('#slug').val(data.kategori.slug);
-                $('#index-menu').val(data.kategori.index_menu);
-                $('#type-halaman').val(data.kategori.type_halaman);
-                $('#deskripsi').val(data.kategori.deskripsi);
+                if (Array.isArray(data.menu)) {
+                    var selectMenu = $('#index-menu');
+
+                    // Iterasi setiap user dalam data
+                    data.menu.forEach(function(menu) {
+                        // Buat baris tabel baru
+                        var option = $('<option></option>').val(menu.id).text(menu.nama_menu);
+                        
+                        // Tambahkan baris ke dalam tabel
+                        selectMenu.append(option);
+                    });
+                    getKategoriPostData(kategoriPostId);
+                }
             },
             error: function(xhr, status, error) {
                 console.error('There has been a problem with your AJAX operation:', error);
             }
         });
+
+        function getKategoriPostData(kategoriPostId) {
+            $.ajax({
+                url: '/api/admin/kategori-post/edit/' + kategoriPostId,
+                method: 'GET',
+                success: function(data) {
+                    $('#nama').val(data.kategori.nama);
+                    $('#slug').val(data.kategori.slug);
+                    var selectMenu = $('#index-menu');
+
+                    selectMenu.find('option').each(function() {
+                        if ($(this).val() == data.kategori.index_menu) {
+                            $(this).prop('selected', true);
+                        }
+                    });
+                    $('#deskripsi').val(data.kategori.deskripsi);
+                },
+                error: function(xhr, status, error) {
+                    console.error('There has been a problem with your AJAX operation:', error);
+                }
+            });
+        }
 
         $('#updateForm').submit(function(event) {
             event.preventDefault(); 
@@ -67,7 +103,7 @@
             formData.append('nama', $('#nama').val());
             formData.append('slug', $('#slug').val());
             formData.append('index_menu', $('#index-menu').val());
-            formData.append('type_halaman', $('#type-halaman').val());
+            formData.append('type_halaman', 'multi-artikel');
             formData.append('deskripsi', $('#deskripsi').val());
 
             $.ajax({

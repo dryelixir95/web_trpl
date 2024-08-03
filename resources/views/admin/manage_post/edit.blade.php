@@ -33,7 +33,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Tambah Post Baru</h4>
-                    <form id="StoreForm" enctype="multipart/form-data" method="POST">
+                    <form id="updateForm" enctype="multipart/form-data" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-12 mb-3">
@@ -85,7 +85,7 @@
                         
                         <div class="row">
                             <div class="col-12 mb-3">
-                                <button type="submit" class="btn btn-primary" id="submitButton">Simpan</button>
+                                <button type="submit" class="btn btn-primary" id="submitButton">Update</button>
                             </div>
                         </div>
                     </form>
@@ -97,8 +97,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        const today = new Date().toISOString().split('T')[0];
-        $('#tanggal').val(today);
+        var PostId = window.location.pathname.split('/').pop();
 
         $.ajax({
             url: '/api/admin/kategori-post',
@@ -118,6 +117,7 @@
                             selectMenu.append(option);
                         }
                     });
+                    getPostData(PostId);
                 }
             },
             error: function(xhr, status, error) {
@@ -146,6 +146,56 @@
                 console.error('There has been a problem with your AJAX operation:', error);
             }
         });
+        
+        function getPostData(PostId){
+            $.ajax({
+                url: '/api/admin/post/edit/'+ PostId,
+                method: 'GET',
+                success: function(data) {
+                    if (data.post) {
+                        window.editor.setData(data.post.deskripsi); // Muat konten artikel jika ada
+                        
+                        $('#judul').val(data.post.judul);
+                        $('#tanggal').val(data.post.tanggal);
+                        var selectKategori = $('#kategori-post');
+
+                        selectKategori.find('option').each(function() {
+                        if ($(this).val() == data.post.kategori) {
+                                $(this).prop('selected', true);
+                            }
+                        });
+
+                        var tags = data.post.tag ? JSON.parse(data.post.tag) : [];
+                        populateSelectedTags(tags);        
+                    }
+                    window.editor = editor;
+                    editor.editing.view.document.on('clipboardInput', (evt, data) => {
+                        console.log('Paste event triggered', data);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('There has been a problem with your AJAX operation:', error);
+                }
+            });
+        }
+        
+
+        function populateSelectedTags(tags) {
+            var selectedTagsContainer = $('#selected-tags-container');
+            selectedTagsContainer.empty(); // Kosongkan kontainer sebelumnya
+
+            if (tags && tags.length > 0) {
+                tags.forEach(function(tag) {
+                    var categoryTag = $('<span class="selected-tag-tag" data-tag="' + tag + '">' + tag + '<span class="remove-tag">&times;</span></span>');
+                    selectedTagsContainer.append(categoryTag);
+
+                    // Tambahkan event listener untuk menghapus tag
+                    categoryTag.find('.remove-tag').on('click', function() {
+                        $(this).parent().remove();
+                    });
+                });
+            }
+        }
 
         $('#tambah-tag').on('click', function(event) {
             event.preventDefault(); // Mencegah tindakan default tombol
@@ -180,10 +230,7 @@
 
         $('#submitButton').on('click', function(event) {
             event.preventDefault();
-            handleFormSubmit('POST', '/api/admin/post');
-        });
 
-        function handleFormSubmit(method, url) {
             var formData = new FormData();
             formData.append('judul', $('#judul').val());
             formData.append('tanggal', $('#tanggal').val());
@@ -197,26 +244,26 @@
                 formData.append('tags[]', $(this).data('tag'));
             });
 
-            if(method == 'POST'){
-                $.ajax({
-                    url: url,
-                    method: method,
-                    data: formData,
-                    processData: false,
-                    contentType: false, 
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        window.location.href = data.url;
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('There has been a problem with your AJAX operation:', error);
-                    },
-                });
-            }     
-        }
+            $.ajax({
+                url: '/api/admin/post/'+ PostId,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false, 
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-HTTP-Method-Override': 'PUT'
+                },
+                success: function(data) {
+                    console.log(data);
+                    window.location.href = data.url;
+                },
+                error: function(xhr, status, error) {
+                    console.error('There has been a problem with your AJAX operation:', error);
+                },
+            });
+
+        });
     });
 </script>
 @endsection

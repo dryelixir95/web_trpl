@@ -32,7 +32,7 @@
         <div class="col-md-12 grid-margin transparent">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tambah Post Baru</h4>
+                    <h4 class="card-title">Tambah Halaman Baru</h4>
                     <form id="StoreForm" enctype="multipart/form-data" method="POST">
                         @csrf
                         <div class="row">
@@ -56,36 +56,16 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" id="contentContainer">
                             <div class="col mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi/isi</label>
-                                <textarea class="form-control" id="editor" name="keterangan" rows="10"></textarea>
+                                <!-- <textarea class="form-control" id="editor" name="keterangan" rows="10"></textarea> -->
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 mb-4">
-                            <label for="tag" class="form-label">Tag</label>
-                            <div class="input-group">
-                                    <select class="custom-select" style="height: 46px;" id="tag" name="tag">
-                                        <option value="">Pilih Tag</option>
-                                        <!-- option -->
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" id="tambah-tag" type="button">Tambah</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="selected-tag" class="col-sm-2 col-form-label">Tag yang dipilih:</label>
-                                <div class="col-sm-10">
-                                    <div id="selected-tags-container" class="form-control"></div>
-                            </div>
-                        </div>
-                        
+                        </div>                        
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <button type="submit" class="btn btn-primary" id="submitButton">Simpan</button>
+                                <button type="submit" class="btn btn-success" id="uploadButton" style="display: none;">Update</button>
                             </div>
                         </div>
                     </form>
@@ -110,7 +90,8 @@
 
                     // Iterasi setiap user dalam data
                     data.kategori.forEach(function(kategori) {
-                        if(kategori.type_halaman == 'multi-artikel'){
+                        if(kategori.type_halaman == 'single-artikel'){
+
                             // Buat baris tabel baru
                             var option = $('<option></option>').val(kategori.id).text(kategori.nama);
                             
@@ -125,62 +106,28 @@
             }
         });
 
-        $.ajax({
-            url: '/api/admin/tag',
-            method: 'GET',
-            success: function(data) {
-                if (Array.isArray(data.tag)) {
-                    var selectMenu = $('#tag');
-
-                    // Iterasi setiap user dalam data
-                    data.tag.forEach(function(tag) {
-                        // Buat baris tabel baru
-                        var option = $('<option></option>').val(tag.tag).text(tag.tag);
-                        
-                        // Tambahkan baris ke dalam tabel
-                        selectMenu.append(option);
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('There has been a problem with your AJAX operation:', error);
-            }
-        });
-
-        $('#tambah-tag').on('click', function(event) {
-            event.preventDefault(); // Mencegah tindakan default tombol
-
-            // Ambil nilai tag yang dipilih
-            var selectedTag = $('#tag').val();
-            var selectedTagName = $('#tag option:selected').text();
-
-            if (!selectedTag) return; 
-
-            // Cek apakah tag sudah ada
-            var tagExists = false;
-            $('#selected-tags-container .selected-tag-tag').each(function() {
-                if ($(this).data('tag') == selectedTag) {
-                    tagExists = true;
-                    return false; // Break the loop
-                }
-            });
-
-            if (!tagExists) {
-                // Tambahkan kategori yang dipilih sebagai tag
-                var categoryTag = $('<span class="selected-tag-tag" data-tag="' + selectedTag + '">' + selectedTagName + '<span class="remove-tag">&times;</span></span>');
-                $('#selected-tags-container').append(categoryTag);
-
-                // Tambahkan event listener untuk menghapus tag
-                categoryTag.find('.remove-tag').on('click', function() {
-                    $(this).parent().remove();
-                });
-            }
-            $('#tag').val('');
-        });
-
         $('#submitButton').on('click', function(event) {
             event.preventDefault();
             handleFormSubmit('POST', '/api/admin/post');
+        });
+
+        // Menambahkan event listener untuk tombol Update
+        $('#uploadButton').on('click', function(event) {
+            event.preventDefault();
+            var kategoriId = window.selectedKategori.id; 
+
+            $.ajax({
+                url: `/api/admin/post/${kategoriId}/artikel`,
+                method: 'GET',
+                success: function(data) {
+                    var dataId = data.post.id;
+                    handleFormSubmit('PUT', `/api/admin/post/${dataId}`);
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('There has been a problem with your AJAX operation:', error);
+                }
+            });
         });
 
         function handleFormSubmit(method, url) {
@@ -191,11 +138,6 @@
 
             const editorData = window.editor.getData();
             formData.append('deskripsi', editorData); // Ambil data CKEditor
-
-            // Menyertakan tag yang dipilih
-            $('#selected-tags-container .selected-tag-tag').each(function() {
-                formData.append('tags[]', $(this).data('tag'));
-            });
 
             if(method == 'POST'){
                 $.ajax({
@@ -215,7 +157,26 @@
                         console.error('There has been a problem with your AJAX operation:', error);
                     },
                 });
-            }     
+            } else{
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false, 
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-HTTP-Method-Override': 'PUT'
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        window.location.href = data.url;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('There has been a problem with your AJAX operation:', error);
+                    },
+                });
+            }      
         }
     });
 </script>

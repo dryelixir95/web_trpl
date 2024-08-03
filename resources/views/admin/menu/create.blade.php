@@ -5,21 +5,37 @@
         <div class="col-md-12 grid-margin transparent">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title" id="card-title"></h4>
+                    <h4 class="card-title">Tambah Kategori Menu</h4>
                     <form id="StoreForm" enctype="multipart/form-data" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6 col-sm-12 mb-3">
-                                <label for="nama_menu" class="form-label">Nama Sub Menu</label>
-                                <input type="text" class="form-control" id="nama_menu" name="nama_menu" required>
+                            <div class="col-12 mb-3">
+                                <label for="nama" class="form-label">Nama Kategori</label>
+                                <input type="text" class="form-control" id="nama" name="nama" required>
                             </div>
-                            
-                            <div class="col-md-6 col-sm-12 mb-3">
-                                <label for="jenis" class="form-label">Jenis Page</label>
-                                <select class="form-control" id="jenis" name="jenis">
-                                    <option value="single-single">Single Page</option>
-                                    <option value="multi-page">Multi Page</option>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="slug" class="form-label">Slug</label>
+                                <input type="text" class="form-control" id="slug" name="slug" required>
+                                <small class="form-text" style="color: red;">tidak boleh ada spasi</small>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" id="index-menu" name="index-menu" hidden>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="type-halaman" class="form-label">Type Halaman</label>
+                                <select class="form-control" id="type-halaman" name="type-halaman">
+                                    <option value="">Pilih Menu</option>
+                                    <option value="single-artikel">Single Article</option>
+                                    <option value="multi-artikel">Multi Article</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="deskripsi" class="form-label">deskripsi</label>
+                                <textarea class="form-control" id="deskripsi" name="deskripsi" rows="10"></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -36,24 +52,36 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        var kategori = window.location.pathname.split('/')[2];
+        var menu = window.location.pathname.split('/')[2];
+        var formattedTitle = menu.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-        var formattedTitle = kategori.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
-        $('.card-title').text(formattedTitle);
+        $.ajax({
+            url: '/api/admin/menu',
+            method: 'GET',
+            success: function(data) {
+                data.menu.forEach(function(menu) {
+                    if(menu.nama_menu == formattedTitle){
+                        $('#index-menu').val(menu.id);
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('There has been a problem with your AJAX operation:', error);
+            }
+        });
 
         $('#StoreForm').submit(function(event) {
             event.preventDefault(); 
 
-            // $('#submitButton').prop('disabled', true);
-
             var formData = new FormData();
-            formData.append('nama_menu', $('#nama_menu').val());
-
-            console.log(formData);
+            formData.append('nama', $('#nama').val());
+            formData.append('slug', $('#slug').val());
+            formData.append('index_menu', $('#index-menu').val());
+            formData.append('type_halaman', $('#type-halaman').val());
+            formData.append('deskripsi', $('#deskripsi').val());
 
             $.ajax({
-                url: '/api/admin/' + kategori,
+                url: '/api/admin/kategori-post',
                 method: 'POST',
                 contentType: 'application/json',
                 data: formData,

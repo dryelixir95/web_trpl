@@ -71,10 +71,43 @@
                         tableBody.append(row);
                     });
 
+                    data.mediaFiles.forEach(function(media) {
+                        // Buat baris tabel baru
+                        var row = $('<tr></tr>');
+
+                        // Tambahkan data kolom
+                        
+                        var fileUrl = media.name;
+                        var fileExtension = fileUrl.split('.').pop().toLowerCase();
+                        var kategori = '';
+                        
+                        if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+                            // Jika file gambar, buat elemen img
+                            row.append('<td><img src="' + '/media/ckeditor/' + fileUrl + '" alt="' + media.nama + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
+                        } else if (fileExtension === 'pdf') {
+                            // Jika file PDF, buat link untuk mengunduh
+                            row.append('<td><a href="' + '/media/ckeditor/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        } else{
+                            row.append('<td><a href="' + '/media/ckeditor/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        }
+                        row.append('<td>' + media.type + '</td>');
+
+                        row.append('<td>' + media.keterangan + '</td>');
+                        row.append('<td><button data-name="' + media.name + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        // Tambahkan baris ke dalam tabel
+                        tableBody.append(row);
+                    });
+
                     $('.delete-button').on('click', function() {
-                    var mediaId = $(this).data('id');
-                    deleteMedia(mediaId);
-                });
+                        var mediaId = $(this).data('id');
+                        var mediaName = $(this).data('name');
+
+                        if(mediaId){
+                            deleteMedia(mediaId);
+                        } else{
+                            deleteMediaNama(mediaName);
+                        }
+                    });
                 }
             },
             error: function(xhr, status, error) {
@@ -85,26 +118,50 @@
         function deleteMedia(mediaId) {
             if (confirm('Apa Anda yakin ingin menghapus media ini?')) {
                 $.ajax({
-                url: '/api/admin/media/' + mediaId,
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
-                        alert('Media deleted successfully');
-                        // Remove the media row from the table
-                        $('button[data-id="' + mediaId + '"]').closest('tr').remove();
-                    } else {
-                        alert('Failed to delete media');
+                    url: '/api/admin/media/' + mediaId,
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Media deleted successfully');
+                            // Remove the media row from the table
+                            $('button[data-id="' + mediaId + '"]').closest('tr').remove();
+                        } else {
+                            alert('Failed to delete media');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('There has been a problem with your AJAX operation:', error);
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('There has been a problem with your AJAX operation:', error);
-                }
-            });
+                });
+            }
         }
-    }
+
+        function deleteMediaNama(mediaName) {
+            if (confirm('Apa Anda yakin ingin menghapus media ini?')) {
+                $.ajax({
+                    url: '/api/admin/media-name/' + mediaName,
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Media deleted successfully');
+                            // Remove the media row from the table
+                            $('button[data-name="' + mediaName + '"]').closest('tr').remove();
+                        } else {
+                            alert('Failed to delete media');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('There has been a problem with your AJAX operation:', error);
+                    }
+                });
+            }
+        }
     });
 </script>
 

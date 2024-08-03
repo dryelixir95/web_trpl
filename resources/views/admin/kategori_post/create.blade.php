@@ -29,6 +29,12 @@
                                 </select>
                             </div>
                         </div>
+                        <!-- <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="type-halaman" class="form-label">Type Halaman</label>
+                                <input type="text" class="form-control" id="type-halaman" name="type-halaman" value="multi-artikel" readonly>
+                            </div>
+                        </div> -->
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="deskripsi" class="form-label">deskripsi</label>
@@ -78,6 +84,7 @@
             formData.append('nama', $('#nama').val());
             formData.append('slug', $('#slug').val());
             formData.append('index_menu', $('#index-menu').val());
+            formData.append('type_halaman', 'multi-artikel');
             formData.append('deskripsi', $('#deskripsi').val());
 
             $.ajax({

@@ -6,7 +6,10 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>TRPL Admin</title>
+  <title id="tittleWebAdmin"></title>
+  
+    <link rel="shortcut icon" href="#">
+  
   <!-- plugins:css -->
   <link rel="stylesheet" href="{{asset('/src/vendors/feather/feather.css')}}">
   <link rel="stylesheet" href="{{asset('/src/vendors/ti-icons/css/themify-icons.css')}}">
@@ -22,13 +25,10 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="{{asset('/src/css/vertical-layout-light/style.css')}}">
   <!-- endinject -->
-  <link rel="shortcut icon" href="{{asset('/src/images/favicon.png')}}">
 
   <!-- ckeditor5 -->
   <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css" />
   <link rel="stylesheet" href="{{ URL::asset('assets/vendor/main.css') }}" />
-  
-    
 
 </head>
 <style>
@@ -54,36 +54,31 @@
     <div class="container-scroller">
       <!-- partial:partials/_navbar.html -->
       <nav class="navbar navbar-warning col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-          <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-              <a class="navbar-brand brand-logo mr-2" href="{{ route('dashboard')}}"><img src="{{asset('/src/images/logo.svg')}}"
-                      class="mr-2" alt="logo" /></a>
-              <a class="navbar-brand brand-logo-mini" href="{{ route('dashboard')}}"><img src="{{asset('/src/images/logo-mini.svg')}}"
-                      alt="logo" /></a>
-          </div>
-          <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-              <!-- <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-                  <span class="icon-menu"></span>
-              </button> -->
-              <ul class="navbar-nav navbar-nav-right">
-                  <li class="nav-item nav-profile dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                          <i class="fa fa-user"></i>
-                          Profile
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                          <a href="#" id="logout" class="dropdown-item">
-                              <i class="ti-power-off text-primary"></i>
-                              Logout
-                          </a>
-                      </div>
-                  </li>
-              </ul>
-              <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-                  data-toggle="offcanvas">
-                  <span class="icon-menu"></span>
-              </button>
-          </div>
-      </nav>
+        <div class="navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand ml-1 mr-1" href="{{ route('dashboard') }}" id="logoAdmin">
+                <!-- <img src="{{ asset('/src/images/logo.svg') }}" class="mr-2" alt="logo" /> -->
+            </a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end flex-grow-1">
+            <ul class="navbar-nav navbar-nav-right">
+                <li class="nav-item nav-profile dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                        <i class="fa fa-user"></i>
+                        Profile
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                        <a href="#" id="logout" class="dropdown-item">
+                            <i class="ti-power-off text-primary"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                <span class="icon-menu"></span>
+            </button>
+        </div>
+    </nav>
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_sidebar.html -->
@@ -91,7 +86,6 @@
         <!-- partial -->
         <div class="main-panel">
             @include('admin.layouts.modal')
-            <!-- <div id="editor"></div> -->
 
             @yield('content')
             <footer class="footer">
@@ -116,7 +110,7 @@
         }
     </script>
     <script type="module" src="{{ URL::asset('assets/vendor/ckeditor5.js') }}"></script>
-
+    
   <!-- plugins:js -->
   <script src="{{asset('/src/vendors/js/vendor.bundle.base.js')}}"></script>
   <script src="{{asset('/src/vendors/chart.js/Chart.min.js')}}"></script>
@@ -143,26 +137,54 @@
   <!-- End custom js for this page-->
 
 <script>
+    $('#logout').click(function() {
+        // Membuat permintaan logout ke server
+        $.ajax({
+            url: '/api/logout',
+            method: 'POST', 
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
 
-  $('#logout').click(function() {
-    // Membuat permintaan logout ke server
+            success: function(data) {
+                console.log(data);
+                window.location.href = data.url;
+            },
+            error: function(xhr, status, error) {
+                console.error('There has been a problem with your AJAX operation:', error);
+            }
+        });
+    });
+
     $.ajax({
-        url: '/api/logout',
-        method: 'POST', 
-        contentType: 'application/json',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-
+        url: '/api/admin/setting',
+        method: 'GET',
         success: function(data) {
-            console.log(data);
-            window.location.href = data.url;
+            if (Array.isArray(data.setting)) {
+                var logoAdmin = $('#logoAdmin');
+                var tittleWebAdmin = $('#tittleWebAdmin');
+
+                data.setting.forEach(function(setting) {
+                    if (setting.name == 'dataLogoAdmin') {
+                        logoAdmin.html(`<img src="/media/${setting.value}" class="mr-2" alt="${setting.name}" />`);
+                    } else if (setting.name === 'dataTittleWebAdmin') {
+                        tittleWebAdmin.text(setting.value);
+                    }
+                });
+
+                data.setting.forEach(function(setting) {
+                    if (setting.name == 'dataIconAdmin') {
+                        // Update the favicon link element
+                        $('link[rel="shortcut icon"]').attr('href', '/media/' + setting.value);
+                    }
+                });
+            }
         },
         error: function(xhr, status, error) {
             console.error('There has been a problem with your AJAX operation:', error);
         }
     });
-});
 </script>
 </body>
 

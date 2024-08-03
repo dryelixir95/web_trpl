@@ -7,10 +7,10 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h4 class="card-title">Daftar Post</h4>
+                            <h4 class="card-title">Daftar Halaman</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('post.create')}}"class="btn btn-primary">Add Post</a>
+                            <a href="{{ route('halaman.create')}}"class="btn btn-primary">Add Halaman</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -20,7 +20,6 @@
                                     <th>Judul</th>
                                     <th>Kategori</th>
                                     <th>Deskripsi/Isi</th>
-                                    <th>Tag</th>
                                     <th>Tanggal</th>
                                     <th>Action</th>
                                 </tr>
@@ -56,7 +55,7 @@
                     data.posts.forEach(function(post) {
                         var kategori = kategoriMap[post.kategori];
 
-                        if (kategori && kategori.type_halaman === 'multi-artikel') {
+                        if (kategori && kategori.type_halaman == 'single-artikel') {
                             // Buat baris tabel baru
                             var row = $('<tr></tr>');
 
@@ -76,10 +75,9 @@
 
                             row.append('<td><pre style="white-space: pre-wrap; background:000; font-family: sans-serif; line-height: 1.5;">' + shortenedDeskripsi + ' ' + showMore + '</pre></td>');
 
-                            row.append('<td>' + post.tag + '</td>');
                             row.append('<td>' + post.tanggal + '</td>');
 
-                            row.append('<td><a href="'+ '/admin/post/edit/' + post.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + post.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                            row.append('<td><a href="'+ '/admin/halaman/edit/' + post.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + post.id + '" class="btn btn-danger delete-button">Delete</button></td>');
 
                             // Tambahkan baris ke dalam tabel
                             tableBody.append(row);
@@ -91,10 +89,11 @@
                         }
                     });
 
+
                     $('.delete-button').on('click', function() {
-                    var postId = $(this).data('id');
-                    deletePost(postId);
-                });
+                        var postId = $(this).data('id');
+                        deletePost(postId);
+                    });
                 }
             },
             error: function(xhr, status, error) {

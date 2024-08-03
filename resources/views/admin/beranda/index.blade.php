@@ -64,7 +64,7 @@
                                 <th>Tambah Beranda</th>
                             </tr>
                         </thead>
-                        <tbody id="allSubMenuData">
+                        <tbody id="allKategori">
                             <!-- Dynamic content will be loaded here -->
                         </tbody>
                     </table>
@@ -90,39 +90,62 @@
             url: '/api/admin/beranda',
             method: 'GET',
             success: function (data) {
-                if (Array.isArray(data.subMenu)) {
+                if (Array.isArray(data.kategori)) {
                     var tableBody = $('#table-body');
 
                     // Iterasi setiap user dalam data
-                    data.subMenu.forEach(function (submenu) {
+                    data.kategori.forEach(function (kategori) {
 
-                        var nama_subMenu = submenu.nama_menu.toLowerCase().replace(/\s+/g,
+                        var nama_subMenu = kategori.nama.toLowerCase().replace(/\s+/g,
                             '-');
                         // Buat baris tabel baru
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        row.append('<td>' + submenu.nama_menu + '</td>');
-                        row.append('<td>' + submenu.kategori + '</td>');
-                        row.append('<td><a href="/admin/' + kategori + '/' + nama_subMenu + '" class="mr-1 btn btn-primary">Detail</a><button data-id="' + submenu.id +'" class="btn btn-danger delete-button">Delete</button></td>');
+                        row.append('<td>' + kategori.nama + '</td>');
+
+                        var menukategori;
+                        data.menu.forEach(function(menu) {
+                            if(menu.id == kategori.index_menu){
+                                menukategori = '<td id="'+kategori.index_menu+'">' +menu.nama_menu + '</td>';
+                            } else if( kategori.index_menu == null){
+                                menukategori = '<td>Beranda</td>';
+                            }
+                        });
+                        row.append(menukategori);
+                        
+                        var url;
+                        data.menu.forEach(function(menu) {
+                            if(kategori.type_halaman == 'multi-artikel'){
+                                url='/admin/post';
+                            } else{
+                                url='/admin/halaman';
+                            }
+                        });
+                        row.append('<td><a href=" '+url+'" class="btn btn-primary mr-1">Detail</a><button data-id="' + kategori.id +'" class="btn btn-danger delete-button">Delete</button></td>');
+
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
 
                     $('.delete-button').on('click', function () {
-                        var submenuId = $(this).data('id');
-                        deleteMenu(submenuId);
+                        var kategoriId = $(this).data('id');
+                        deleteMenu(kategoriId);
                     });
                 }
-                if (Array.isArray(data.allSubMenu)) {
-                    var allSubMenuData = $('#allSubMenuData');
-                    data.allSubMenu.forEach(function (submenu) {
-                        if(submenu.kategori != 'beranda'){
+                if (Array.isArray(data.allKategori)) {
+                    var allKategori = $('#allKategori');
+                    data.allKategori.forEach(function (kategori) {
+                        if(kategori.index_menu != null){
                             var row = $('<tr></tr>');
-                            row.append('<td>' + submenu.nama_menu + '</td>');
-                            row.append('<td>' + submenu.kategori + '</td>');
-                            row.append('<td><input type="checkbox" class="form-check-input ml-5" style="margin-top: -0.3rem;" name="beranda[]" value="' + submenu.id + '" ' + (submenu.beranda ? 'checked' : '') + '></td>');
-                            allSubMenuData.append(row);
+                            row.append('<td>' + kategori.nama + '</td>');
+                            data.menu.forEach(function(menu) {
+                                if(menu.id == kategori.index_menu){
+                                    row.append('<td id="'+kategori.index_menu+'">' +menu.nama_menu + '</td>');
+                                }
+                            });
+                            row.append('<td><input type="checkbox" class="form-check-input ml-5" style="margin-top: -0.3rem;" name="beranda[]" value="' + kategori.id + '" ' + (kategori.beranda ? 'checked' : '') + '></td>');
+                            allKategori.append(row);
                         }
                     });
                 }
@@ -133,22 +156,21 @@
             }
         });
 
-        function deleteMenu(submenuId) {
-            if (confirm('Apa Anda yakin ingin menghapus SubMenu ini?')) {
+        function deleteMenu(kategoriId) {
+            if (confirm('Apa Anda yakin ingin menghapus kategori ini?')) {
                 $.ajax({
-                    url: '/api/admin/beranda/' + submenuId,
+                    url: '/api/admin/beranda/' + kategoriId,
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     success: function (response) {
                         if (response.status === 'success') {
-                            alert('SubMenu deleted successfully');
+                            alert('Kategori deleted successfully');
                             // Remove the Menu row from the table
-                            // $('button[data-id="' + submenuId + '"]').closest('tr').remove();
                             location.reload();
                         } else {
-                            alert('Failed to delete SubMenu');
+                            alert('Failed to delete kategori');
                         }
                     },
                     error: function (xhr, status, error) {
