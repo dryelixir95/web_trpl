@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\kategoriPost;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
 {
@@ -75,6 +76,12 @@ class PostController extends Controller
                 'url' => $url,
                 'post' => $post],
                  201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Failed to create post',
@@ -169,6 +176,12 @@ class PostController extends Controller
                 'post' => $post],
                  201);
 
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Failed to update post',

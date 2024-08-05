@@ -158,7 +158,7 @@
     });
 
     $.ajax({
-        url: '/api/admin/setting',
+        url: '/api/setting',
         method: 'GET',
         success: function(data) {
             if (Array.isArray(data.setting)) {

@@ -182,12 +182,22 @@ $('#mediaLibraryBody').on('click', '.select-media-file', function () {
     var editorInstance = window.editor;
     
     if (editorInstance) {
-        // Insert the image URL into the editor
+        // Get the file extension
+        var fileExtension = fileUrl.split('.').pop().toLowerCase();
+
         editorInstance.model.change(writer => {
-            const imageElement = writer.createElement('imageBlock', {
-                src: fileUrl
-            });
-            editorInstance.model.insertContent(imageElement, editorInstance.model.document.selection);
+            if (['jpeg', 'jpg', 'gif', 'png', 'svg'].includes(fileExtension)) {
+                // If the file is an image, insert it as an image
+                const imageElement = writer.createElement('imageBlock', {
+                    src: fileUrl
+                });
+                editorInstance.model.insertContent(imageElement, editorInstance.model.document.selection);
+            } else {
+                const linkElement = writer.createElement('paragraph');
+                const textNode = writer.createText('Lihat File', { linkHref: fileUrl });
+                writer.append(textNode, linkElement);
+                writer.append(linkElement, editorInstance.model.document.selection.getFirstPosition());
+            }
         });
     }
 
@@ -232,13 +242,9 @@ function handleTypeHalaman(selectedKategori) {
                             $('#submitButton').show();
                             $('#uploadButton').hide();
                             $('#judul').val('');
-                            $('#tanggal').val('');
                             $('#selected-tags-container').empty();
                         }
                         window.editor = editor;
-                        editor.editing.view.document.on('clipboardInput', (evt, data) => {
-                            console.log('Paste event triggered', data);
-                        });
                     })
                     .catch(error => {
                         console.error('Failed to initialize CKEditor:', error);
@@ -488,9 +494,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ClassicEditor.create(editorElement, editorConfig)
             .then(editorInstance => {
                 window.editor = editorInstance;
-                editorInstance.editing.view.document.on('clipboardInput', (evt, data) => {
-                    console.log('Paste event triggered', data);
-                });
             })
             .catch(error => {
                 console.error('Failed to initialize CKEditor:', error);

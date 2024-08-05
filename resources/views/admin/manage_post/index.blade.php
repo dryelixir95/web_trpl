@@ -22,7 +22,7 @@
                                     <th>Deskripsi/Isi</th>
                                     <th>Tag</th>
                                     <th>Tanggal</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-post">

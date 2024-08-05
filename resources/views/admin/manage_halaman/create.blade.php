@@ -65,7 +65,7 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <button type="submit" class="btn btn-primary" id="submitButton">Simpan</button>
-                                <button type="submit" class="btn btn-success" id="uploadButton" style="display: none;">Update</button>
+                                <button type="submit" class="btn btn-success" id="uploadButton" style="display: none;">Perbarui</button>
                             </div>
                         </div>
                     </form>

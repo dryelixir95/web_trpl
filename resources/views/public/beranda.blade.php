@@ -45,7 +45,7 @@
         <div class="container">
             <h2 class="text-center mb-3"><u>Fasilitas</u></h2>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 mb-3">
                     <div class="card">
                         <img src="https://via.placeholder.com/300" class="card-img-top" alt="Lab 1" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-3">
                     <div class="card">
                         <img src="https://via.placeholder.com/300" class="card-img-top" alt="Lab 2" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-3">
                     <div class="card">
                         <img src="https://via.placeholder.com/300" class="card-img-top" alt="Lab 3" style="height: 200px; object-fit: cover;">
                         <div class="card-body">

@@ -39,7 +39,7 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin'])->group(
 // PostController 
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('post', [PostController::class, 'index']);
-    Route::get('post/{id}/artikel', [PostController::class, 'get_id']); //ini mengambil data dengan katehori single-artikel
+    Route::get('post/{id}/artikel', [PostController::class, 'get_id']); //ini mengambil data dengan kategori single-artikel
     Route::get('post/edit/{id}', [PostController::class, 'edit']); //ini mengambil data berdasarkan id post
     Route::post('post', [PostController::class, 'store']);
     Route::put('post/{id}', [PostController::class, 'update']);
@@ -68,10 +68,10 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])
     Route::get('media', [MediaController::class, 'index']);
     Route::post('media', [MediaController::class, 'store']);
     Route::post('media/ckeditor', [MediaController::class, 'upload_ckeditor']);
-    Route::post('media/handsontable', [MediaController::class, 'upload_handsontable']);
     Route::delete('media/{id}', [MediaController::class, 'destroy']);
     Route::delete('media-name/{name}', [MediaController::class, 'destroy_storage']);
 });
+
 // KategoriMediaController 
 Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('kategori-media', [KategoriMediaController::class, 'index']);
@@ -103,5 +103,14 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])
 });
 
 
-Route::get('public/menu', [KategoriPostController::class, 'index']);
+Route::prefix('public/')->group(function () {
+    Route::get('menu', [KategoriPostController::class, 'index']);
+    
+    Route::get('kategori-post', [KategoriPostController::class, 'index']);
+    Route::get('post/{id}/artikel', [PostController::class, 'get_id']);
+    Route::get('post', [PostController::class, 'index']);
+
+});
+
 Route::get('setting', [SettingController::class, 'index']);
+

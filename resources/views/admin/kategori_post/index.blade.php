@@ -10,7 +10,7 @@
                             <h4 class="card-title">Daftar Kategori Post</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('kategori-post.create')}}"class="btn btn-primary">Add Kategori</a>
+                            <a href="{{ route('kategori-post.create')}}"class="btn btn-primary">Tambah Kategori</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -21,7 +21,7 @@
                                     <th>Slug</th>
                                     <th>Index Menu</th>
                                     <th>Deskripsi</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-kategori-post">
@@ -74,7 +74,7 @@
 
                     $('.delete-button').on('click', function() {
                     var kategoriId = $(this).data('id');
-                    deleteMedia(kategoriId);
+                    deleteKategori(kategoriId);
                 });
                 }
             },
@@ -83,8 +83,8 @@
             }
         });
 
-        function deleteMedia(kategoriId) {
-            if (confirm('Apa Anda yakin ingin menghapus kategori media ini?')) {
+        function deleteKategori(kategoriId) {
+            if (confirm('Apa Anda yakin ingin menghapus kategori ini?')) {
                 $.ajax({
                 url: '/api/admin/kategori-post/' + kategoriId,
                 method: 'DELETE',

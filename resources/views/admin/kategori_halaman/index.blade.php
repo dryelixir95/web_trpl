@@ -10,7 +10,7 @@
                             <h4 class="card-title">Daftar Kategori Halaman</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('kategori-halaman.create')}}"class="btn btn-primary">Add Kategori</a>
+                            <a href="{{ route('kategori-halaman.create')}}"class="btn btn-primary">Tambah Kategori</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -21,7 +21,7 @@
                                     <th>Slug</th>
                                     <th>Index Menu</th>
                                     <th>Deskripsi</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-kategori-post">
@@ -73,7 +73,7 @@
 
                     $('.delete-button').on('click', function() {
                     var kategoriId = $(this).data('id');
-                    deleteMedia(kategoriId);
+                    deleteKategori(kategoriId);
                 });
                 }
             },
@@ -82,19 +82,19 @@
             }
         });
 
-        function deleteMedia(kategoriId) {
-            if (confirm('Apa Anda yakin ingin menghapus kategori media ini?')) {
+        function deleteKategori(kategoriId) {
+            if (confirm('Apa Anda yakin ingin menghapus kategori ini?')) {
                 $.ajax({
-                url: '/api/admin/kategori-media/' + mediaId,
+                url: '/api/admin/kategori-post/' + kategoriId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('Media deleted successfully');
-                        // Remove the media row from the table
-                        $('button[data-id="' + mediaId + '"]').closest('tr').remove();
+                        alert('kategori deleted successfully');
+                        // Remove the kategori row from the table
+                        $('button[data-id="' + kategoriId + '"]').closest('tr').remove();
                     } else {
                         alert('Failed to delete media');
                     }

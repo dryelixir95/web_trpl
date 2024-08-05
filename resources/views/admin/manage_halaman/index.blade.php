@@ -10,7 +10,7 @@
                             <h4 class="card-title">Daftar Halaman</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('halaman.create')}}"class="btn btn-primary">Add Halaman</a>
+                            <a href="{{ route('halaman.create')}}"class="btn btn-primary">Tambah Halaman</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -21,7 +21,7 @@
                                     <th>Kategori</th>
                                     <th>Deskripsi/Isi</th>
                                     <th>Tanggal</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-post">

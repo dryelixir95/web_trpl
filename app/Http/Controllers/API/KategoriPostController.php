@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\kategoriPost;
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class KategoriPostController extends Controller
 {
@@ -96,7 +97,13 @@ class KategoriPostController extends Controller
                 'kategori' => $kategori,
                 'url' => $url,
             ]);
-        } catch (\Exception $e){
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
+        }catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to add kategori-post',
@@ -132,7 +139,13 @@ class KategoriPostController extends Controller
                 'kategori' => $kategori,
                 'url' => $url,
             ]);
-        } catch (\Exception $e){
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
+        }catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to update kategori-post',

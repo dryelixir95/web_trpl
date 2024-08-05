@@ -2,18 +2,14 @@
 
 namespace Tests\Feature\API;
 
-use App\Models\kategoriPost;
+use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
-
-class BerandaControllerTest extends TestCase
+class MenuControllerTest extends TestCase
 {
-    // use RefreshDatabase;
-
     protected $adminUser;
 
     protected function setUp(): void
@@ -27,46 +23,42 @@ class BerandaControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_can_access_beranda_index()
+    public function user_can_access_menu_index()
     {
         $this->actingAs($this->adminUser, 'sanctum');
 
-        $response = $this->getJson('/api/admin/beranda');
-
-        Log::info($response->getContent());
+        $response = $this->getJson('/api/admin/menu');
 
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 'success',
-                     'message' => 'Get data sub-menu successful',
+                     'message' => 'Get data menu successful',
                  ]);
     }
 
     /** @test */
-    public function it_can_store_a_beranda()
+    public function it_can_store_a_menu()
     {
         $this->actingAs($this->adminUser, 'sanctum');
 
-        $response = $this->postJson('/api/admin/beranda', [
-            'nama' => 'test kategori',
-            'slug' => 'test-kategori',
-            'deskripsi' => 'test kategori',
-            'type_halaman' => 'single-artikel',
-    ]);
+        $response = $this->postJson('/api/admin/menu', [
+            'nama_menu' => 'Tes Menu',
+            'hak_akses' => ['Admin'],
+]);
 
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 'success',
-                     'message' => 'Add kategori-post successful',
+                     'message' => 'Add menu successful',
                  ]);
     }
 
     /** @test */
-    public function it_cannot_store_a_beranda()
+    public function it_cannot_store_a_menu()
     {
         $this->actingAs($this->adminUser, 'sanctum');
 
-        $response = $this->postJson('/api/admin/beranda', [
+        $response = $this->postJson('/api/admin/menu', [
         // Missing 'nama_menu' to trigger validation error
         ]);
 
@@ -78,36 +70,38 @@ class BerandaControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_beranda()
+    public function it_can_update_menu()
     {
         $this->actingAs($this->adminUser, 'sanctum');
 
-        // Create some sub-menus for testing
-        $kategori = kategoriPost::create([
-            'nama' => 'test kategori',
-            'slug' => 'test-kategori',
-            'deskripsi' => 'test kategori',
-            'type_halaman' => 'single-artikel',
+        $menu = Menu::create([
+            'nama_menu' => 'Tes Menu',
+            'hak_akses' => 1,
         ]);
 
-        $response = $this->putJson('/api/admin/beranda', [
-            'beranda' => [$kategori->id],
+        $response = $this->putJson('/api/admin/menu/'.$menu->id, [
+            'nama_menu' => 'Tes Menu baru',
+            'hak_akses' => ['Admin'],
         ]);
 
         $response->assertStatus(200)
                 ->assertJson([
                     'status' => 'success',
-                    'message' => 'Update sub-menu successful',
+                    'message' => 'Add menu successful',
                 ]);
     }
 
     /** @test */
-    public function it_cannot_update_beranda_with_invalid_data()
+    public function it_cannot_update_menu_with_invalid_data()
     {
         $this->actingAs($this->adminUser, 'sanctum');
 
-        // Send an invalid request (missing 'beranda')
-        $response = $this->putJson('/api/admin/beranda', []);
+        $menu = Menu::create([
+            'nama_menu' => 'Tes Menu',
+            'hak_akses' => 1,
+        ]);
+
+        $response = $this->putJson('/api/admin/menu/'.$menu->id, []);
 
         $response->assertStatus(422)
                 ->assertJson([
@@ -117,39 +111,36 @@ class BerandaControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_destroy_a_beranda()
+    public function it_can_destroy_a_menu()
     {
         $this->actingAs($this->adminUser, 'sanctum');
 
-        // Create a sub-menu for testing
-        $kategori = kategoriPost::create([
-            'nama' => 'test kategori',
-            'slug' => 'test-kategori',
-            'deskripsi' => 'test kategori',
-            'type_halaman' => 'single-artikel',
+        $menu = Menu::create([
+            'nama_menu' => 'Tes Menu',
+            'hak_akses' => 1,
         ]);
 
-        $response = $this->deleteJson('/api/admin/beranda/' . $kategori->id);
+        $response = $this->deleteJson('/api/admin/menu/' . $menu->id);
 
         $response->assertStatus(200)
                 ->assertJson([
                     'status' => 'success',
-                    'message' => 'sub-menu beranda has been removed',
+                    'message' => 'menu has been removed',
                 ]);
     }
 
     /** @test */
-    public function it_cannot_destroy_nonexistent_beranda()
+    public function it_cannot_destroy_nonexistent_menu()
     {
         $this->actingAs($this->adminUser, 'sanctum');
 
         // Attempt to delete a non-existent sub-menu
-        $response = $this->deleteJson('/api/admin/beranda/999999');
+        $response = $this->deleteJson('/api/admin/menu/999999');
 
         $response->assertStatus(500)
                 ->assertJson([
                     'status' => 'error',
-                    'message' => 'Failed to delete sub-menu beranda',
+                    'message' => 'Failed to delete menu',
                 ]);
     }
 }

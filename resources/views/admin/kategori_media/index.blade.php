@@ -18,7 +18,7 @@
                             <thead>
                                 <tr>
                                     <th>Kategori</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-kategori-media">

@@ -10,17 +10,18 @@
                             <h4 class="card-title">Daftar Media</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('media.create')}}"class="btn btn-primary">Add Media</a>
+                            <a href="{{ route('media.create')}}"class="btn btn-primary">Tambah Media</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>Nama</th>
                                     <th>Media</th>
                                     <th>Kategori</th>
                                     <th>Deskripsi</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-media">
@@ -50,7 +51,8 @@
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        
+                        row.append('<td>' + media.media + '</td>');
+
                         var fileUrl = media.media;
                         var fileExtension = fileUrl.split('.').pop().toLowerCase();
                         
@@ -76,7 +78,8 @@
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        
+                        row.append('<td>' + media.name + '</td>');
+
                         var fileUrl = media.name;
                         var fileExtension = fileUrl.split('.').pop().toLowerCase();
                         var kategori = '';
@@ -92,7 +95,7 @@
                         }
                         row.append('<td>' + media.type + '</td>');
 
-                        row.append('<td>' + media.keterangan + '</td>');
+                        row.append('<td>Upload form CKEditor</td>');
                         row.append('<td><button data-name="' + media.name + '" class="btn btn-danger delete-button">Delete</button></td>');
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);

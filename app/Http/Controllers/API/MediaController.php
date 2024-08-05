@@ -6,6 +6,7 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class MediaController extends Controller
 {
@@ -78,6 +79,12 @@ class MediaController extends Controller
                 'media' => $media,
                 'url' => $url,
             ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
@@ -105,6 +112,12 @@ class MediaController extends Controller
 
             return response()->json(['url' => $url]);
 
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
@@ -143,15 +156,19 @@ class MediaController extends Controller
     {
         try {
             $filePath = public_path('media/ckeditor/' . $name);
-
+    
             if (File::exists($filePath)) {
                 File::delete($filePath);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'media has been removed',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Media not found',
+                ], 404);
             }
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'media has been removed',
-            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

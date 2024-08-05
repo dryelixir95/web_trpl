@@ -11,7 +11,7 @@
                         </div>
                         @if(Auth::user()->role == 'Admin')
                         <div class="col-6 text-end">
-                            <a href=""class="btn btn-primary" id="tambah-submenu">Add Kategori</a>
+                            <a href=""class="btn btn-primary" id="tambah-submenu">Tambah Kategori</a>
                         </div>
                         @endif
                     </div>
@@ -19,10 +19,10 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Nama</th>
                                     <th>Child Menu</th>
                                     <th>Data Kategori</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-kategori">

@@ -11,8 +11,8 @@
                         </div>
                         @if(Auth::user()->role == 'Admin')
                         <div class="col-6 text-end">
-                            <a href="#" id="setting-data-beranda" class="btn btn-success">Setting Data</a>
-                            <a href="{{ route('beranda.create')}}" id="add-data-beranda" class="btn btn-primary">Add Data</a>
+                            <a href="#" id="setting-data-beranda" class="btn btn-success">Atur Data</a>
+                            <a href="{{ route('beranda.create')}}" id="add-data-beranda" class="btn btn-primary">Tambah Data</a>
                         </div>
                         @endif
                     </div>
@@ -22,7 +22,7 @@
                                 <tr>
                                     <th>Name Data</th>
                                     <th>Child Menu</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-body">
@@ -59,7 +59,7 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Nama SubMenu</th>
+                                <th>Nama Kategori</th>
                                 <th>Child Menu</th>
                                 <th>Tambah Beranda</th>
                             </tr>
