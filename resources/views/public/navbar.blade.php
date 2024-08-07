@@ -25,7 +25,7 @@
                 if (Array.isArray(data.menu)) {
                     var navbar = $('#navbar');
                     var beranda = `<li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Beranda</a>
+                                <a class="nav-link active" aria-current="page" href="/">Beranda</a>
                             </li>`
                     navbar.append(beranda);
 
