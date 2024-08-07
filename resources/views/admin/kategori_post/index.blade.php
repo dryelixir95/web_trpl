@@ -10,7 +10,7 @@
                             <h4 class="card-title">Daftar Kategori Post</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('kategori-post.create')}}"class="btn btn-primary">Add Kategori</a>
+                            <a href="{{ route('kategori-post.create')}}"class="btn btn-primary">Tambah Kategori</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -21,7 +21,7 @@
                                     <th>Slug</th>
                                     <th>Index Menu</th>
                                     <th>Deskripsi</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-kategori-post">
@@ -47,26 +47,34 @@
 
                     // Iterasi setiap user dalam data
                     data.kategori.forEach(function(kategori) {
-                        // Buat baris tabel baru
-                        var row = $('<tr></tr>');
+                        if(kategori.type_halaman == 'multi-artikel'){
+                            var row = $('<tr></tr>');
 
-                        // Tambahkan data kolom
-                        row.append('<td>' + kategori.nama + '</td>');
-                        row.append('<td>' + kategori.slug + '</td>');
-                        data.menu.forEach(function(menu) {
-                            if(menu.id == kategori.id){
-                                row.append('<td id="'+kategori.index_menu+'">' +menu.nama_menu + '</td>');
-                            }
-                        });
-                        row.append('<td>' + kategori.deskripsi + '</td>');
-                        row.append('<td><button data-id="' + kategori.id + '" class="btn btn-danger delete-button">Delete</button></td>');
-                        // Tambahkan baris ke dalam tabel
-                        tableBody.append(row);
+                            // Tambahkan data kolom
+                            row.append('<td>' + kategori.nama + '</td>');
+                            row.append('<td>' + kategori.slug + '</td>');
+
+                            var menukategori;
+                            data.menu.forEach(function(menu) {
+                                if(menu.id == kategori.index_menu){
+                                    menukategori = '<td id="'+kategori.index_menu+'">' +menu.nama_menu + '</td>';
+                                } else if( kategori.index_menu == null){
+                                    menukategori = '<td>Beranda</td>';
+                                }
+                            });
+                            row.append(menukategori);
+
+                            row.append('<td>' + kategori.deskripsi + '</td>');
+                            row.append('<td><a href="'+ '/admin/kategori-post/edit/' + kategori.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + kategori.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+                            // Tambahkan baris ke dalam tabel
+                            tableBody.append(row);
+                        }
+                        // Buat baris tabel baru
                     });
 
                     $('.delete-button').on('click', function() {
                     var kategoriId = $(this).data('id');
-                    deleteMedia(kategoriId);
+                    deleteKategori(kategoriId);
                 });
                 }
             },
@@ -75,21 +83,21 @@
             }
         });
 
-        function deleteMedia(kategoriId) {
-            if (confirm('Apa Anda yakin ingin menghapus kategori media ini?')) {
+        function deleteKategori(kategoriId) {
+            if (confirm('Apa Anda yakin ingin menghapus kategori ini?')) {
                 $.ajax({
-                url: '/api/admin/kategori-media/' + mediaId,
+                url: '/api/admin/kategori-post/' + kategoriId,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('Media deleted successfully');
-                        // Remove the media row from the table
-                        $('button[data-id="' + mediaId + '"]').closest('tr').remove();
+                        alert('Kategori deleted successfully');
+                        // Remove the kategori row from the table
+                        $('button[data-id="' + kategoriId + '"]').closest('tr').remove();
                     } else {
-                        alert('Failed to delete media');
+                        alert('Failed to delete kategori');
                     }
                 },
                 error: function(xhr, status, error) {

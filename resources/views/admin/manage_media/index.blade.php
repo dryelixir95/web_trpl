@@ -10,17 +10,18 @@
                             <h4 class="card-title">Daftar Media</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('media.create')}}"class="btn btn-primary">Add Media</a>
+                            <a href="{{ route('media.create')}}"class="btn btn-primary">Tambah Media</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>Nama</th>
                                     <th>Media</th>
                                     <th>Kategori</th>
                                     <th>Deskripsi</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-media">
@@ -50,7 +51,8 @@
                         var row = $('<tr></tr>');
 
                         // Tambahkan data kolom
-                        
+                        row.append('<td>' + media.media + '</td>');
+
                         var fileUrl = media.media;
                         var fileExtension = fileUrl.split('.').pop().toLowerCase();
                         
@@ -71,10 +73,44 @@
                         tableBody.append(row);
                     });
 
+                    data.mediaFiles.forEach(function(media) {
+                        // Buat baris tabel baru
+                        var row = $('<tr></tr>');
+
+                        // Tambahkan data kolom
+                        row.append('<td>' + media.name + '</td>');
+
+                        var fileUrl = media.name;
+                        var fileExtension = fileUrl.split('.').pop().toLowerCase();
+                        var kategori = '';
+                        
+                        if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+                            // Jika file gambar, buat elemen img
+                            row.append('<td><img src="' + '/media/ckeditor/' + fileUrl + '" alt="' + media.nama + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
+                        } else if (fileExtension === 'pdf') {
+                            // Jika file PDF, buat link untuk mengunduh
+                            row.append('<td><a href="' + '/media/ckeditor/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        } else{
+                            row.append('<td><a href="' + '/media/ckeditor/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        }
+                        row.append('<td>' + media.type + '</td>');
+
+                        row.append('<td>Upload form CKEditor</td>');
+                        row.append('<td><button data-name="' + media.name + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        // Tambahkan baris ke dalam tabel
+                        tableBody.append(row);
+                    });
+
                     $('.delete-button').on('click', function() {
-                    var mediaId = $(this).data('id');
-                    deleteMedia(mediaId);
-                });
+                        var mediaId = $(this).data('id');
+                        var mediaName = $(this).data('name');
+
+                        if(mediaId){
+                            deleteMedia(mediaId);
+                        } else{
+                            deleteMediaNama(mediaName);
+                        }
+                    });
                 }
             },
             error: function(xhr, status, error) {
@@ -85,26 +121,50 @@
         function deleteMedia(mediaId) {
             if (confirm('Apa Anda yakin ingin menghapus media ini?')) {
                 $.ajax({
-                url: '/api/admin/media/' + mediaId,
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
-                        alert('Media deleted successfully');
-                        // Remove the media row from the table
-                        $('button[data-id="' + mediaId + '"]').closest('tr').remove();
-                    } else {
-                        alert('Failed to delete media');
+                    url: '/api/admin/media/' + mediaId,
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Media deleted successfully');
+                            // Remove the media row from the table
+                            $('button[data-id="' + mediaId + '"]').closest('tr').remove();
+                        } else {
+                            alert('Failed to delete media');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('There has been a problem with your AJAX operation:', error);
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('There has been a problem with your AJAX operation:', error);
-                }
-            });
+                });
+            }
         }
-    }
+
+        function deleteMediaNama(mediaName) {
+            if (confirm('Apa Anda yakin ingin menghapus media ini?')) {
+                $.ajax({
+                    url: '/api/admin/media-name/' + mediaName,
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Media deleted successfully');
+                            // Remove the media row from the table
+                            $('button[data-name="' + mediaName + '"]').closest('tr').remove();
+                        } else {
+                            alert('Failed to delete media');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('There has been a problem with your AJAX operation:', error);
+                    }
+                });
+            }
+        }
     });
 </script>
 

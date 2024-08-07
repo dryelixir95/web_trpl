@@ -49,8 +49,8 @@
                         </div>
                         <div class="row">
                             <div class="col-12 mb-4">
-                                <label for="kategori" class="form-label">Kategori</label>
-                                <select class="custom-select" style="height: 46px;" id="kategori" name="kategori">
+                                <label for="kategori-post" class="form-label">Kategori</label>
+                                <select class="custom-select" style="height: 46px;" id="kategori-post" name="kategori-post">
                                     <option value="">Pilih Kategori</option>
                                     <!-- option -->
                                 </select>
@@ -105,15 +105,18 @@
             method: 'GET',
             success: function(data) {
                 if (Array.isArray(data.kategori)) {
-                    var selectMenu = $('#kategori');
+                    window.dataKategori = data.kategori;
+                    var selectMenu = $('#kategori-post');
 
                     // Iterasi setiap user dalam data
                     data.kategori.forEach(function(kategori) {
-                        // Buat baris tabel baru
-                        var option = $('<option></option>').val(kategori.nama).text(kategori.nama);
-                        
-                        // Tambahkan baris ke dalam tabel
-                        selectMenu.append(option);
+                        if(kategori.type_halaman == 'multi-artikel'){
+                            // Buat baris tabel baru
+                            var option = $('<option></option>').val(kategori.id).text(kategori.nama);
+                            
+                            // Tambahkan baris ke dalam tabel
+                            selectMenu.append(option);
+                        }
                     });
                 }
             },
@@ -175,16 +178,18 @@
             $('#tag').val('');
         });
 
-        $('#StoreForm').submit(function(event) {
+        $('#submitButton').on('click', function(event) {
             event.preventDefault();
+            handleFormSubmit('POST', '/api/admin/post');
+        });
 
+        function handleFormSubmit(method, url) {
             var formData = new FormData();
             formData.append('judul', $('#judul').val());
             formData.append('tanggal', $('#tanggal').val());
-            formData.append('kategori', $('#kategori').val());
+            formData.append('kategori', $('#kategori-post').val());
 
             const editorData = window.editor.getData();
-            console.log(editorData);
             formData.append('deskripsi', editorData); // Ambil data CKEditor
 
             // Menyertakan tag yang dipilih
@@ -192,25 +197,26 @@
                 formData.append('tags[]', $(this).data('tag'));
             });
 
-            $.ajax({
-                url: '/api/admin/post',
-                method: 'POST',
-                contentType: 'application/json',
-                data: formData,
-                processData: false,
-                contentType: false, 
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                success: function(data) {
-                    console.log(data);
-                    window.location.href = data.url;
-                },
-                error: function(xhr, status, error) {
-                    console.error('There has been a problem with your AJAX operation:', error);
-                },
-            });
-        });
+            if(method == 'POST'){
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: formData,
+                    processData: false,
+                    contentType: false, 
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        window.location.href = data.url;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('There has been a problem with your AJAX operation:', error);
+                    },
+                });
+            }     
+        }
     });
 </script>
 @endsection

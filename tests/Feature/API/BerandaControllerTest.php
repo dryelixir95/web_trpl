@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\API;
 
+use App\Models\kategoriPost;
 use App\Models\User;
-use App\Models\SubMenu;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
@@ -49,13 +48,16 @@ class BerandaControllerTest extends TestCase
         $this->actingAs($this->adminUser, 'sanctum');
 
         $response = $this->postJson('/api/admin/beranda', [
-            'nama_menu' => 'Test Menu',
-        ]);
+            'nama' => 'test kategori',
+            'slug' => 'test-kategori',
+            'deskripsi' => 'test kategori',
+            'type_halaman' => 'single-artikel',
+    ]);
 
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 'success',
-                     'message' => 'Add sub-menu successful',
+                     'message' => 'Add kategori-post successful',
                  ]);
     }
 
@@ -81,10 +83,15 @@ class BerandaControllerTest extends TestCase
         $this->actingAs($this->adminUser, 'sanctum');
 
         // Create some sub-menus for testing
-        $subMenu1 = SubMenu::create(['nama_menu' => 'Menu 1', 'kategori' => 'beranda', 'beranda' => 0]);
+        $kategori = kategoriPost::create([
+            'nama' => 'test kategori',
+            'slug' => 'test-kategori',
+            'deskripsi' => 'test kategori',
+            'type_halaman' => 'single-artikel',
+        ]);
 
         $response = $this->putJson('/api/admin/beranda', [
-            'beranda' => [$subMenu1->id],
+            'beranda' => [$kategori->id],
         ]);
 
         $response->assertStatus(200)
@@ -115,9 +122,14 @@ class BerandaControllerTest extends TestCase
         $this->actingAs($this->adminUser, 'sanctum');
 
         // Create a sub-menu for testing
-        $subMenu = SubMenu::create(['nama_menu' => 'Menu to Delete', 'kategori' => 'beranda', 'beranda' => 1]);
+        $kategori = kategoriPost::create([
+            'nama' => 'test kategori',
+            'slug' => 'test-kategori',
+            'deskripsi' => 'test kategori',
+            'type_halaman' => 'single-artikel',
+        ]);
 
-        $response = $this->deleteJson('/api/admin/beranda/' . $subMenu->id);
+        $response = $this->deleteJson('/api/admin/beranda/' . $kategori->id);
 
         $response->assertStatus(200)
                 ->assertJson([

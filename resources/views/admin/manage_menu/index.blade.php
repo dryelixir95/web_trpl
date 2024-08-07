@@ -10,15 +10,15 @@
                             <h4 class="card-title">Daftar Menu</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('menu.create')}}"class="btn btn-primary">Add Menu</a>
+                            <a href="{{ route('menu.create')}}"class="btn btn-primary">Tambah Menu</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Action</th>
+                                    <th>Nama</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-menu">

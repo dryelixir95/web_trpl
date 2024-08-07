@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\kategoriPost;
 use App\Models\Menu;
-use App\Models\SubMenu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -13,14 +13,16 @@ class BerandaController extends Controller
 {
     public function index(){
         try {
-            $allSubMenu = SubMenu::all();
-            $subMenu = SubMenu::where('beranda', 1)->get();
+            $allKategori = kategoriPost::all();
+            $kategori = kategoriPost::where('beranda', 1)->get();
+            $menu = Menu::all();
         
             return response()->json([
                 'status' => 'success',
                 'message' => 'Get data sub-menu successful',
-                'allSubMenu' => $allSubMenu,
-                'subMenu' => $subMenu,
+                'allKategori' => $allKategori,
+                'kategori' => $kategori,
+                'menu' => $menu,
             ]);
 
         } catch (\Exception $e) {
@@ -35,21 +37,22 @@ class BerandaController extends Controller
     public function store(Request $request){
         try{
             $validatedData = $request->validate([
-                'nama_menu' => 'required|string|max:255',
+                'nama' => 'required|string|max:255',
+                'slug' => 'required|string|max:255',
+                'deskripsi' => 'nullable|string',
+                'type_halaman' => 'required|string|max:255',
             ]);
 
-            $menu = SubMenu::create([
-                'nama_menu' => ucwords($validatedData['nama_menu']),
-                'kategori' => 'beranda',
-                'beranda' => 1,
-            ]);
+            $validatedData['beranda'] = 1;
+
+            $kategori = kategoriPost::create($validatedData);
             
             $url = '/admin/beranda';
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Add sub-menu successful',
-                'menu' => $menu,
+                'message' => 'Add kategori-post successful',
+                'kategori' => $kategori,
                 'url' => $url,
             ]);
         } catch (ValidationException $e) {
@@ -59,10 +62,9 @@ class BerandaController extends Controller
                 'errors' => $e->errors()
             ], 422);
         } catch (\Exception $e){
-            Log::error('Store method failed: '.$e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to add sub-menu',
+                'message' => 'Failed to add kategori-post',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -77,11 +79,12 @@ class BerandaController extends Controller
             $beranda = ($validatedData['beranda']);
 
             foreach($beranda as $b){
-                $subMenu = SubMenu::findOrFail($b);
-                $subMenu->update([
+                $kategori = kategoriPost::findOrFail($b);
+                $kategori->update([
                     'beranda' => 1,
                 ]);
             }
+            
             $url = '/admin/beranda';
         
             return response()->json([
@@ -107,11 +110,11 @@ class BerandaController extends Controller
 
     public function destroy($id){
         try {
-            $subMenu = SubMenu::findOrFail($id);
-            if($subMenu->kategori == 'beranda'){
-                $subMenu->delete();
+            $kategori = kategoriPost::findOrFail($id);
+            if($kategori->kategori == 'beranda'){
+                $kategori->delete();
             } else{
-                $subMenu->update([
+                $kategori->update([
                     'beranda' => 0,
                 ]);
             }

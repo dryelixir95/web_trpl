@@ -18,7 +18,7 @@
                             <thead>
                                 <tr>
                                     <th>Tag</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-tag">

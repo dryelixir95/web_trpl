@@ -13,6 +13,13 @@ class kategoriPost extends Model
         'nama',
         'slug',
         'index_menu',
+        'beranda',
+        'type_halaman',
         'deskripsi'
     ];
+
+    public function post()
+    {
+        return $this->hasMany(Post::class, 'kategori','id');
+    }
 }

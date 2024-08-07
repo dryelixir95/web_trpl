@@ -6,6 +6,7 @@ use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class MenuController extends Controller
 {
@@ -69,6 +70,12 @@ class MenuController extends Controller
                 'menu' => $menu,
                 'url' => $url,
             ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
@@ -132,6 +139,12 @@ class MenuController extends Controller
                 'menu' => $menu,
                 'url' => $url,
             ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
@@ -144,7 +157,7 @@ class MenuController extends Controller
     public function destroy($id)
     {
         try {
-            $menu = Menu::find($id);
+            $menu = Menu::findOrFail($id);
             $menu->delete();
 
             return response()->json([

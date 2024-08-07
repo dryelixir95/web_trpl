@@ -10,16 +10,16 @@
                             <h4 class="card-title">Daftar user</h4>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="{{ route('user.create')}}"class="btn btn-primary">Add User</a>
+                            <a href="{{ route('user.create')}}"class="btn btn-primary">Tambah User</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Nama</th>
                                     <th>Email</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-user">

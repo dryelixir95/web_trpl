@@ -7,7 +7,7 @@
     }
 </style>
 
-<nav class="sidebar sidebar-offcanvas mt-3" id="sidebar">
+<nav class="sidebar sidebar-offcanvas mt-1" id="sidebar">
     <ul class="nav" id="menu">
         <li class="nav-item">
             <a class="nav-link" href="{{route ('dashboard')}}" id="berandaLink">
@@ -15,7 +15,7 @@
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-        <li class="nav-item mt-3" style="background-color: #FFC100; border-radius: 10px;">
+        <li class="nav-item mt-2" style="background-color: #FFC100; border-radius: 10px;">
             <div class="row p-2 ml-2">
                 <span class="menu-title">Master</span>
             </div>
@@ -30,11 +30,11 @@
         @endif
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa-solid fa-folder menu-icon"></i>
+                <i class="fa-solid fa-paper-plane menu-icon"></i>
                 <span class="menu-title">Post</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="postDropdown">
-                <a class="dropdown-item" href="{{ route('post.index') }}">List Post</a>
+                <a class="dropdown-item" href="{{ route('post.index') }}">Semua Post</a>
                 <a class="dropdown-item" href="{{ route('kategori-post.index') }}">Kategori</a>
                 <a class="dropdown-item" href="{{ route('tag.index') }}">Tag</a>
             </div>
@@ -48,6 +48,22 @@
                 <a class="dropdown-item" href="{{ route('media.index') }}">Semua</a>
                 <a class="dropdown-item" href="{{ route('kategori-media.index') }}">Kategori</a>
             </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa-solid fa-feather menu-icon"></i>
+                <span class="menu-title">Halaman</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="postDropdown">
+                <a class="dropdown-item" href="{{ route('halaman.index') }}">Semua Halaman</a>
+                <a class="dropdown-item" href="{{ route('kategori-halaman.index') }}">Kategori</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route ('setting.index')}}">
+                <i class="fa-solid fa-gear menu-icon"></i>
+                <span class="menu-title">Pengaturan</span>
+            </a>
         </li>
 
         @if(Auth::user()->role == 'Admin')

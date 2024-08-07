@@ -4,8 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\kategoriMedia;
 use App\Models\Menu;
-use App\Models\SubMenu;
+use App\Models\setting;
+use App\Models\Tag;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
@@ -42,79 +44,48 @@ class DatabaseSeeder extends Seeder
             'hak_akses' => '1'
         ]);
 
-        // submenu create
-        SubMenu::create([
-            'nama_menu' => 'Sejarah TRPL',
-            'kategori' => 'profil-prodi',
-            'menu_id' => '1',
+        kategoriMedia::create([
+            'nama' => 'gambar',
         ]);
-        SubMenu::create([
-            'nama_menu' => 'Visi Misi Tujuan TRPL',
-            'kategori' => 'profil-prodi',
-            'menu_id' => '1',
-        ]);
-        SubMenu::create([
-            'nama_menu' => 'Berita',
-            'kategori' => 'profil-prodi',
-            'menu_id' => '1',
-        ]);
-        SubMenu::create([
-            'nama_menu' => 'Kurikulum',
-            'kategori' => 'profil-prodi',
-            'menu_id' => '1',
-        ]);
-        SubMenu::create([
-            'nama_menu' => 'Akreditasi',
-            'kategori' => 'profil-prodi',
-            'menu_id' => '1',
-        ]);
-        SubMenu::create([
-            'nama_menu' => 'Fasilitas',
-            'kategori' => 'profil-prodi',
-            'menu_id' => '1',
-        ]);
-        SubMenu::create([
-            'nama_menu' => 'Dosen dan Staff',
-            'kategori' => 'profil-prodi',
-            'menu_id' => '1',
-        ]);
-        SubMenu::create([
-            'nama_menu' => 'Struktur Organisasi',
-            'kategori' => 'profil-prodi',
-            'menu_id' => '1',
+        kategoriMedia::create([
+            'nama' => 'dokumen',
         ]);
 
-        // menu kemahasiswaan
-        SubMenu::create([
-            'nama_menu' => 'Kegiatan',
-            'kategori' => 'kemahasiswaan',
-            'menu_id' => '2',
+        Tag::create([
+            'tag' => 'Poliwangi',
         ]);
-        SubMenu::create([
-            'nama_menu' => 'Prestasi',
-            'kategori' => 'kemahasiswaan',
-            'menu_id' => '2',
+        Tag::create([
+            'tag' => 'TRPL',
+        ]);
+        Tag::create([
+            'tag' => 'News',
         ]);
 
-        SubMenu::create([
-            'nama_menu' => 'Mutu',
-            'kategori' => 'dokumen',
-            'menu_id' => '3',
+        setting::create([
+            'name' => 'dataLogoPublic',
+            'value' => 'logo.png',
         ]);
-        SubMenu::create([
-            'nama_menu' => 'MKI',
-            'kategori' => 'dokumen',
-            'menu_id' => '3',
+        setting::create([
+            'name' => 'dataIconPublic',
+            'value' => 'logo.png',
         ]);
-        SubMenu::create([
-            'nama_menu' => 'TA',
-            'kategori' => 'dokumen',
-            'menu_id' => '3',
+        setting::create([
+            'name' => 'dataTittleWebPublic',
+            'value' => 'TRPL Poliwangi',
         ]);
-        SubMenu::create([
-            'nama_menu' => 'Surat Edar Mahasiswa',
-            'kategori' => 'dokumen',
-            'menu_id' => '3',
+        setting::create([
+            'name' => 'dataLogoAdmin',
+            'value' => 'logo.svg',
         ]);
+        setting::create([
+            'name' => 'dataIconAdmin',
+            'value' => 'favicon.jpg',
+        ]);
+        setting::create([
+            'name' => 'dataTittleWebAdmin',
+            'value' => 'Admin TRPL',
+        ]);
+
+        $this->call(KategoriPostSeeder::class);
     }
 }

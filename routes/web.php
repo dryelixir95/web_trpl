@@ -55,6 +55,7 @@ Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function
         return view('admin.manage_post.edit');
     })->name('post.edit');
 });
+
 Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('kategori-post/', function(){
         return view('admin.kategori_post.index');
@@ -66,6 +67,30 @@ Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function
         return view('admin.kategori_post.edit');
     })->name('kategori-post.edit');
 });
+
+Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
+    Route::get('halaman/', function(){
+        return view('admin.manage_halaman.index');
+    })->name('halaman.index');
+    Route::get('halaman/add', function(){
+        return view('admin.manage_halaman.create');
+    })->name('halaman.create');
+    Route::get('halaman/edit/{id}', function(){
+        return view('admin.manage_halaman.edit');
+    })->name('halaman.edit');
+});
+Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
+    Route::get('kategori-halaman/', function(){
+        return view('admin.kategori_halaman.index');
+    })->name('kategori-halaman.index');
+    Route::get('kategori-halaman/add', function(){
+        return view('admin.kategori_halaman.create');
+    })->name('kategori-halaman.create');
+    Route::get('kategori-halaman/edit/{id}', function(){
+        return view('admin.kategori_halaman.edit');
+    })->name('kategori-halaman.edit');
+});
+
 Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function () {
     Route::get('tag/', function(){
         return view('admin.manage_tag.index');
@@ -104,6 +129,12 @@ Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function
 });
 
 Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
+    Route::get('setting/', function(){
+        return view('admin.setting.index');
+    })->name('setting.index');
+});
+
+Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
     Route::get('menu/', function(){
         return view('admin.manage_menu.index');
     })->name('menu.index');
@@ -134,20 +165,6 @@ Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function
     });
     Route::get('/{formattedUrl}/edit/{id}', function(){
         return view('admin.menu.edit');
-    });
-
-// data pada sub-menu
-    Route::get('/{formattedUrl}/{subMenu}', function(){
-        return view('admin.data_subMenu.index');
-    });
-    Route::get('/{formattedUrl}/{subMenu}/add', function(){
-        return view('admin.data_subMenu.create');
-    });
-    Route::get('/{formattedUrl}/{subMenu}/field', function(){
-        return view('admin.data_subMenu.field');
-    });
-    Route::get('/{formatedUrl}/{submenu}/data/edit/{dataId}', function(){
-        return view('admin.data_subMenu.edit');
     });
 });
 

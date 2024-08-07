@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('judul'); 
             $table->date('tanggal'); 
-            $table->string('kategori');
+            $table->unsignedBigInteger('kategori');
             $table->text('deskripsi'); 
-            $table->json('tag'); 
+            $table->json('tag')->nullable(); 
             $table->text('komen')->nullable(); 
             $table->timestamps();
+
+            $table->foreign('kategori')->references('id')->on('kategori_posts')->onDelete('cascade');
+
         });
     }
 

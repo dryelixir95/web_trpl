@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('slug');
-            $table->unsignedBigInteger('index_menu');
+            $table->unsignedBigInteger('index_menu')->nullable();
             $table->string('deskripsi')->nullable();
+            $table->boolean('beranda')->default(0);
+            $table->string('type_halaman');
             $table->timestamps();
 
             $table->foreign('index_menu')->references('id')->on('menus')->onDelete('cascade');

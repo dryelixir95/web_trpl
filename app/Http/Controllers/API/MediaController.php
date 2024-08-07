@@ -6,17 +6,38 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class MediaController extends Controller
 {
     public function index(){
         try {
             $media = Media::all();
-        
+            $mediaPath = public_path('media/ckeditor/');
+            
+            // Check if the directory exists
+            if (File::exists($mediaPath)) {
+                $files = File::allFiles($mediaPath);
+            } else {
+                $files = [];
+            }
+    
+            // Prepare an array to hold file details
+            $mediaFiles = [];
+            foreach ($files as $file) {
+                $mediaFiles[] = [
+                    'name' => $file->getFilename(),
+                    'url' => asset('media/ckeditor/' . $file->getFilename()),
+                    'size' => $file->getSize(),
+                    'type' => File::mimeType($file->getPathname()),
+                ];
+            }
+            
             return response()->json([
                 'status' => 'success',
                 'message' => 'Get data media successful',
                 'media' => $media,
+                'mediaFiles' => $mediaFiles,
             ]);
 
         } catch (\Exception $e) {
@@ -35,6 +56,9 @@ class MediaController extends Controller
                 'kategori' => 'required|string|max:255',
                 'keterangan' => 'nullable|string'
             ]);
+
+            // $kategori = File::mimeType($validatedData['media']->getPathname());
+            // dd($kategori);
 
             if ($request->hasFile('media')) {
                 $file = $request->file('media');
@@ -55,6 +79,12 @@ class MediaController extends Controller
                 'media' => $media,
                 'url' => $url,
             ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
@@ -78,10 +108,16 @@ class MediaController extends Controller
                 }
             }
 
-            $url = asset('media/ckeditor/' . $validatedData['upload']);
+            $url = '/media/ckeditor/' . $validatedData['upload'];
 
             return response()->json(['url' => $url]);
 
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
@@ -115,4 +151,31 @@ class MediaController extends Controller
             ], 500);
         }
     }
+
+    public function destroy_storage($name)
+    {
+        try {
+            $filePath = public_path('media/ckeditor/' . $name);
+    
+            if (File::exists($filePath)) {
+                File::delete($filePath);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'media has been removed',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Media not found',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete media',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

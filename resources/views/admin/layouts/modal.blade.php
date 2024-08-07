@@ -7,19 +7,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Preview</th>
-                                <th>File Name</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="mediaLibraryBody">
-                            <!-- Dynamic content will be loaded here -->
-                        </tbody>
-                    </table>
+                <div class="row" id="mediaLibraryBody">
+                    <!-- Dynamic content will be loaded here -->
                 </div>
             </div>
         </div>
@@ -34,24 +23,6 @@
             loadMediaLibrary();
         });
 
-        $('#mediaLibraryBody').on('click', '.select-media-file', function () {
-            var fileUrl = $(this).data('file-url');
-            var fileInput = $('#openMediaLibrary').siblings('input[type="file"]');
-            var filePreview = '';
-
-            if (fileUrl.match(/\.(jpeg|jpg|gif|png|svg)$/) != null) {
-                filePreview = '<img src="' + fileUrl + '" alt="Image Preview" style="width: 500px; height: auto; margin-top: 10px;">';
-            } else if (fileUrl.match(/\.(pdf)$/) != null) {
-                filePreview = '<embed src="' + fileUrl + '" type="application/pdf" style="width: 500px; height: 750px; margin-top: 10px;">';
-            }
-
-            fileInput.siblings('.file-preview').remove(); // Remove previous previews
-            fileInput.after('<div class="file-preview text-center">' + filePreview + '</div>');
-
-            $('#selectedMediaFile').val(fileUrl);
-            $('#mediaLibraryModal').modal('hide');
-        });
-
         function loadMediaLibrary() {
             $.ajax({
                 url: '/api/admin/media',
@@ -60,13 +31,54 @@
                     var mediaLibraryBody = $('#mediaLibraryBody');
                     mediaLibraryBody.empty();
                     
-                    data.media.forEach(function (file) {
-                        var row = '<tr>';
-                        row += '<td><img src="/media/' + file.media + '" alt="File" width="50"></td>';
-                        row += '<td>' + file.nama + '</td>';
-                        row += '<td><button type="button" class="btn btn-primary select-media-file" data-file-url="' + file.url + '">Select</button></td>';
-                        row += '</tr>';
-                        mediaLibraryBody.append(row);
+                    data.media.forEach(function (file, index) {
+                        var filePreview = '';
+                        if (file.url.match(/\.(jpeg|jpg|gif|png|svg)$/) != null) {
+                            filePreview = '<img src="' + file.url + '" class="card-img-top" alt="File" style="height: 150px; object-fit: cover;">';
+                        } else if (file.url.match(/\.(pdf)$/) != null) {
+                            filePreview = '<embed src="' + file.url + '" type="application/pdf" class="card-img-top" style="height: 150px;">';
+                        } else {
+                            filePreview = '<div class="card-img-top" style="height: 150px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">Unknown File</div>';
+                        }
+
+                        var card = `
+                            <div class="col-md-2 mb-3">
+                                <div class="card">
+                                    ${filePreview}
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">${file.nama}</h6>
+                                        <button type="button" class="btn btn-primary select-media-file mb-1" data-file-url="${file.url}">Select</button>
+                                        <button type="button" class="btn btn-secondary preview-media-file" data-file-url="${file.url}">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        mediaLibraryBody.append(card);
+                    });
+
+                    data.mediaFiles.forEach(function (file, index) {
+                        var filePreview = '';
+                        if (file.url.match(/\.(jpeg|jpg|gif|png|svg)$/) != null) {
+                            filePreview = '<img src="' + file.url + '" class="card-img-top" alt="File" style="height: 150px; object-fit: cover;">';
+                        } else if (file.url.match(/\.(pdf)$/) != null) {
+                            filePreview = '<embed src="' + file.url + '" type="application/pdf" class="card-img-top" style="height: 150px;">';
+                        } else {
+                            filePreview = '<div class="card-img-top" style="height: 150px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">Unknown File</div>';
+                        }
+
+                        var card = `
+                            <div class="col-md-2 mb-3">
+                                <div class="card">
+                                    ${filePreview}
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">${file.name}</h6>
+                                        <button type="button" class="btn btn-sm btn-primary select-media-file mb-1" data-file-url="${file.url}">Select</button>
+                                        <button type="button" class="btn btn-sm btn-secondary preview-media-file" data-file-url="${file.url}">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        mediaLibraryBody.append(card);
                     });
                 },
                 error: function (xhr, status, error) {
@@ -74,5 +86,10 @@
                 }
             });
         }
+
+        $('#mediaLibraryBody').on('click', '.preview-media-file', function () {
+            var fileUrl = $(this).data('file-url');
+            window.open(fileUrl, '_blank');
+        });
     });
 </script>

@@ -72,30 +72,28 @@ import {
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-class SavePlugin extends Plugin {
+class UploadPlugin extends Plugin {
     init() {
         const editor = this.editor;
 
-        editor.ui.componentFactory.add('saveButton', locale => {
+        editor.ui.componentFactory.add('uploadButton', locale => {
             const view = new ButtonView(locale);
 
             view.set({
-                label: 'Save',
+                label: 'Upload',
                 tooltip: true,
-                withText: true // Menambahkan teks 'Save' pada tombol
+                withText: true
             });
 
             // Callback executed once the toolbar button is clicked.
             view.on('execute', () => {
-                const editorData = editor.getData();
-                // Save data to a variable
-                window.editorContent = editorData;
-                alert('Content saved!');
+                // Trigger the modal with id "mediaLibraryModal"
+                $('#mediaLibraryModal').modal('show');
+                loadMediaLibrary();
             });
 
             // Render view and then apply styles
             view.on('render', () => {
-                // Ensure that view.element is available
                 if (view.element) {
                     view.element.style.backgroundColor = 'rgb(0, 0, 0)';
                     view.element.style.color = 'white';
@@ -109,6 +107,157 @@ class SavePlugin extends Plugin {
         });
     }
 }
+
+function loadMediaLibrary() {
+    $.ajax({
+        url: '/api/admin/media',
+        method: 'GET',
+        success: function (data) {
+            var mediaLibraryBody = $('#mediaLibraryBody');
+            mediaLibraryBody.empty();
+            
+            data.media.forEach(function (media, index) {
+                var filePreview = '';
+                if (media.media.match(/\.(jpeg|jpg|gif|png|svg)$/) != null) {
+                    filePreview = '<img src="/media/' + media.media + '" class="card-img-top" alt="File" style="height: 150px; object-fit: cover;">';
+                } else if (media.media.match(/\.(pdf)$/) != null) {
+                    filePreview = '<embed src="/media/' + media.media + '" type="application/pdf" class="card-img-top" style="height: 150px;">';
+                } else {
+                    filePreview = '<div class="card-img-top" style="height: 150px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">Unknown File</div>';
+                }
+
+                var card = `
+                    <div class="col-md-3 col-sm-6 mb-2">
+                        <div class="card">
+                            ${filePreview}
+                            <div class="card-body text-center">
+                                <h6 class="card-title">${media.media}</h6>
+                                <button type="button" class="btn btn-sm btn-primary select-media-file mb-1" data-file-url="/media/${media.media}">Select</button>
+                                <button type="button" class="btn btn-sm btn-secondary preview-media-file" data-file-url="/media/${media.media}">Preview</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                mediaLibraryBody.append(card);
+            });
+
+            data.mediaFiles.forEach(function (file, index) {
+                var filePreview = '';
+                if (file.url.match(/\.(jpeg|jpg|gif|png|svg)$/) != null) {
+                    filePreview = '<img src="' + file.url + '" class="card-img-top" alt="File" style="height: 150px; object-fit: cover;">';
+                } else if (file.url.match(/\.(pdf)$/) != null) {
+                    filePreview = '<embed src="' + file.url + '" type="application/pdf" class="card-img-top" style="height: 150px;">';
+                } else {
+                    filePreview = '<div class="card-img-top" style="height: 150px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">Unknown File</div>';
+                }
+
+                var card = `
+                    <div class="col-md-3 col-sm-6 mb-2">
+                        <div class="card">
+                            ${filePreview}
+                            <div class="card-body text-center">
+                                <h6 class="card-title">${file.name}</h6>
+                                <button type="button" class="btn btn-sm btn-primary select-media-file mb-1" data-file-url="/media/ckeditor/${file.name}">Select</button>
+                                <button type="button" class="btn btn-sm btn-secondary preview-media-file" data-file-url="/media/ckeditor/${file.name}">Preview</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                mediaLibraryBody.append(card);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error('There has been a problem with your AJAX operation:', error);
+        }
+    });
+}
+
+$('#mediaLibraryBody').on('click', '.preview-media-file', function () {
+    var fileUrl = $(this).data('file-url');
+    window.open(fileUrl, '_blank');
+});
+
+$('#mediaLibraryBody').on('click', '.select-media-file', function () {
+    var fileUrl = $(this).data('file-url');
+    var editorInstance = window.editor;
+    
+    if (editorInstance) {
+        // Get the file extension
+        var fileExtension = fileUrl.split('.').pop().toLowerCase();
+
+        editorInstance.model.change(writer => {
+            if (['jpeg', 'jpg', 'gif', 'png', 'svg'].includes(fileExtension)) {
+                // If the file is an image, insert it as an image
+                const imageElement = writer.createElement('imageBlock', {
+                    src: fileUrl
+                });
+                editorInstance.model.insertContent(imageElement, editorInstance.model.document.selection);
+            } else {
+                const linkElement = writer.createElement('paragraph');
+                const textNode = writer.createText('Lihat File', { linkHref: fileUrl });
+                writer.append(textNode, linkElement);
+                writer.append(linkElement, editorInstance.model.document.selection.getFirstPosition());
+            }
+        });
+    }
+
+    $('#mediaLibraryModal').modal('hide');
+});
+
+$('#kategori-post').on('change', function () {
+    var kategoriId = $(this).val();
+    var selectedKategori = window.dataKategori.find(kategori => kategori.id == kategoriId);
+    window.selectedKategori = selectedKategori;
+
+    handleTypeHalaman(selectedKategori);
+});
+
+function handleTypeHalaman(selectedKategori) {
+    var contentContainer = $('#contentContainer');
+    contentContainer.empty(); // Kosongkan konten sebelumnya
+
+    if (selectedKategori.type_halaman == 'single-artikel') {
+        $.ajax({
+            url: `/api/admin/post/${selectedKategori.id}/artikel`,
+            method: 'GET',
+            success: function (data) {
+                var textarea = `
+                        <div class="col mb-3">
+                            <label for="deskripsi" class="form-label">Deskripsi/isi</label>
+                            <textarea class="form-control" id="editor" name="keterangan" rows="10"></textarea>
+                        </div>
+                `;
+                contentContainer.append(textarea);
+
+                ClassicEditor.create(document.querySelector('#editor'), editorConfig)
+                    .then(editor => {
+                        if (data.post) {
+                            editor.setData(data.post.deskripsi); // Muat konten artikel jika ada
+                            
+                            $('#judul').val(data.post.judul);
+                            $('#tanggal').val(data.post.tanggal);
+                            $('#submitButton').hide();
+                            $('#uploadButton').show();
+                        } else {
+                            $('#submitButton').show();
+                            $('#uploadButton').hide();
+                            $('#judul').val('');
+                            $('#selected-tags-container').empty();
+                        }
+                        window.editor = editor;
+                    })
+                    .catch(error => {
+                        console.error('Failed to initialize CKEditor:', error);
+                    });
+                    
+            },
+            error: function (xhr, status, error) {
+                console.error('There has been a problem with your AJAX operation:', error);
+            }
+        });
+    }
+}
+
 
 const editorConfig = {
     toolbar: {
@@ -143,7 +292,7 @@ const editorConfig = {
             'outdent',
             'indent',
             '|',
-            'saveButton' // Tambahkan tombol save ke toolbar
+            'uploadButton',
         ],
         shouldNotGroupWhenFull: true
     },
@@ -214,7 +363,7 @@ const editorConfig = {
         TodoList,
         Underline,
         Undo,
-        SavePlugin, // Daftarkan plugin save
+        UploadPlugin, // Daftarkan plugin save
     ],
     balloonToolbar: ['bold', 'italic', '|', 'link', 'insertImage', '|', 'bulletedList', 'numberedList'],
     fontFamily: {
@@ -345,9 +494,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ClassicEditor.create(editorElement, editorConfig)
             .then(editorInstance => {
                 window.editor = editorInstance;
-                editorInstance.editing.view.document.on('clipboardInput', (evt, data) => {
-                    console.log('Paste event triggered', data);
-                });
             })
             .catch(error => {
                 console.error('Failed to initialize CKEditor:', error);

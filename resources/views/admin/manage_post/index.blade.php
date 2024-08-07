@@ -16,13 +16,13 @@
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
-                                <tr>
+                                <tr class="text-center">
                                     <th>Judul</th>
                                     <th>Kategori</th>
                                     <th>Deskripsi/Isi</th>
                                     <th>Tag</th>
                                     <th>Tanggal</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-post">
@@ -45,38 +45,50 @@
             success: function(data) {
                 if (Array.isArray(data.posts)) {
                     var tableBody = $('#table-post');
+                    var kategoriMap = {};
 
-                    // Iterasi setiap user dalam data
+                    // Buat peta kategori untuk akses cepat
+                    data.kategori.forEach(function(kategori) {
+                        kategoriMap[kategori.id] = kategori;
+                    });
+
+                    // Iterasi setiap post dalam data
                     data.posts.forEach(function(post) {
-                        // Buat baris tabel baru
-                        var row = $('<tr></tr>');
+                        var kategori = kategoriMap[post.kategori];
 
-                        // Tambahkan data kolom
-                        row.append('<td>' + post.judul + '</td>');
-                        row.append('<td>' + post.kategori + '</td>');
+                        if (kategori && kategori.type_halaman === 'multi-artikel') {
+                            // Buat baris tabel baru
+                            var row = $('<tr></tr>');
 
-                        var isiDeskripsi = post.deskripsi;
-                        var shortenedDeskripsi = isiDeskripsi;
-                        var showMore = '';
+                            // Tambahkan data kolom
+                            row.append('<td>' + post.judul + '</td>');
 
-                        if (isiDeskripsi.length > 70) {
-                            shortenedDeskripsi = isiDeskripsi.substring(0, 70) + '...';
-                            showMore = '<a href="#" class="show-more">Selengkapnya</a>';
+                            row.append('<td>' + kategori.nama + '</td>');
+
+                            var isiDeskripsi = post.deskripsi;
+                            var shortenedDeskripsi = isiDeskripsi;
+                            var showMore = '';
+
+                            if (isiDeskripsi && isiDeskripsi.length > 70) {
+                                shortenedDeskripsi = isiDeskripsi.substring(0, 70) + '...';
+                                showMore = '<a href="#" class="show-more">Selengkapnya</a>';
+                            }
+
+                            row.append('<td><pre style="white-space: pre-wrap; background:000; font-family: sans-serif; line-height: 1.5;">' + shortenedDeskripsi + ' ' + showMore + '</pre></td>');
+
+                            row.append('<td>' + post.tag + '</td>');
+                            row.append('<td>' + post.tanggal + '</td>');
+
+                            row.append('<td><a href="'+ '/admin/post/edit/' + post.id + '" class="mr-1 btn btn-primary">Edit</a><button data-id="' + post.id + '" class="btn btn-danger delete-button">Delete</button></td>');
+
+                            // Tambahkan baris ke dalam tabel
+                            tableBody.append(row);
+
+                            $('.show-more').on('click', function(event) {
+                                event.preventDefault();
+                                $(this).parent().html(isiDeskripsi);
+                            });
                         }
-
-                        row.append('<td><pre style="white-space: pre-wrap; background:000; font-family: sans-serif; line-height: 1.5;">' + shortenedDeskripsi + ' ' + showMore + '</pre></td>');
-
-                        row.append('<td>' + post.tag + '</td>');
-                        row.append('<td>' + post.tanggal + '</td>');
-
-                        row.append('<td><button data-id="' + post.id + '" class="btn btn-danger delete-button">Delete</button></td>');
-                        // Tambahkan baris ke dalam tabel
-                        tableBody.append(row);
-
-                        $('.show-more').on('click', function(event) {
-                            event.preventDefault();
-                            $(this).parent().html(isiDeskripsi);
-                        });
                     });
 
                     $('.delete-button').on('click', function() {
