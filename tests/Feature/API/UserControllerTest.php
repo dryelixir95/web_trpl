@@ -12,8 +12,6 @@ use App\Models\User;
 
 class UserControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     private $adminUser;
 
     protected function setUp(): void
