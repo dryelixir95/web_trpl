@@ -38,7 +38,7 @@ class BerandaControllerTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 'success',
-                     'message' => 'Get data sub-menu successful',
+                     'message' => 'Get data beranda successful',
                  ]);
     }
 
@@ -57,7 +57,7 @@ class BerandaControllerTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 'success',
-                     'message' => 'Add kategori-post successful',
+                     'message' => 'Add data beranda successful',
                  ]);
     }
 
@@ -97,7 +97,7 @@ class BerandaControllerTest extends TestCase
         $response->assertStatus(200)
                 ->assertJson([
                     'status' => 'success',
-                    'message' => 'Update sub-menu successful',
+                    'message' => 'Update data beranda successful',
                 ]);
     }
 
@@ -134,7 +134,7 @@ class BerandaControllerTest extends TestCase
         $response->assertStatus(200)
                 ->assertJson([
                     'status' => 'success',
-                    'message' => 'sub-menu beranda has been removed',
+                    'message' => 'data beranda has been removed',
                 ]);
     }
 
@@ -143,13 +143,13 @@ class BerandaControllerTest extends TestCase
     {
         $this->actingAs($this->adminUser, 'sanctum');
 
-        // Attempt to delete a non-existent sub-menu
+        // Attempt to delete a non-existent data
         $response = $this->deleteJson('/api/admin/beranda/999999');
 
         $response->assertStatus(500)
                 ->assertJson([
                     'status' => 'error',
-                    'message' => 'Failed to delete sub-menu beranda',
+                    'message' => 'Failed to delete data beranda',
                 ]);
     }
 }

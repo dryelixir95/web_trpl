@@ -13,15 +13,6 @@
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <h3>Link Terkait</h3>
-                <ul class="list-unstyled">
-                    <li><a href="#" class="text-white text-decoration-none">Beranda</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Profil Prodi</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Kemahasiswaan</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Dokumen</a></li>
-                </ul>
-            </div>
-            <div class="col-md-4 mb-4">
                 <h3>Kerjasama Mitra</h3>
                 <p>logo</p>
             </div>

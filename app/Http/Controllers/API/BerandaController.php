@@ -14,12 +14,12 @@ class BerandaController extends Controller
     public function index(){
         try {
             $allKategori = kategoriPost::all();
-            $kategori = kategoriPost::where('beranda', 1)->get();
+            $kategori = kategoriPost::where('beranda', 1)->with('post')->get();
             $menu = Menu::all();
         
             return response()->json([
                 'status' => 'success',
-                'message' => 'Get data sub-menu successful',
+                'message' => 'Get data beranda successful',
                 'allKategori' => $allKategori,
                 'kategori' => $kategori,
                 'menu' => $menu,
@@ -28,7 +28,7 @@ class BerandaController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to get data sub-menu',
+                'message' => 'Failed to get data beranda',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -51,7 +51,7 @@ class BerandaController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Add kategori-post successful',
+                'message' => 'Add data beranda successful',
                 'kategori' => $kategori,
                 'url' => $url,
             ]);
@@ -64,7 +64,7 @@ class BerandaController extends Controller
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to add kategori-post',
+                'message' => 'Failed to add data beranda',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -89,7 +89,7 @@ class BerandaController extends Controller
         
             return response()->json([
                 'status' => 'success',
-                'message' => 'Update sub-menu successful',
+                'message' => 'Update data beranda successful',
                 'url' => $url,
             ]);
 
@@ -102,7 +102,7 @@ class BerandaController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to update sub-menu',
+                'message' => 'Failed to update data beranda',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -121,12 +121,12 @@ class BerandaController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'sub-menu beranda has been removed',
+                'message' => 'data beranda has been removed',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete sub-menu beranda',
+                'message' => 'Failed to delete data beranda',
                 'error' => $e->getMessage()
             ], 500);
         }

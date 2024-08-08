@@ -105,7 +105,8 @@ Route::prefix('admin/')->middleware(['auth:sanctum', 'checkRole:Admin;Kaprodi'])
 
 Route::prefix('public/')->group(function () {
     Route::get('menu', [KategoriPostController::class, 'index']);
-    
+    Route::get('beranda', [BerandaController::class, 'index']);
+
     Route::get('kategori-post', [KategoriPostController::class, 'index']);
     Route::get('post/{id}/artikel', [PostController::class, 'get_id']);
     Route::get('post', [PostController::class, 'index']);

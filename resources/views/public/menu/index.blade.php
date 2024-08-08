@@ -50,7 +50,7 @@
     <div class="row">
         <div class="col-md-8 col-sm-12">
         <!-- <div class="col-md-8 col-sm-12" style="background-color: #f3ff7a63;"> -->
-            <u><h3 class="mt-3 mb-4 text-center" id="page-title"></h3></u>
+            <h3 class="mt-3 mb-4 text-center"><b id="page-title"></b></h3>
             <div class="container">
                 <div class="mt-2 mb-2" id="content"></div> 
             </div>
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="col-md-4 shadow bg-light d-sm-none d-lg-block d-md-block">
-            <h3 class="text-center">Kalender</h3>
+            <h3 class="mt-3 text-center"><b>Kalender</b></h3>
             <div id="calendar-container" class="mb-4">
                 <div id="my-calendar"></div>
             </div>
@@ -139,7 +139,7 @@ $(document).ready(function() {
 
                                 // Tambahkan kelas img-fluid dan text-center ke semua gambar di dalam #content
                                 $('#content img').addClass('img-fluid').parent().addClass('text-center');
-                                $('#content h4').addClass('text-center');
+                                $('#content h4, #content h3, #content h2 ').addClass('text-center');
 
                                 // Tambahkan atribut target="_blank" ke semua link di dalam #content
                                 $('#content a').attr('target', '_blank');
