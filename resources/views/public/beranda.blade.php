@@ -1,7 +1,7 @@
 @extends('public.app')
 @section('content')
     <!-- Hero Section -->
-    <div class="hero-section bg-primary">
+    <div class="hero-section bg-primary" style="padding-top: 5rem;">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-sm-12">

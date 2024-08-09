@@ -110,6 +110,7 @@ Route::prefix('public/')->group(function () {
     Route::get('kategori-post', [KategoriPostController::class, 'index']);
     Route::get('post/{id}/artikel', [PostController::class, 'get_id']);
     Route::get('post', [PostController::class, 'index']);
+    Route::get('post/edit/{id}', [PostController::class, 'edit']);
 
 });
 

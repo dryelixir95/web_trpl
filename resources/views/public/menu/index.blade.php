@@ -46,7 +46,7 @@
         text-decoration: none;
     }
 </style>
-<div class="container">
+<div class="container" style="padding-top: 5rem;">
     <div class="row">
         <div class="col-md-8 col-sm-12">
         <!-- <div class="col-md-8 col-sm-12" style="background-color: #f3ff7a63;"> -->
@@ -94,7 +94,6 @@ $(document).ready(function() {
         success: function(data) {
             data.kategori.forEach(function(kategori) {
                 if (kategori.slug == kategoriHalaman) {
-                    console.log(kategori.id)
                     // Set the page title
                     $('#page-title').text(kategori.nama);
 

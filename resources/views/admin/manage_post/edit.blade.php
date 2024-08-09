@@ -50,9 +50,8 @@
                         <div class="row">
                             <div class="col-12 mb-4">
                                 <label for="kategori-post" class="form-label">Kategori</label>
-                                <select class="custom-select" style="height: 46px;" id="kategori-post" name="kategori-post">
-                                    <option value="">Pilih Kategori</option>
-                                    <!-- option -->
+                                <select class="custom-select" style="height: 46px;" id="kategori-post" name="kategori-post" disabled>
+
                                 </select>
                             </div>
                         </div>

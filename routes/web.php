@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('public.beranda');
-});
-
 Route::get('/login', function(){
     if(Auth::check()){
         return redirect()->route('dashboard');
@@ -25,11 +22,7 @@ Route::get('/login', function(){
     return view('auth.login');
 })->name('login');
 
-
-//AdminController
-Route::get('/admin', function(){
-    return view('admin.dashboard');
-})->name('dashboard')->middleware('checkRole:Admin;Kaprodi');
+Route::get('/admin', [DashboardController::class, 'index'])->middleware('checkRole:Admin;Kaprodi')->name('dashboard');
 
 // userControllter
 Route::prefix('admin/')->middleware(['checkRole:Admin'])->group(function () {
@@ -155,7 +148,6 @@ Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function
         return view('admin.beranda.create');
     })->name('beranda.create');
 
-
 // sub-menu
     Route::get('/{formattedUrl}', function(){
         return view('admin.menu.index');
@@ -169,9 +161,14 @@ Route::prefix('admin/')->middleware(['checkRole:Admin;Kaprodi'])->group(function
 });
 
 // public
-Route::get('/{kategori}', function(){
-    return view('public.menu.index');
-});
-Route::get('/{kategori}/{slug}', function(){
-    return view('public.menu.detail');
+Route::middleware(['logVisits'])->group(function () {
+    Route::get('/', function () {
+        return view('public.beranda');
+    });
+    Route::get('/{kategori}', function(){
+        return view('public.menu.index');
+    });
+    Route::get('/{kategori}/{slug}', function(){
+        return view('public.menu.detail');
+    });
 });

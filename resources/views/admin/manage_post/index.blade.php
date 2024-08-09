@@ -52,8 +52,17 @@
                         kategoriMap[kategori.id] = kategori;
                     });
 
+                    var isAdmin = data.isAdmin;
+
+                    // Filter posts berdasarkan peran pengguna
+                    var filteredPosts = data.posts.filter(function(post) {
+                        var kategori = kategoriMap[post.kategori];
+                        // Tampilkan semua post jika admin, atau hanya post dengan kategori.beranda == 1 jika bukan admin
+                        return isAdmin || (kategori.beranda == 1);
+                    });
+
                     // Iterasi setiap post dalam data
-                    data.posts.forEach(function(post) {
+                    filteredPosts.forEach(function(post) {
                         var kategori = kategoriMap[post.kategori];
 
                         if (kategori && kategori.type_halaman === 'multi-artikel') {

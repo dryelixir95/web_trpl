@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="/" id="logoPublic">
             <!-- <img src="{{asset('src/images/LOGO_poliwangi.jpeg')}}" class="me-1" style="width: 50px; height: auto;" alt="Logo">
@@ -43,7 +43,7 @@
                         data.kategori.forEach(function(kategori) {
                             if (kategori.index_menu == menu.id) {  // Misalkan `kategori.index_menu` adalah `menu.id`
                                 dropdown += `
-                                    <li><a class="dropdown-item" href="${kategori.slug}"><i class="fa-solid fa-bars menu-icon"></i> ${kategori.nama}</a></li>`;
+                                    <li><a class="dropdown-item" href="/${kategori.slug}"><i class="fa-solid fa-bars menu-icon"></i> ${kategori.nama}</a></li>`;
                             }
                         });
 
