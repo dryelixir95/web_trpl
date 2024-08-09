@@ -82,6 +82,12 @@ $(document).ready(function() {
         language : ""
     });
 
+    function stripHtml(html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+    }
+
+
     $.ajax({
         url: '/api/public/kategori-post', 
         method: 'GET',
@@ -103,6 +109,9 @@ $(document).ready(function() {
 
                                 // Generate card HTML
                                 filteredPosts.forEach(function(post) {
+                                    var parsedDescription = marked.parse(post.deskripsi);
+                                    var plainTextDescription = stripHtml(parsedDescription).substring(0, 100);
+
                                     var cardHtml = `
                                         <div class="col-12 mb-4">
                                             <div class="card h-100">
@@ -113,7 +122,7 @@ $(document).ready(function() {
                                                     <div class="col-md-8 shadow bg-light">
                                                         <div class="card-body">
                                                             <h5 class="card-title">${post.judul}</h5>
-                                                            <p class="card-text">${post.deskripsi.replace(/!\[\]\((.*?)\)/, '').substring(0, 100)}...</p>
+                                                            <p class="card-text">${plainTextDescription}...</p>
                                                             <a href="/post/${post.id}" class="read-more" target="_blank">Read More</a>
                                                         </div>
                                                     </div>
