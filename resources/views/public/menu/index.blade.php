@@ -122,7 +122,7 @@ $(document).ready(function() {
                                                         <div class="card-body">
                                                             <h5 class="card-title">${post.judul}</h5>
                                                             <p class="card-text">${plainTextDescription}...</p>
-                                                            <a href="/post/${post.id}" class="read-more" target="_blank">Read More</a>
+                                                            <a href="/${kategoriHalaman}/${post.id}" class="read-more" target="_blank">Read More</a>
                                                         </div>
                                                     </div>
                                                 </div>

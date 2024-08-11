@@ -15,7 +15,7 @@ class PostFactory extends Factory
         return [
             'judul' => $this->faker->sentence,
             'tanggal' => $this->faker->date,
-            'kategori' => $this->faker->numberBetween(47, 55),  // Assuming you want to create a related kategoriPost
+            'kategori' => $this->faker->numberBetween(11, 15),  // Assuming you want to create a related kategoriPost
             'deskripsi' => $this->faker->paragraph,
             'tag' => '["TRPL","Poliwangi"]',
         ];

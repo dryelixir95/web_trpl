@@ -87,7 +87,7 @@ class BerandaControllerTest extends TestCase
             'nama' => 'test kategori',
             'slug' => 'test-kategori',
             'deskripsi' => 'test kategori',
-            'type_halaman' => 'single-artikel',
+            'type_halaman' => 'multi-artikel',
         ]);
 
         $response = $this->putJson('/api/admin/beranda', [

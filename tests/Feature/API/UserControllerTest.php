@@ -21,7 +21,6 @@ class UserControllerTest extends TestCase
         // Create an admin user for authentication
         $this->adminUser = User::factory()->create([
             'role' => 'Admin',
-            'email' => 'admin@example.com',
             'password' => Hash::make('password')
         ]);
     }

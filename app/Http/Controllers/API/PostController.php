@@ -16,7 +16,12 @@ class PostController extends Controller
         try {
             $posts = Post::all();
             $kategori = kategoriPost::all();
-            $isAdmin = Auth::user()->role == 'Admin';
+            $isAdmin = false;
+            if(Auth::user()){
+                if(Auth::user()->role == 'Admin'){
+                    $isAdmin == true;
+                }
+            } 
         
             return response()->json([
                 'status' => 'success',

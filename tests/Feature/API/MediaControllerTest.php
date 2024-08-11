@@ -159,8 +159,6 @@ class MediaControllerTest extends TestCase
         $file = UploadedFile::fake()->image('media.jpg');
         $storedFileName = uniqid('media_') . '.' . $file->getClientOriginalExtension();
         $file->move(public_path('media/ckeditor'), $storedFileName);
-
-        echo($storedFileName);
     
         $response = $this->deleteJson('/api/admin/media-name/' . $storedFileName);
     
