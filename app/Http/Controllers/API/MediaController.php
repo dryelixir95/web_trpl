@@ -63,7 +63,19 @@ class MediaController extends Controller
             if ($request->hasFile('media')) {
                 $file = $request->file('media');
                 if ($file->isValid()) {
-                    $FileName = uniqid('media_') . '.' . $file->getClientOriginalExtension();
+                    $uniqueId = substr(uniqid(), -6);
+
+                    // Get the original file name without extension
+                    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            
+                    // Replace spaces with underscores or dashes in the original file name
+                    $originalName = str_replace(' ', '_', $originalName);
+
+                    // Get the file extension
+                    $extension = $file->getClientOriginalExtension();
+            
+                    // Combine them into the new file name
+                    $FileName = $uniqueId . '_' . $originalName . '.' . $extension;
                     $file->move(public_path('media'), $FileName);
                     $validatedData['media'] = $FileName;
                 }
@@ -102,7 +114,19 @@ class MediaController extends Controller
             if ($request->hasFile('upload')) {
                 $file = $request->file('upload');
                 if ($file->isValid()) {
-                    $FileName = uniqid('media_') . '.' . $file->getClientOriginalExtension();
+                    $uniqueId = substr(uniqid(), -6);
+
+                    // Get the original file name without extension
+                    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            
+                    // Replace spaces with underscores or dashes in the original file name
+                    $originalName = str_replace(' ', '_', $originalName);
+
+                    // Get the file extension
+                    $extension = $file->getClientOriginalExtension();
+            
+                    // Combine them into the new file name
+                    $FileName = $uniqueId . '_' . $originalName . '.' . $extension;
                     $file->move(public_path('media/ckeditor'), $FileName);
                     $validatedData['upload'] = $FileName;
                 }

@@ -42,6 +42,7 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        // dd('tes');
         try {
             // Validasi data yang diterima
             $validatedData = $request->validate([
@@ -140,6 +141,7 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd('tes');
         try {
             // Validasi data yang diterima
             $validatedData = $request->validate([

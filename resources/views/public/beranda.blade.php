@@ -1,5 +1,14 @@
 @extends('public.app')
 @section('content')
+<style>
+    .card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
     <!-- Hero Section -->
     <div class="hero-section bg-primary" style="padding-top: 5rem;">
         <div class="container">
@@ -67,6 +76,22 @@
                 var dataAkreditasi = data.kategori.filter(kategori => kategori.nama == 'Akreditasi')[0]?.post ?? [];
                 var dataVisiMisi = data.kategori.filter(kategori => kategori.nama == 'Visi Misi Tujuan TRPL')[0]?.post ?? [];
                 
+                dataBerita.sort(function(a, b) {
+                    // Parse the 'tanggal' field (YYYY-MM-DD)
+                    var dateA = new Date(a.tanggal);
+                    var dateB = new Date(b.tanggal);
+
+                    // Compare the 'tanggal' first
+                    if (dateA.getTime() !== dateB.getTime()) {
+                        return dateB - dateA; // Newer dates first
+                    } else {
+                        // If 'tanggal' is the same, compare by 'created_at'
+                        var createdAtA = new Date(a.created_at);
+                        var createdAtB = new Date(b.created_at);
+                        return createdAtB - createdAtA; // Newer timestamps first
+                    }
+                });
+
                 $('#berita').empty();
                 var index = 1;
                 dataBerita.forEach(function(post) {
@@ -78,12 +103,12 @@
 
                         var cardHtml = `
                             <div class="col-md-4 p-3">
-                                <div class="card">
+                                <div class="card h-100 d-flex flex-column">
                                     <img src="${imageUrl}" class="card-img" alt="${post.judul}" style="height: 200px; object-fit: cover;">
-                                    <div class="card-body">
+                                    <div class="card-body flex-grow-1 d-flex flex-column">
                                         <h4 class="card-title">${post.judul}</h4>
                                         <p class="card-text">${plainTextDescription}...</p>
-                                        <a href="/berita/${post.id}" class="btn btn-primary">Detail</a>
+                                        <a href="/berita/${post.id}" class="btn btn-primary mt-auto">Detail</a>
                                     </div>
                                 </div>
                             </div>

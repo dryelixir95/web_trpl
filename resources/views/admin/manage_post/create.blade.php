@@ -111,6 +111,7 @@
                     // Clear existing options
                     selectMenu.empty();
 
+                    selectMenu.append('<option value="">Pilih Kategori</option>');
                     // Iterate over each category
                     data.kategori.forEach(function(kategori) {
                         if (kategori.type_halaman == 'multi-artikel') {

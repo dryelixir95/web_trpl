@@ -29,6 +29,7 @@ class KategoriPostSeeder extends Seeder
                 'index_menu' => 1,
                 'deskripsi' => 'Halaman yang berisi tentang Visi Misi Tujuan TRPL',
                 'type_halaman' => 'single-artikel',
+                'beranda' => 1,
             ],
             [
                 'nama' => 'Kurikulum',
@@ -43,6 +44,7 @@ class KategoriPostSeeder extends Seeder
                 'index_menu' => 1,
                 'deskripsi' => 'Halaman yang berisi Akreditasi program studi TRPL',
                 'type_halaman' => 'single-artikel',
+                'beranda' => 1,
             ],
             [
                 'nama' => 'Fasilitas',
@@ -50,6 +52,7 @@ class KategoriPostSeeder extends Seeder
                 'index_menu' => 1,
                 'deskripsi' => 'Halaman yang berisi Fasilitas program studi TRPL',
                 'type_halaman' => 'multi-artikel',
+                'beranda' => 1,
             ],
             [
                 'nama' => 'Dosen dan Staff',
