@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\kategoriPost;
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class KategoriPostController extends Controller
@@ -13,12 +14,19 @@ class KategoriPostController extends Controller
         try {
             $menu = Menu::all();
             $kategori = kategoriPost::all();
+            $isAdmin = false;
+            if(Auth::user()){
+                if(Auth::user()->role == 'Admin'){
+                    $isAdmin == true;
+                }
+            } 
         
             return response()->json([
                 'status' => 'success',
                 'message' => 'Get data kategori-post successful',
                 'kategori' => $kategori,
                 'menu' => $menu,
+                'isAdmin' => $isAdmin,
             ]);
 
         } catch (\Exception $e) {

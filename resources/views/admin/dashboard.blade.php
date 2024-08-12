@@ -8,7 +8,7 @@
                     <div class="card card-tale">
                         <div class="card-body">
                             <p class="mb-4">Jumlah Artikel</p><br><br><br>
-                            <p class="fs-30 mb-2">4006</p>
+                            <p class="fs-30 mb-2">{{ $articleCount }}</p>
                         </div>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <p>Jumlah Kunjungan</p>
                             <p class="mb-4">Dalam Satu Bulan</p><br><br>
-                            <p class="fs-30 mb-2">4006</p>
+                            <p class="fs-30 mb-2">{{ $visitCount }}</p>
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                     <div class="card card-tale">
                         <div class="card-body">
                             <p class="mb-4">Jumlah User</p><br><br><br>
-                            <p class="fs-30 mb-2">61344</p>
+                            <p class="fs-30 mb-2">{{ $userCount }}</p>
                         </div>
                     </div>
                 </div>

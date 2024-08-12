@@ -84,19 +84,21 @@
             url: '/api/admin/kategori-post',
             method: 'GET',
             success: function(data) {
+                var isAdmin = data.isAdmin;
+                var selectMenu = $('#kategori-post');
+
                 if (Array.isArray(data.kategori)) {
-                    window.dataKategori = data.kategori;
-                    var selectMenu = $('#kategori-post');
+                    // Clear existing options
+                    selectMenu.empty();
 
-                    // Iterasi setiap user dalam data
+                    // Iterate over each category
                     data.kategori.forEach(function(kategori) {
-                        if(kategori.type_halaman == 'single-artikel'){
-
-                            // Buat baris tabel baru
-                            var option = $('<option></option>').val(kategori.id).text(kategori.nama);
-                            
-                            // Tambahkan baris ke dalam tabel
-                            selectMenu.append(option);
+                        if (kategori.type_halaman == 'single-artikel') {
+                            // Show all categories if admin, otherwise filter by beranda == 1
+                            if (isAdmin || kategori.beranda == 1) {
+                                var option = $('<option></option>').val(kategori.id).text(kategori.nama);
+                                selectMenu.append(option);
+                            }
                         }
                     });
                 }

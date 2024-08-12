@@ -32,19 +32,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $validatedData = $request->validate([
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|confirmed|min:8',
                 'role' => 'required',
             ]);
 
-            $user = User::create([
-                'name' => $request->name,
-                'role' => $request->role,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-            ]);
+            $validatedData['password'] = bcrypt($validatedData['password']);
+
+            $user = User::create($validatedData);
 
             $url = '/admin/user';
 
@@ -95,23 +92,17 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            $request->validate([
+            $validatedData = $request->validate([
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email,' . $user->id,
                 'password' => 'sometimes|required|confirmed|min:8',
             ]);
 
-            $data = [
-                'name' => $request->name,
-                'role' => $request->role,
-                'email' => $request->email,
-            ];
-
             if ($request->filled('password')) {
-                $data['password'] = bcrypt($request->password);
+                $validatedData['password'] = bcrypt($validatedData['password']);
             }
 
-            $user->update($data);
+            $user->update($validatedData);
 
             $url = '/admin/user';
 

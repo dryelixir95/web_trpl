@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\kategoriPost;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
@@ -15,12 +16,19 @@ class PostController extends Controller
         try {
             $posts = Post::all();
             $kategori = kategoriPost::all();
+            $isAdmin = false;
+            if(Auth::user()){
+                if(Auth::user()->role == 'Admin'){
+                    $isAdmin == true;
+                }
+            } 
         
             return response()->json([
                 'status' => 'success',
                 'message' => 'Get data posts successful',
                 'posts' => $posts,
                 'kategori' => $kategori,
+                'isAdmin' => $isAdmin,
             ]);
 
         } catch (\Exception $e) {

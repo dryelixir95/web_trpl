@@ -1,7 +1,7 @@
 @extends('public.app')
 @section('content')
     <!-- Hero Section -->
-    <div class="hero-section bg-primary">
+    <div class="hero-section bg-primary" style="padding-top: 5rem;">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-sm-12">
@@ -19,6 +19,17 @@
         </div>
     </div>
 
+    <div class="learning-section mt-4 mb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8" id="visiMisi">
+                </div>
+                <div class="col-md-4 d-flex flex-column justify-content-center" id="akreditasi">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="learning-section mt-4">
         <div class="container">
             <h2 class="text-center"><b>Berita Terbaru</b></h2>
@@ -28,63 +39,25 @@
         </div>
     </div>
 
-    <div class="learning-section mt-2 mb-4">
+    <div class="learning-section mt-2 mb-3">
         <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <h2 class="text-center"><b>Visi TRPL</b></h2>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-                    
-                    <h2 class="text-center"><b>Misi TRPL</b></h2>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/300" class="card-img-top mt-4" alt="Akreditasi" style="margin:auto; height: 200px; width: 300px; object-fit: cover;">
-                        <div class="card-body">
-                            <hr>
-                            <h5 class="card-title text-center">Akreditasi</h5>
-                        </div>
+            <div class="card bg-light" style="border-radius: 15px;">
+                <div class="card-body">
+                    <h2 class="text-center"><b>Fasilitas</b></h2>
+                    <div class="row px-4" id="fasilitas">
+                        <!-- Dynamic content will be inserted here -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="learning-section mt-3">
-        <div class="container">
-            <h2 class="text-center mb-3"><b>Fasilitas</b></h2>
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Lab 1" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">Lab. 1</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Lab 2" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">Lab. 2</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Lab 3" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">Lab. 3</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 <script>
     $(document).ready(function() {
+        function stripHtml(html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            return doc.body.textContent || "";
+        }
+
         $.ajax({
             url: '/api/public/beranda', 
             method: 'GET',
@@ -93,20 +66,23 @@
                 var dataFasilitas = data.kategori.filter(kategori => kategori.nama == 'Fasilitas')[0].post;
                 var dataAkreditasi = data.kategori.filter(kategori => kategori.nama == 'Akreditasi')[0].post;
                 var dataVisiMisi = data.kategori.filter(kategori => kategori.nama == 'Visi Misi Tujuan TRPL')[0].post;
-                var dataKerjasamaMitra = data.kategori.filter(kategori => kategori.nama == 'Kerjasama Mitra')[0].post;
-
+                
                 $('#berita').empty();
                 var index = 1;
                 dataBerita.forEach(function(post) {
                     if(index <= 3){
-                        console.log(index)
+                        var imageUrl = post.deskripsi.match(/!\[\]\((.*?)\)/) ? post.deskripsi.match(/!\[\]\((.*?)\)/)[1] : '/default-image.jpg';
+                        
+                        var parsedDescription = marked.parse(post.deskripsi);
+                        var plainTextDescription = stripHtml(parsedDescription).substring(0, 100);
+
                         var cardHtml = `
                             <div class="col-md-4 p-3">
                                 <div class="card">
-                                    <img src="${post.deskripsi.match(/!\[\]\((.*?)\)/) ? post.deskripsi.match(/!\[\]\((.*?)\)/)[1] : '/default-image.jpg'}" class="card-img-top" alt="${post.judul}" style="height: 200px; object-fit: cover;">
+                                    <img src="${imageUrl}" class="card-img" alt="${post.judul}" style="height: 200px; object-fit: cover;">
                                     <div class="card-body">
                                         <h4 class="card-title">${post.judul}</h4>
-                                        <p class="card-text">${post.deskripsi.replace(/!\[\]\((.*?)\)/, '').substring(0, 100)}...</p>
+                                        <p class="card-text">${plainTextDescription}...</p>
                                         <a href="/berita/${post.id}" class="btn btn-primary">Detail</a>
                                     </div>
                                 </div>
@@ -118,7 +94,7 @@
                 });
 
                 var buttonBerita = `
-                    <div class="row mb-4">
+                    <div class="row mb-3">
                         <div class="col-12 text-center">
                             <a href="/berita" class="">Berita Selengkapnya</a>
                         </div>
@@ -126,6 +102,47 @@
 
                 `;
                 $('#berita').append(buttonBerita);
+
+
+                $('#visiMisi').empty();
+                $('#akreditasi').empty();
+                dataVisiMisi.forEach(function(post) {
+                    var htmlContent = marked.parse(post.deskripsi);
+                    $('#visiMisi').html(htmlContent);
+
+                    // Tambahkan kelas img-fluid dan text-center ke semua gambar di dalam #content
+                    $('#visiMisi img').addClass('img-fluid').parent().addClass('text-center');
+                    $('#visiMisi h4, #visiMisi h3, #visiMisi h2 ').addClass('text-center');
+
+                    // Tambahkan atribut target="_blank" ke semua link di dalam #visiMisi
+                    $('#visiMisi a').attr('target', '_blank');
+                });
+                dataAkreditasi.forEach(function(post) {
+                    var htmlContent = marked.parse(post.deskripsi);
+                    $('#akreditasi').html(htmlContent);
+
+                    // Tambahkan kelas img-fluid dan text-center ke semua gambar di dalam #content
+                    $('#akreditasi img').addClass('img-fluid').parent().addClass('text-center');
+                    $('#akreditasi h6').addClass('text-center');
+
+                    // Tambahkan atribut target="_blank" ke semua link di dalam #akreditasi
+                    $('#akreditasi a').attr('target', '_blank');
+                });
+
+                $('#fasilitas').empty();
+                dataFasilitas.forEach(function(post) {
+                    var imageUrl = post.deskripsi.match(/!\[\]\((.*?)\)/) ? post.deskripsi.match(/!\[\]\((.*?)\)/)[1] : '/default-image.jpg';
+
+                    var cardHtml = `
+                        <div class="col-md-4 mb-3 px-4">
+                            <div class="card">
+                                <img src="${imageUrl}" class="card-img" alt="${post.judul}" style="height: 200px;">
+                            </div>
+                            <h5 class="text-center mt-2">${post.judul}</h5>
+                        </div>
+                    `;
+                    $('#fasilitas').append(cardHtml);
+                });
 
             },
             error: function(xhr, status, error) {

@@ -138,6 +138,7 @@ class PostControllerTest extends TestCase
         $this->actingAs($this->adminUser, 'sanctum');
 
         $post = Post::factory()->create();
+    // jika terdapat error periksa kategori-post id pada factory dan database
 
         $response = $this->putJson('/api/admin/post/' . $post->id, [
             // Missing required fields to trigger validation error

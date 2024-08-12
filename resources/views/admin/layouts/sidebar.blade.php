@@ -27,7 +27,6 @@
                 <span class="menu-title">User</span>
             </a>
         </li>
-        @endif
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-paper-plane menu-icon"></i>
@@ -39,6 +38,8 @@
                 <a class="dropdown-item" href="{{ route('tag.index') }}">Tag</a>
             </div>
         </li>
+        @endif
+
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="mediaDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-folder menu-icon"></i>
@@ -49,6 +50,8 @@
                 <a class="dropdown-item" href="{{ route('kategori-media.index') }}">Kategori</a>
             </div>
         </li>
+
+        @if(Auth::user()->role == 'Admin')
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-feather menu-icon"></i>
@@ -59,6 +62,7 @@
                 <a class="dropdown-item" href="{{ route('kategori-halaman.index') }}">Kategori</a>
             </div>
         </li>
+        @endif
         <li class="nav-item">
             <a class="nav-link" href="{{route ('setting.index')}}">
                 <i class="fa-solid fa-gear menu-icon"></i>

@@ -2,16 +2,11 @@
 
 namespace Tests\Feature\API;
 
-use App\Models\Role;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 
 class AuthControllerTest extends TestCase
 {
-    // use RefreshDatabase;
-
     /** @test */
     public function user_can_login_with_valid_credentials()
     {
@@ -24,7 +19,6 @@ class AuthControllerTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password',
         ]);
-
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 'success',
@@ -40,7 +34,6 @@ class AuthControllerTest extends TestCase
             'email' => 'invalid@example.com',
             'password' => 'invalidpassword',
         ]);
-
         $response->assertStatus(401)
                  ->assertJson([
                      'message' => 'Unauthorized',
@@ -53,11 +46,9 @@ class AuthControllerTest extends TestCase
     {
 
         $user = User::factory()->create();
-        
         $this->actingAs($user);
 
         $response = $this->postJson('/api/logout');
-
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 'success',
