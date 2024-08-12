@@ -62,10 +62,10 @@
             url: '/api/public/beranda', 
             method: 'GET',
             success: function(data) {
-                var dataBerita = data.kategori.filter(kategori => kategori.nama == 'Berita')[0].post;
-                var dataFasilitas = data.kategori.filter(kategori => kategori.nama == 'Fasilitas')[0].post;
-                var dataAkreditasi = data.kategori.filter(kategori => kategori.nama == 'Akreditasi')[0].post;
-                var dataVisiMisi = data.kategori.filter(kategori => kategori.nama == 'Visi Misi Tujuan TRPL')[0].post;
+                var dataBerita = data.kategori.filter(kategori => kategori.nama == 'Berita')[0]?.post ?? [];
+                var dataFasilitas = data.kategori.filter(kategori => kategori.nama == 'Fasilitas')[0]?.post ?? [];
+                var dataAkreditasi = data.kategori.filter(kategori => kategori.nama == 'Akreditasi')[0]?.post ?? [];
+                var dataVisiMisi = data.kategori.filter(kategori => kategori.nama == 'Visi Misi Tujuan TRPL')[0]?.post ?? [];
                 
                 $('#berita').empty();
                 var index = 1;

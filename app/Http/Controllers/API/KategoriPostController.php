@@ -17,7 +17,7 @@ class KategoriPostController extends Controller
             $isAdmin = false;
             if(Auth::user()){
                 if(Auth::user()->role == 'Admin'){
-                    $isAdmin == true;
+                    $isAdmin = true;
                 }
             } 
         

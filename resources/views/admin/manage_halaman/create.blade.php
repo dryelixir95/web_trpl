@@ -85,12 +85,14 @@
             method: 'GET',
             success: function(data) {
                 var isAdmin = data.isAdmin;
+                window.dataKategori = data.kategori;
                 var selectMenu = $('#kategori-post');
 
                 if (Array.isArray(data.kategori)) {
                     // Clear existing options
                     selectMenu.empty();
 
+                    selectMenu.append('<option value="">Pilih Kategori</option>');
                     // Iterate over each category
                     data.kategori.forEach(function(kategori) {
                         if (kategori.type_halaman == 'single-artikel') {

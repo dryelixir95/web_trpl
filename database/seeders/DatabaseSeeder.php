@@ -87,5 +87,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(KategoriPostSeeder::class);
+        $this->call(PostSeeder::class);
     }
 }
