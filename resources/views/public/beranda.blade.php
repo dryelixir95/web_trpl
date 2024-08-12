@@ -155,19 +155,32 @@
                 });
 
                 $('#fasilitas').empty();
+                var index = 1;
                 dataFasilitas.forEach(function(post) {
-                    var imageUrl = post.deskripsi.match(/!\[\]\((.*?)\)/) ? post.deskripsi.match(/!\[\]\((.*?)\)/)[1] : '/default-image.jpg';
-
-                    var cardHtml = `
-                        <div class="col-md-4 mb-3 px-4">
-                            <div class="card">
-                                <img src="${imageUrl}" class="card-img" alt="${post.judul}" style="height: 200px;">
+                    if(index <= 3){
+                        var imageUrl = post.deskripsi.match(/!\[\]\((.*?)\)/) ? post.deskripsi.match(/!\[\]\((.*?)\)/)[1] : '/default-image.jpg';
+    
+                        var cardHtml = `
+                            <div class="col-md-4 mb-3 px-4">
+                                <div class="card">
+                                    <img src="${imageUrl}" class="card-img" alt="${post.judul}" style="height: 200px;">
+                                </div>
+                                <h5 class="text-center mt-2">${post.judul}</h5>
                             </div>
-                            <h5 class="text-center mt-2">${post.judul}</h5>
-                        </div>
-                    `;
-                    $('#fasilitas').append(cardHtml);
+                        `;
+                        $('#fasilitas').append(cardHtml);
+                        index++;
+                    }
                 });
+                var buttonFasilitas = `
+                    <div class="row mb-1">
+                        <div class="col-12 text-center">
+                            <a href="/fasilitas" class="">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+
+                `;
+                $('#fasilitas').append(buttonFasilitas);
 
             },
             error: function(xhr, status, error) {
