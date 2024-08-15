@@ -30,6 +30,9 @@
   <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css" />
   <link rel="stylesheet" href="{{ URL::asset('assets/vendor/main.css') }}" />
 
+  <!-- datatables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/jquery.dataTables.min.css">
+
 </head>
 <style>
 .navbar-toggler:focus {
@@ -122,6 +125,9 @@
   <script src="{{asset('/src/vendors/datatables.net-bs4/dataTables.bootstrap4.js')}}"></script>
   <script src="{{asset('/src/js/dataTables.select.min.js')}}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- datatables -->
+  <script src="https://cdn.datatables.net/2.1.3/js/jquery.dataTables.min.js"></script>
 
   <!-- End plugin js for this page -->
   <!-- inject:js -->

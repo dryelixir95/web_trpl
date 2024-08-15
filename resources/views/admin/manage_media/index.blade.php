@@ -5,7 +5,7 @@
         <div class="col-md-12 grid-margin transparent">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row mb-2">
                         <div class="col-6">
                             <h4 class="card-title">Daftar Media</h4>
                         </div>
@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" id="table-datatables">
                             <thead>
                                 <tr>
                                     <th>Nama</th>
@@ -35,7 +35,6 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-
 <script>
     $(document).ready(function () {
         $.ajax({
@@ -44,6 +43,12 @@
             success: function(data) {
                 if (Array.isArray(data.media)) {
                     var tableBody = $('#table-media');
+
+                    if ($.fn.DataTable.isDataTable('#table-datatables')) {
+                        $('#table-datatables').DataTable().clear().destroy();
+                    }
+
+                    tableBody.empty(); // Clear existing rows
 
                     // Iterasi setiap user dalam data
                     data.media.forEach(function(media) {
@@ -100,6 +105,36 @@
                         // Tambahkan baris ke dalam tabel
                         tableBody.append(row);
                     });
+
+                    data.mediaLain.forEach(function(media) {
+                        // Buat baris tabel baru
+                        var row = $('<tr></tr>');
+
+                        // Tambahkan data kolom
+                        row.append('<td>' + media.name + '</td>');
+
+                        var fileUrl = media.name;
+                        var fileExtension = fileUrl.split('.').pop().toLowerCase();
+                        var kategori = '';
+                        
+                        if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+                            // Jika file gambar, buat elemen img
+                            row.append('<td><img src="' + '/media/' + fileUrl + '" alt="' + media.nama + '" style="width: 70px; height: auto; border-radius: 0;"></td>');
+                        } else if (fileExtension === 'pdf') {
+                            // Jika file PDF, buat link untuk mengunduh
+                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        } else{
+                            row.append('<td><a href="' + '/media/' + fileUrl + '" target="_blank">Lihat File</a></td>');
+                        }
+                        row.append('<td>' + media.type + '</td>');
+
+                        row.append('<td>Upload form Directory</td>');
+                        row.append('<td><button data-name="' + media.name + '" class="btn btn-danger delete-button">Delete</button></td>');
+                        // Tambahkan baris ke dalam tabel
+                        tableBody.append(row);
+                    });
+
+                    $('#table-datatables').DataTable();
 
                     $('.delete-button').on('click', function() {
                         var mediaId = $(this).data('id');

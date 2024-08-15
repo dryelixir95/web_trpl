@@ -14,6 +14,7 @@ class MediaController extends Controller
         try {
             $media = Media::all();
             $mediaPath = public_path('media/ckeditor/');
+            $mediaPathLain = public_path('media/');
             
             // Check if the directory exists
             if (File::exists($mediaPath)) {
@@ -21,22 +22,65 @@ class MediaController extends Controller
             } else {
                 $files = [];
             }
+
+            if (File::exists($mediaPathLain)) {
+                $filesLain = File::allFiles($mediaPathLain);
+            } else {
+                $filesLain = [];
+            }
+
+            $mimeTypeMapping = [
+                'application/pdf' => 'PDF',
+                'image/jpeg' => 'JPEG Image',
+                'image/png' => 'PNG Image',
+                'application/msword' => 'Word Document',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'Word Document',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'Excel Spreadsheet',
+                'application/zip' => 'ZIP Archive',
+                'text/plain' => 'Text File',
+                'image/svg+xml' => 'SVG Image', 
+                // Add more mappings as needed
+            ];    
     
             // Prepare an array to hold file details
             $mediaFiles = [];
             foreach ($files as $file) {
+                $fileName = $file->getFilename();
+                $mimeType = File::mimeType($file->getPathname());
+                $shortMimeType = $mimeTypeMapping[$mimeType] ?? $mimeType;
+    
                 $mediaFiles[] = [
-                    'name' => $file->getFilename(),
-                    'url' => asset('media/ckeditor/' . $file->getFilename()),
+                    'name' => $fileName,
+                    'url' => asset('media/ckeditor/' . $fileName),
                     'size' => $file->getSize(),
-                    'type' => File::mimeType($file->getPathname()),
+                    'type' => $shortMimeType,
                 ];
             }
-            
+
+            $mediaDatabase = Media::pluck('media')->toArray();
+
+            $mediaFilesLain = [];
+            foreach ($filesLain as $file) {
+                $fileName = $file->getFilename();
+                $mimeType = File::mimeType($file->getPathname());
+                $shortMimeType = $mimeTypeMapping[$mimeType] ?? $mimeType;    
+    
+                // Check if the file exists in the ckeditor directory and in the database
+                if (!File::exists($mediaPath . $fileName) && !in_array($fileName, $mediaDatabase)) {
+                    $mediaFilesLain[] = [
+                        'name' => $fileName,
+                        'url' => asset('media/' . $fileName),
+                        'size' => $file->getSize(),
+                        'type' => $shortMimeType,
+                    ];
+                }
+            }
+                
             return response()->json([
                 'status' => 'success',
                 'message' => 'Get data media successful',
                 'media' => $media,
+                'mediaLain' => $mediaFilesLain,
                 'mediaFiles' => $mediaFiles,
             ]);
 
@@ -119,8 +163,8 @@ class MediaController extends Controller
                     // Get the original file name without extension
                     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             
-                    // Replace spaces with underscores or dashes in the original file name
-                    $originalName = str_replace(' ', '_', $originalName);
+                            // Replace spaces with underscores or dashes in the original file name
+                            $originalName = str_replace(' ', '_', $originalName);
 
                     // Get the file extension
                     $extension = $file->getClientOriginalExtension();

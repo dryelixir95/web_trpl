@@ -5,7 +5,7 @@
         <div class="col-md-12 grid-margin transparent">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row mb-2">
                         <div class="col-6">
                             <h4 class="card-title">Daftar Post</h4>
                         </div>
@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" id="table-datatables">
                             <thead>
                                 <tr class="text-center">
                                     <th>Judul</th>
@@ -53,6 +53,10 @@
                     });
 
                     var isAdmin = data.isAdmin;
+
+                    if ($.fn.DataTable.isDataTable('#table-datatables')) {
+                        $('#table-datatables').DataTable().clear().destroy();
+                    }
 
                     // Filter posts berdasarkan peran pengguna
                     var filteredPosts = data.posts.filter(function(post) {
@@ -100,10 +104,12 @@
                         }
                     });
 
-                    $('.delete-button').on('click', function() {
-                    var postId = $(this).data('id');
-                    deletePost(postId);
-                });
+                    $('#table-datatables').DataTable();
+
+                    $(document).on('click', '.delete-button', function() {
+                        var postId = $(this).data('id');
+                        deletePost(postId);
+                    });
                 }
             },
             error: function(xhr, status, error) {
