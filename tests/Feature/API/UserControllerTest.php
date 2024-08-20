@@ -95,7 +95,7 @@ class UserControllerTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                      'status' => 'success',
-                     'message' => 'Get user successful',
+                     'message' => 'Get user by id successful',
                      'user' => [
                          'id' => $user->id,
                          'name' => $user->name,
